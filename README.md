@@ -15,9 +15,9 @@
 
 # Usage
     Only support C++11
-    > make && ./main
-    g++ -o mysort.o -Wall -std=c++11 -g3 -c sortgallery.cpp
-    g++ -o main mysort.o
+    > source env.sh (not needed for MAC)
+    > make
+    > ./demo
 
 ## Example
 ``` bash

@@ -10,5 +10,6 @@ void bubbleSort(vector<int> &);
 void insertSort(vector<int> &);
 void shellSort(vector<int> &);
 void quickSort(vector<int> &);
+void quickSortOptimized(vector<int> &);
 
 #endif /* ifndef MYSORT_H_ */

@@ -7,7 +7,8 @@ OBJS = mybasic.o \
 	   bubblesort.o \
 	   insertsort.o \
 	   shellsort.o \
-	   quicksort.o
+	   quicksort.o \
+	   quicksortoptimized.o
 
 all: ${LIB}
 
@@ -20,6 +21,8 @@ insertsort.o: insertsort.cpp
 shellsort.o: shellsort.cpp
 	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
 quicksort.o: quicksort.cpp
+	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
+quicksortoptimized.o: quicksortoptimized.cpp
 	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
 
 ${LIB}: ${OBJS}

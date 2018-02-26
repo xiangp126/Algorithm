@@ -1,8 +1,8 @@
 #include "mybasic.h"
 #include "mysort.h"
 
-void qSort(vector<int> &, int, int);
-int partition(vector<int> &, int, int);
+static void qSort(vector<int> &, int, int);
+static int partition(vector<int> &, int, int);
 
 void quickSort(vector<int> &nums) {
     int N = nums.size();
