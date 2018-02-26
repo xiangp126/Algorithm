@@ -7,7 +7,7 @@ void printArray(vector<int> &nums) {
     cout << endl;
 }
 
-void swap(int a, int b) {
+void swap(int &a, int &b) {
     a ^= b;
     b ^= a;
     a ^= b;

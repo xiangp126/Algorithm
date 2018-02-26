@@ -1,15 +1,33 @@
 #include <iostream>
-#include "inc/mybasic.h"
-#include "inc/mysort.h"
+#include "mybasic.h"
+#include "mysort.h"
 
 int main(int argc, char *argv[])
 {
-    vector<int> nums {13, 2, 7, 11, -8, 4, 9, 12, 6, 11};
+    vector<int> nums {13, 2, 7, 11, -8, 4, 9, 12, 6, 11, -4, 22, 74, 11};
     const int N = nums.size();
     cout << "Original Array: " << endl;
-
     printArray(nums);
-    bubbleSort(nums);
+
+    int select = 4;
+    switch (select) {
+        case 1:
+            bubbleSort(nums);
+            break;
+        case 2:
+            insertSort(nums);
+            break;
+        case 3:
+            shellSort(nums);
+            break;
+        case 4:
+            quickSort(nums);
+            break;
+        default:
+            break;
+    }
+
+    cout << "After Sorted: " << endl;
     printArray(nums);
 
     return 0;

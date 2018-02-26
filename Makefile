@@ -1,19 +1,24 @@
 CC = g++
-CFLAGXX = -Wall -std=c++11
+CFLAGXX = -Wall -std=c++11 -g3
 INCDIR = inc
 LIBDIR = src/lib
 LIB = libmysort.so
+OBJS = demo.o
 MAKE = make
 
-all: demo ${LIB}
+all: demo
 
 SUBDIR = src
 ${LIB}:
 	@echo "Entering into ${SUBDIR}"
 	@cd ${SUBDIR} && ${MAKE}
+	@echo "Leaving from ${SUBDIR}"
 
-demo: demo.cpp ${LIB}
-	${CC} ${CFLAGXX} $< -I ${INCDIR} -L ${LIBDIR} -lmysort -o $@
+demo.o: demo.cpp
+	${CC} ${CFLAGXX} -I ${INCDIR} -c $<
+
+demo: ${OBJS} ${LIB}
+	${CC} -L ${LIBDIR} -lmysort ${OBJS} -o $@
 
 .PHONY:
 clean:

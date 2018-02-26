@@ -1,2 +1,4 @@
 demo
 src/lib/
+src/obj/
+*.dSYM/
