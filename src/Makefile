@@ -1,5 +1,5 @@
 CC = g++
-CFLAGXX = -Wall -std=c++11
+CFLAGXX = -Wall -std=c++11 -fPIC -g3
 LIBDIR = lib
 INCDIR = ../inc
 LIB = libmysort.so

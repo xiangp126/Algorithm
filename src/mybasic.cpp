@@ -8,7 +8,14 @@ void printArray(vector<int> &nums) {
 }
 
 void swap(int &a, int &b) {
-    a ^= b;
-    b ^= a;
-    a ^= b;
+    std::swap(a, b);
+    return;
+    // fix bug: if a & b the same address => yields 0
+    if (&a != &b) {
+        a ^= b;
+        b ^= a;
+        a ^= b;
+    } else {
+        std::swap(a, b);
+    }
 }
