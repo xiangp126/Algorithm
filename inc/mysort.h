@@ -16,5 +16,6 @@ void quickSortOptimized(vector<int> &);
 void heapSort(vector<int> &);
 void bucketSort(vector<int> &);
 void radixSort(vector<int> &);
+void mergeSort(vector<int> &);
 
 #endif /* ifndef MYSORT_H_ */

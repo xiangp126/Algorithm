@@ -9,7 +9,8 @@ OBJS = bubblesort.o \
 	   quicksortoptimized.o \
 	   heapsort.o \
 	   bucketsort.o \
-	   radixsort.o
+	   radixsort.o \
+	   mergesort.o
 LIB = libmysort.so
 
 all: ${LIB}
@@ -29,6 +30,8 @@ heapsort.o: heapsort.cpp
 bucketsort.o: bucketsort.cpp
 	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
 radixsort.o: radixsort.cpp
+	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
+mergesort.o: mergesort.cpp
 	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
 
 ${LIB}: ${OBJS}

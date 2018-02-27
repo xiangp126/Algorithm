@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     cout << "Original Array: " << endl;
     printArray(nums);
 
-    int select = 8;
+    int select = 9;
     switch (select) {
         case 1:
             bubbleSort(nums);
@@ -33,6 +33,8 @@ int main(int argc, char *argv[])
             bucketSort(nums);
         case 8:
             radixSort(nums);
+        case 9:
+            mergeSort(nums);
         default:
             break;
     }
