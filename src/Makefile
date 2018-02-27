@@ -9,7 +9,8 @@ OBJS = mybasic.o \
 	   shellsort.o \
 	   quicksort.o \
 	   quicksortoptimized.o \
-	   heapsort.o
+	   heapsort.o \
+	   bucketsort.o
 
 all: ${LIB}
 
@@ -26,6 +27,8 @@ quicksort.o: quicksort.cpp
 quicksortoptimized.o: quicksortoptimized.cpp
 	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
 heapsort.o: heapsort.cpp
+	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
+bucketsort.o: bucketsort.cpp
 	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
 
 ${LIB}: ${OBJS}

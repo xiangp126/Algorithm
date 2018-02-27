@@ -4,14 +4,14 @@
 
 int main(int argc, char *argv[])
 {
-    vector<int> nums {13, 2, 7, 11, -8, 4, 9, 12, 6};
-    // vector<int> nums {13, 2, 7, 11, -8, 4, 9, 12, 6, 11, -4, 88, 11,
-        // 44, -5, 12, 6, 12, 22, 74, 11};
+    // vector<int> nums {13, 2, 7, 11, -8, 4, 9, 12, 6};
+    vector<int> nums {13, 2, 7, 11, -8, 4, 9, 12, 6, 11, -4, 88, 11,
+        44, -5, 12, 6, 12, 22, 74, 11};
     const int N = nums.size();
     cout << "Original Array: " << endl;
     printArray(nums);
 
-    int select = 6;
+    int select = 7;
     switch (select) {
         case 1:
             bubbleSort(nums);
@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
             quickSortOptimized(nums);
         case 6:
             heapSort(nums);
+        case 7:
+            bucketSort(nums);
         default:
             break;
     }

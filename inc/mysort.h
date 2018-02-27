@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string.h>
 
 using std::vector;
 
@@ -12,5 +13,6 @@ void shellSort(vector<int> &);
 void quickSort(vector<int> &);
 void quickSortOptimized(vector<int> &);
 void heapSort(vector<int> &);
+void bucketSort(vector<int> &);
 
 #endif /* ifndef MYSORT_H_ */
