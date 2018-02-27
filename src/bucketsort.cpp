@@ -13,8 +13,8 @@ void bucketSort(vector<int> &nums) {
     int plusOn = minNum < 0 ? abs(minNum) : 0;
     int bucketLen = maxNum + plusOn + 1;
     int buckets[bucketLen];
-    // initialize buckets to zero
-    memset(buckets, 0, bucketLen);
+    // bug point: memset size
+    memset(buckets, 0, bucketLen * sizeof(int));
     for (i = 0; i < N; ++i) {
         ++buckets[nums[i] + plusOn];
     }
@@ -25,10 +25,10 @@ void bucketSort(vector<int> &nums) {
             continue;
         }
         for (rptCnt = 0; rptCnt < buckets[i]; ++rptCnt) {
-            nums[k] = i - plusOn;
-            ++k;
+            nums[k++] = i - plusOn;
+            // if (k >= N) {
+            //     cout << "k = " << k << endl;
+            // }
         }
     }
-    cout << "k == " << k << endl;
-    cout << "N == " << N << endl;
 }
