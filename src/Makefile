@@ -10,7 +10,8 @@ OBJS = mybasic.o \
 	   quicksort.o \
 	   quicksortoptimized.o \
 	   heapsort.o \
-	   bucketsort.o
+	   bucketsort.o \
+	   radixsort.o
 
 all: ${LIB}
 
@@ -29,6 +30,8 @@ quicksortoptimized.o: quicksortoptimized.cpp
 heapsort.o: heapsort.cpp
 	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
 bucketsort.o: bucketsort.cpp
+	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
+radixsort.o: radixsort.cpp
 	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
 
 ${LIB}: ${OBJS}
