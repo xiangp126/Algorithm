@@ -1,10 +1,8 @@
 CC = g++
 CFLAGXX = -Wall -std=c++11 -fPIC -g3
-LIBDIR = lib
+LIBDIR = ../lib
 INCDIR = ../inc
-LIB = libmysort.so
-OBJS = mybasic.o \
-	   bubblesort.o \
+OBJS = bubblesort.o \
 	   insertsort.o \
 	   shellsort.o \
 	   quicksort.o \
@@ -12,11 +10,10 @@ OBJS = mybasic.o \
 	   heapsort.o \
 	   bucketsort.o \
 	   radixsort.o
+LIB = libmysort.so
 
 all: ${LIB}
 
-mybasic.o: mybasic.cpp
-	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
 bubblesort.o: bubblesort.cpp
 	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
 insertsort.o: insertsort.cpp
@@ -36,9 +33,9 @@ radixsort.o: radixsort.cpp
 
 ${LIB}: ${OBJS}
 	@mkdir -p ${LIBDIR}
-	${CC} -fPIC -shared $^ -o ${PWD}/${LIBDIR}/${LIB}
+	${CC} -fPIC -shared $^ -o ${LIBDIR}/${LIB}
 
 .PHONY:
 clean:
 	@echo Removing binary and object files ...
-	-rm -rf *.o ${LIBDIR}/*.so
+	-rm -rf *.o ${LIBDIR}/${LIB}
