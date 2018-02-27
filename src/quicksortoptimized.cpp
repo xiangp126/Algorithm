@@ -22,7 +22,7 @@ void qSort(vector<int> &nums, int left, int right) {
 }
 
 pair<int, int> partition(vector<int> &nums, int left, int right) {
-    // qSort ensures left < right @here
+    // qSort ensure left < right @here
     int sentinel = nums[right];
     int i = left, k = i;
     int rend = right;
@@ -31,17 +31,19 @@ pair<int, int> partition(vector<int> &nums, int left, int right) {
             swap(nums[i++], nums[k++]);
         } else {
             if (nums[k] == sentinel) {
-                swap(nums[k++], nums[--right]);
+                // bug point: nums[k], not k++
+                swap(nums[k], nums[--right]);
             } else {
                 ++k;
             }
         }
     }
-    // swap 'equal' numbers with 'greater'
+    // move 'equal' iterms to 'middle'
     int equalCnt = rend - right + 1;
-    for (int index = 0; index < equalCnt; ++index) {
-        swap(nums[i + index], nums[right + index]);
+    int grCnt = right - left;
+    int cnt = std::min(equalCnt, grCnt);
+    for (int index = 0; index < cnt; ++index) {
+        swap(nums[i + index], nums[rend - index]);
     }
-    // return make_pair( i,  i + equalCnt - 1);
     return make_pair( i,  i + equalCnt - 1);
 }
