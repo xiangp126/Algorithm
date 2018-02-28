@@ -3,6 +3,13 @@
 
 - can be directly compiled on MAC and Linux
 
+## Quick Start
+```bash
+# gcc need support C++11
+source env.sh (not needed for MAC)
+make
+
+```
 ## Summarize Sort
     basic sort No. 9+, according to description in book & website, implement as it.
 
@@ -21,10 +28,7 @@
 
 ### Usage
 ``` bash
-# gcc need support C++11
-source env.sh (not needed for MAC)
-make
-./demo
+./bin/sortdemo
 ```
 
 ## Summarize Kmp
@@ -42,6 +46,7 @@ make
 ### Usage
 
 ```bash
+./bin/kmpdemo
 ```
 
 ## Reference

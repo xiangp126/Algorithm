@@ -30,5 +30,22 @@ static void
 mergeTwoSortedArray(vector<int> &mergeArray, vector<int> &nums,
             int left, int right) {
     int mid = (left + right) / 2;
-
+    int ia = left;
+    int ib = mid + 1;
+    int ic = left;
+    while (ia <= mid && ib <= right) {
+        mergeArray[ic++] = nums[ia] <= nums[ib] ? nums[ia++] : nums[ib++];
+    }
+    while (ia <= mid) {
+        mergeArray[ic++] = nums[ia++];
+    }
+    while (ib <= right) {
+        mergeArray[ic++] = nums[ib++];
+    }
+    // copy sorted array back
+    ic = left;
+    while (ic <= right) {
+        nums[ic] = mergeArray[ic];
+        ++ic;
+    }
 }

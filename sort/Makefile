@@ -42,4 +42,3 @@ ${LIB}: ${OBJS}
 clean:
 	@echo Removing binary and object files ...
 	-rm -f *.o
-	# -rm -rf *.o ${LIBDIR}/${LIB}

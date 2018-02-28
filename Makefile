@@ -2,11 +2,11 @@ CC = g++
 CFLAGXX = -Wall -std=c++11 -g3
 INCDIR = inc
 LIBDIR = lib
-OBJS = demo.o
+BINDIR = bin
 MAKE = make
 LIBS = libmybasic.so libmysort.so
 
-all: demo
+all: binary
 
 BASICDIR = basic
 libmybasic.so:
@@ -20,19 +20,19 @@ libmysort.so:
 	@cd ${SORTDIR} && ${MAKE}
 	@echo "Leaving from ${SORTDIR}"
 
-demo.o: demo.cpp
-	${CC} ${CFLAGXX} -I ${INCDIR} -c $<
-
-demo: ${OBJS} ${LIBS}
-	${CC} ${OBJS} -L ${LIBDIR} -lmybasic -lmysort -o $@
+TESTDIR = test
+binary: ${LIBS}
+	@echo "Entering into ${TESTDIR}"
+	@cd ${TESTDIR} && ${MAKE}
+	@echo "Leaving from ${TESTDIR}"
 
 .PHONY:
 clean:
-	@echo "Removing binary and object files ..."
-	-rm -f *.o demo
 	@echo -e "\nEntering into ${BASICDIR}"
 	@cd ${BASICDIR} && ${MAKE} clean
 	@echo "Leaving from ${BASICDIR}"
 	@echo -e "\nEntering into ${SORTDIR}"
 	@cd ${SORTDIR} && ${MAKE} clean
 	@echo "Leaving from ${SORTDIR}"
+	@echo "Removing binary and object files ..."
+	-rm -f *.o ${LIBDIR}/lib*.so ${BINDIR}/*
