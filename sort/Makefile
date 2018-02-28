@@ -36,9 +36,10 @@ mergesort.o: mergesort.cpp
 
 ${LIB}: ${OBJS}
 	@mkdir -p ${LIBDIR}
-	${CC} -fPIC -shared $^ -o ${LIBDIR}/${LIB}
+	${CC} -fPIC -shared $^ -L ${LIBDIR} -lmybasic -o ${PWD}/${LIBDIR}/${LIB}
 
 .PHONY:
 clean:
 	@echo Removing binary and object files ...
-	-rm -rf *.o ${LIBDIR}/${LIB}
+	-rm -f *.o
+	# -rm -rf *.o ${LIBDIR}/${LIB}
