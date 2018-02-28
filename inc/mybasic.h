@@ -9,6 +9,7 @@ using std::cout;
 using std::endl;
 
 void printArray(vector<int> &);
+void printArray(int *, int);
 void swap(int&, int&);
 
 #endif /* ifndef MYBASIC_H_ */

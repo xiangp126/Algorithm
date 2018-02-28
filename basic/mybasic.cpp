@@ -7,6 +7,14 @@ void printArray(vector<int> &nums) {
     cout << endl;
 }
 
+void printArray(int *nums, int N)
+{
+    for (int i = 0; i < N; ++i) {
+        cout << nums[i] << " ";
+    }
+    cout << endl;
+}
+
 void swap(int &a, int &b) {
     std::swap(a, b);
     return;

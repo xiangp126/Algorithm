@@ -4,7 +4,7 @@ INCDIR = inc
 LIBDIR = lib
 BINDIR = bin
 MAKE = make
-LIBS = libmybasic.so libmysort.so
+LIBS = libmybasic.so libmysort.so libmykmp.so
 
 all: binary
 
@@ -19,6 +19,12 @@ libmysort.so:
 	@echo "Entering into ${SORTDIR}"
 	@cd ${SORTDIR} && ${MAKE}
 	@echo "Leaving from ${SORTDIR}"
+
+KMPDIR = kmp
+libmykmp.so:
+	@echo "Entering into ${KMPDIR}"
+	@cd ${KMPDIR} && ${MAKE}
+	@echo "Leaving from ${KMPDIR}"
 
 TESTDIR = test
 binary: ${LIBS}
