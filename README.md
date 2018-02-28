@@ -43,17 +43,27 @@ ldd bin/sortdemo
 ``` bash
 source env.sh (not needed for MAC)
 ./bin/sortdemo
-./bin/sortdemo
 ||=>> Select Sort Algorithm @
 [1]: Bubble Sort       [2]: Insert Sort       [3]: Quick  Sort
 [4]: Quick  Sort(Op)   [5]: Shell  Sort       [6]: Heap   Sort
 [7]: Merge  Sort       [8]: Bucket Sort       [9]: Radix  Sort
 [10]:Library Fun       [*]: Quit Selection
-Original Array:
--79 -27 61 84 22 -77 -87 -19 39 2 80 -26 89 72 74 -43 86 -54 -96 -89
+-------------------------- Original Array --------------------------
+49 -85 -98 -78 -44 30 -48 66 63 89 6 -58 66 83 91 76 -7 -72 88 -23
 Input Here: 3
-After Sorted:
--96 -89 -87 -79 -77 -54 -43 -27 -26 -19 2 22 39 61 72 74 80 84 86 89
+-------------------------- Quick Sort --------------------------
+-98 -85 -78 -72 -58 -48 -44 -23 -7 6 30 49 63 66 66 76 83 88 89 91
+
+||=>> Select Sort Algorithm @
+[1]: Bubble Sort       [2]: Insert Sort       [3]: Quick  Sort
+[4]: Quick  Sort(Op)   [5]: Shell  Sort       [6]: Heap   Sort
+[7]: Merge  Sort       [8]: Bucket Sort       [9]: Radix  Sort
+[10]:Library Fun       [*]: Quit Selection
+-------------------------- Original Array --------------------------
+11 -91 40 -37 -84 31 44 -62 -11 -67 -33 -34 60 -81 77 40 -7 82 13 17
+Input Here: 5
+-------------------------- Shell Sort --------------------------
+-91 -84 -81 -67 -62 -37 -34 -33 -11 -7 11 13 17 31 40 40 44 60 77 82
 ```
 
 ## Summarize Kmp
