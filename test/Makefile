@@ -9,6 +9,7 @@ all: sortdemo
 sortdemo.o: sortdemo.cpp
 	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
 sortdemo: sortdemo.o
+	@mkdir -p ${LIBDIR}
 	${CC} $< -L ${LIBDIR} -lmybasic -lmysort -o ${BINDIR}/$@
 
 .PHONY:
