@@ -8,6 +8,22 @@
 
 using std::vector;
 
+/*! \enum SORTTYPE
+ *
+ *  sort type enumerator
+ */
+enum SORTTYPE { 
+    BUBBLESORT = 1,
+    INSERTSORT,
+    QUICKSORT,
+    QUICKSORTOPTIMIZED,
+    SHELLSORT,
+    HEAPSORT,
+    MERGESORT,
+    BUCKETSORT,
+    RADIXSORT
+};
+
 void bubbleSort(vector<int> &);
 void insertSort(vector<int> &);
 void shellSort(vector<int> &);

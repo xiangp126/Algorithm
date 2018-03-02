@@ -5,6 +5,7 @@
 #include <vector>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 
 using std::vector;
 using std::cout;
@@ -15,5 +16,7 @@ void printArray(int *, int);
 void swap(int&, int&);
 void randomArray(int *, int);
 void randomArray(vector<int> &);
+// print repeat symbols char: repeatCount
+void repeatSymbol(char, int);
 
 #endif /* ifndef MYBASIC_H_ */

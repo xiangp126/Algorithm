@@ -15,6 +15,7 @@ int subStrSearch(const char *str, const char *pattern) {
     int *next = new int[ptLen];
     memset(next, 0, (ptLen + 1) * sizeof(int));
     getNext(pattern, next);
+    cout << "Next Array: ";
     printArray(next, ptLen);
 
     int sIndex = 0;

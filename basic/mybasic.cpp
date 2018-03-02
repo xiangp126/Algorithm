@@ -46,3 +46,10 @@ void randomArray(vector<int> &nums) {
         nums[i] = dir * (rand() % 100);
     }
 }
+
+void repeatSymbol(char ch, int rpt)
+{
+    for (int i = 0; i < rpt; ++i) {
+        cout << ch;
+    }
+}
