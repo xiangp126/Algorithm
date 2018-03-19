@@ -11,6 +11,9 @@ using std::vector;
 using std::cout;
 using std::endl;
 
+#define Error(str)       fprintf(stderr, "%s\n", str)
+#define FatalError(str)  fprintf(stderr, "%s\n", str); exit(1)
+
 void printArray(vector<int> &);
 void printArray(int *, int);
 void swap(int&, int&);
