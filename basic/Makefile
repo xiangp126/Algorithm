@@ -1,18 +1,21 @@
 CC = g++
-CFLAGXX = -Wall -std=c++11 -fPIC -g3
+CFLAGXX += -Wall
+CFLAGXX += -std=c++11 -fPIC -g3
 LIBDIR = ../lib
 INCDIR = ../inc
-OBJS = mybasic.o
 LIB = libmybasic.so
 
-all: ${LIB}
+SOURCE = $(wildcard *.cpp)
+OBJS   = $(patsubst %.cpp, %.o, $(SOURCE))
 
-mybasic.o: mybasic.cpp
-	${CC} ${CFLAGXX} -I ${INCDIR} $< -c
+all: $(LIB)
 
-${LIB}: ${OBJS}
-	@mkdir -p ${LIBDIR}
-	${CC} -fPIC -shared $^ -o ${PWD}/${LIBDIR}/${LIB}
+$(LIB): $(OBJS)
+	@mkdir -p $(LIBDIR)
+	$(CC) -fPIC -shared $^ -o $(shell pwd)/$(LIBDIR)/$(LIB)
+
+%.o: %.cpp
+	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@
 
 .PHONY:
 clean:

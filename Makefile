@@ -1,44 +1,17 @@
 CC = g++
-CFLAGXX = -Wall -std=c++11 -g3
+CFLAGXX += -Wall
+CFLAGXX += -std=c++11 -fPIC -g3
 INCDIR = inc
 LIBDIR = lib
 BINDIR = bin
 MAKE = make
 LIBS = libmybasic.so libmysort.so libmykmp.so
 
-all: binary
+SUBDIRS = basic kmp sort test
 
-BASICDIR = basic
-libmybasic.so:
-	@echo "Entering into ${BASICDIR}"
-	@cd ${BASICDIR} && ${MAKE}
-	@echo "Leaving from ${BASICDIR}"
-
-SORTDIR = sort
-libmysort.so:
-	@echo "Entering into ${SORTDIR}"
-	@cd ${SORTDIR} && ${MAKE}
-	@echo "Leaving from ${SORTDIR}"
-
-KMPDIR = kmp
-libmykmp.so:
-	@echo "Entering into ${KMPDIR}"
-	@cd ${KMPDIR} && ${MAKE}
-	@echo "Leaving from ${KMPDIR}"
-
-TESTDIR = test
-binary: ${LIBS}
-	@echo "Entering into ${TESTDIR}"
-	@cd ${TESTDIR} && ${MAKE}
-	@echo "Leaving from ${TESTDIR}"
+all:
+	for i in $(SUBDIRS); do $(MAKE) -C $$i || exit 1; done
 
 .PHONY:
 clean:
-	@echo -e "\nEntering into ${BASICDIR}"
-	@cd ${BASICDIR} && ${MAKE} clean
-	@echo "Leaving from ${BASICDIR}"
-	@echo -e "\nEntering into ${SORTDIR}"
-	@cd ${SORTDIR} && ${MAKE} clean
-	@echo "Leaving from ${SORTDIR}"
-	@echo "Removing binary and object files ..."
-	-rm -f *.o ${LIBDIR}/lib*.so ${BINDIR}/*
+	for i in $(SUBDIRS); do $(MAKE) -C $$i clean || exit 1; done
