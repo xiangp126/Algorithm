@@ -1,8 +1,6 @@
 ## Algorithm
 - source algorithm will generate dynamic library, can be used for outer usage.
-
 - can be directly compiled on MAC and Linux
-
 - key kind of algorithm
     - sort
     - kmp
@@ -40,8 +38,14 @@ ldd bin/sortdemo
     - insertSort
 
 ### Example
+
+You should source env.sh first (not needed for MAC).
+
 ``` bash
-source env.sh (not needed for MAC)
+source env.sh
+```
+
+```bash
 ./bin/sortdemo
 ||=>> Select Sort Algorithm @
 [1]: Bubble Sort       [2]: Insert Sort       [3]: Quick  Sort
@@ -96,5 +100,5 @@ pattern = BCDABDE
 Index = 14
 ```
 
-## Reference
-[Illustration of NEXT](http://www.tuicool.com/articles/yayeIbe)
+## License
+The [MIT](./LICENSE.txt) License (MIT)
