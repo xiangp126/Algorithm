@@ -35,7 +35,7 @@ struct util_rbtree_s {
 #define util_rbt_black(rbnode)    ((rbnode)->color = 1)
 #define util_rbt_red(rbnode)      ((rbnode)->color = 0)
 #define util_rbt_isblack(rbnode)  ((rbnode)->color == 1)
-#define util_rbt_isred            ((rbnode)->color == 0)
+#define util_rbt_isred(rbnode)    ((rbnode)->color == 0)
 
 #define util_rbtree_isempty(rbtree) ((rbtree)->root == &(rbtree)->null)
 
