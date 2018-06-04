@@ -10,6 +10,7 @@ static void rbtree_right_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node)
 
 void util_rbtree_init(util_rbtree_t *rbtree) {
     if (rbtree != NULL) {
+        // NIL must be black
         util_rbt_black(_NULL(rbtree));
         rbtree->root = _NULL(rbtree);
         rbtree->size = 0;
@@ -55,25 +56,26 @@ void util_rbtree_insert(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
 
 // insert may violate the rbtree properties, need fix up the tree
 void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
-    /*
-     * N for new node, P for parent, U for uncle, G for grandparent
-     *
-     *          |
-     *          G
-     *        /   \
-     *       P     U
-     *     /
-     *    N
-     *
-     */
     // np denotes node's parent, nu for uncle, ng for grandparent
     util_rbtree_node_t *np, *nu, *ng;
     // fix up the property recursive
     while (util_rbt_isred(node->parent)) {
         np = node->parent;
         ng = np->parent;
-        // if parent is the left child of its parent
+        // if parent is the left child of its parent (node's grandparent)
         if (np == ng->left) {
+            /*
+             * N for new node, P for parent, U for uncle, G for grandparent
+             * P is left child of G
+             *
+             *          |
+             *          G
+             *        /   \
+             *       P     U
+             *     /
+             *    N
+             *
+             */
             nu = np->right;
             // case 1: parent & uncle are red
             if (util_rbt_isred(nu)) {
@@ -81,12 +83,12 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                  * N for new node, P for parent, U for uncle, G for grandparent
                  * R for red, B for black
                  *
-                 *          |                      |                  |
-                 *          G                      B                  R
-                 *        /   \       or         /   \      -->     /   \
-                 *       P     U                R     R           B      B
-                 *     /                      /                  /
-                 *    N                      R                  R
+                 *          |                   |                      |
+                 *          G                   B       color          R
+                 *        /   \     or        /   \     ---->        /   \
+                 *       P     U             R     R               B      B
+                 *     /                   /                      /
+                 *    N                   R                      R
                  *
                  */
                 util_rbt_black(np);
@@ -101,24 +103,27 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                      * G for grandparent, S for sibling
                      * LR denotes for left rotate, RR for right rotate
                      * Manipulate:
-                     * <1> Rotate at P
+                     * <1> Left Rotate at P
                      * <2> swap P and N to prepar the following right rotation
                      *
-                     *         |                    |                     |
-                     *         G        LR          G      SWAP           G
-                     *       /   \      -->       /   \                 /   \
-                     *      P     U              N     U      np -->   N     U
-                     *    /   \                /                     /
-                     *   S     N              P                     P  <-- node
-                     *                      /                     /
-                     *                     S                     S
+                     *         |                     |
+                     *         G     LR at P         G
+                     *       /   \   ------>       /   \
+                     *      P     U               N     U
+                     *    /   \                 /
+                     *   S     N               P
+                     *                       /
+                     *                      S
                      *
-                     *               |
-                     *               N
-                     *   RR        /   \
-                     *   -->      P      G
-                     *          /         \
-                     *         S           U
+                     *
+                     *               |                        |
+                     *               G                        N
+                     *             /   \     RR at G        /   \
+                     *   np -->   N     U    ------>      P      G
+                     *          /                        /         \
+                     *         P  <-- node              S           U
+                     *       /
+                     *      S
                      *
                      * Or
                      * R for red, B for black
@@ -128,7 +133,7 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                      *       /   \      -->          /   \    ---->        /   \
                      *      R     B                 R     B               B     B
                      *    /   \                   /                     /
-                     *   B     R                 R                     R
+                     *   B     R                 R            node --> R
                      *                         /                     /
                      *                        B                     B
                      *
@@ -149,39 +154,163 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                     // util_rbtree_node_t *pTmp = np;
                     // np = node;
                     // node = pTmp;
-                } else {
-                    // case 3: parent read, uncle black, node is left child
+                }
+                // case 3: parent red, uncle black, node is left child
+                /*
+                 * N for new node, P for parent, U for uncle
+                 * G for grandparent, S for sibling
+                 *
+                 *         |                           |
+                 *         G        RR at G            P
+                 *       /   \      ------>          /   \
+                 *      P     U                     N     G
+                 *    /   \                             /   \
+                 *   N     S                           S     U
+                 *
+                 * Or
+                 * R for red, B for black
+                 *
+                 *         |                      |                |
+                 *         B       color          R       RR       B
+                 *       /   \     ---->        /   \     -->    /   \
+                 *      R     B                B     B          R     R
+                 *    /   \                  /   \                  /   \
+                 *   R     B                R     B                B     B
+                 *
+                 */
+                util_rbt_black(np);
+                util_rbt_red(ng);
+                /* right rotate at New Node's grandparent */
+                rbtree_right_rotate(rbtree, ng);
+            }
+        } else {
+            /* parent is the right child of its parent (node's grandparent)
+             * Operation Symmetric
+             */
+            /*
+             * N for new node, P for parent, U for uncle, G for grandparent
+             * P is right child of G
+             *
+             *          |
+             *          G
+             *        /   \
+             *       U     P
+             *            /
+             *          N
+             *
+             */
+            nu = np->left;
+            // case 1: parent & uncle are red
+            if (util_rbt_isred(nu)) {
+                /*
+                 * N for new node, P for parent, U for uncle, G for grandparent
+                 * R for red, B for black
+                 *
+                 *          |                  |                      |
+                 *          G                  B        color         R
+                 *        /   \       or     /   \      ---->       /   \
+                 *       U     P            R     R                B      B
+                 *            /                 /                       /
+                 *           N                 R                       R
+                 *
+                 */
+                util_rbt_black(np);
+                util_rbt_black(nu);
+                util_rbt_red(ng);
+                node = ng;
+            } else {
+                // case 2: parent red, uncle black, node is left child
+                if (node == np->left) {
                     /*
                      * N for new node, P for parent, U for uncle
                      * G for grandparent, S for sibling
+                     * LR denotes for left rotate, RR for right rotate
+                     * Manipulate:
+                     * <1> Right Rotate at P
+                     * <2> swap P and N to prepar the following left rotation
                      *
-                     *         |                    |
-                     *         G                    P
-                     *       /   \      -->       /   \
-                     *      P     U              N     G
-                     *    /   \                      /   \
-                     *   N     S                    S     U
+                     *         |                         |
+                     *         G        RR at P          G
+                     *       /   \      ------>        /   \
+                     *      U     P                   U     N
+                     *          /   \                         \
+                     *         N     S                          P
+                     *                                           \
+                     *                                            S
+                     *
+                     *         |                                         |
+                     *         G                                         N
+                     *       /   \                  LR at G            /   \
+                     *      U     N  <-- np         ------>           G      P
+                     *              \                               /         \
+                     *                P  <-- node                  U           S
+                     *                 \
+                     *                  S
+                     *
                      *
                      * Or
                      * R for red, B for black
                      *
-                     *         |                    |                 |
-                     *         B                    R                 B
-                     *       /   \     -->        /   \      -->    /   \
-                     *      R     B              B     B           R     R
-                     *    /   \                /   \                   /   \
-                     *   R     B              R     B                 B     B
+                     *       |                |                     |
+                     *       B        RR      B          color      R
+                     *     /   \      -->   /   \        ---->    /   \
+                     *    B     R          B     R               B     B <-- np
+                     *        /   \                \                     \
+                     *       R     B                 R            node --> R
+                     *                                \                     \
+                     *                                 B                     B
+                     *
+                     *
+                     *                |
+                     *   LR           B
+                     *   -->        /   \
+                     *             R      R
+                     *           /         \
+                     *          B            B
                      *
                      */
-                    util_rbt_black(np);
-                    util_rbt_red(ng);
-                    /* right rotate at New Node's grandparent */
-                    rbtree_right_rotate(rbtree, ng);
+                    node = np;
+                    /* right rotate at New Node's parent */
+                    rbtree_right_rotate(rbtree, node);
+                    np = node->parent;
+                    /*  Upper 3 line code operates same as below */
+                    // rbtree_right_rotate(rbtree, np);
+                    // util_rbtree_node_t *pTmp = np;
+                    // np = node;
+                    // node = pTmp;
                 }
+                // case 3: parent red, uncle black, node is right child
+                /*
+                 * N for new node, P for parent, U for uncle
+                 * G for grandparent, S for sibling
+                 *
+                 *         |                        |
+                 *         G        LR at G         P
+                 *       /   \      ------>       /   \
+                 *      U     P                  G     N
+                 *          /   \              /   \
+                 *         S     N            U     S
+                 *
+                 * Or
+                 * R for red, B for black
+                 *
+                 *         |                  |                     |
+                 *         B       color      R         LR          B
+                 *       /   \     ---->    /   \       -->       /   \
+                 *      B     R            B     B               R     B
+                 *          /   \              /   \           /   \
+                 *         B     R            B     B         B     B
+                 *
+                 */
+                util_rbt_black(np);
+                util_rbt_red(ng);
+                /* left rotate at New Node's grandparent */
+                rbtree_left_rotate(rbtree, ng);
             }
         }
     }
-
+    // mark root as black
+    util_rbt_black(rbtree->root);
 }
 
 // left rotate based on 'node', make 'node' left child of other's
