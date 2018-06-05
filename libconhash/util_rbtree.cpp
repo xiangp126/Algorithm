@@ -4,9 +4,16 @@
 
 #define _NULL(rbtree) (&((rbtree)->null))
 
-static void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node);
-static void rbtree_left_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node);
-static void rbtree_right_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node);
+static void rbtree_left_rotate(util_rbtree_t *rbtree,
+                               util_rbtree_node_t *node);
+static void rbtree_right_rotate(util_rbtree_t *rbtree,
+                                util_rbtree_node_t *node);
+static void rbtree_insert_fixup(util_rbtree_t *rbtree,
+                                util_rbtree_node_t *node);
+static void rbtree_mid_travel(util_rbtree_node_t *node,
+                              util_rbtree_node_t *sentinel,
+                              void (*opera)(util_rbtree_node_t *, void *),
+                              void *data);
 
 void util_rbtree_init(util_rbtree_t *rbtree) {
     if (rbtree != NULL) {
@@ -392,5 +399,69 @@ void rbtree_right_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     // if lcrc not NIL node
     if (lcrc != _NULL(rbtree)) {
         lcrc->parent = node;
+    }
+}
+
+util_rbtree_node_t* util_rbtree_search(util_rbtree_t *rbtree, util_key_t key) {
+    if (rbtree != NULL) {
+        util_rbtree_node_t *node = rbtree->root;
+        util_rbtree_node_t *null = _NULL(rbtree);
+        while (node != null) {
+            if (key < node->key) {
+                node = node->left;
+            } else {
+                if (key > node->key) {
+                    node = node->right;
+                } else {
+                    return node;
+                }
+            }
+        }
+    }
+    return NULL;
+}
+
+util_rbtree_node_t* util_rbtree_min(util_rbtree_t *rbtree) {
+    util_rbtree_node_t *node = rbtree->root;
+    util_rbtree_node_t *null = _NULL(rbtree);
+    if (node == null) {
+        return NULL;
+    }
+    while (node->left != null) {
+        node = node->left;
+    }
+    return node;
+}
+
+util_rbtree_node_t* util_rbtree_max(util_rbtree_t *rbtree) {
+    util_rbtree_node_t *node = rbtree->root;
+    util_rbtree_node_t *null = _NULL(rbtree);
+    if (node == null) {
+        return NULL;
+    }
+    while (node->right != null) {
+        node = node->right;
+    }
+    return node;
+}
+
+void util_rbtree_mid_travel(util_rbtree_t *rbtree,
+                            void (*opera)(util_rbtree_node_t *, void *),
+                            void *data) {
+    if (rbtree != NULL && ! util_rbtree_isempty(rbtree)) {
+        rbtree_mid_travel(rbtree->root, _NULL(rbtree), opera, data);
+    }
+}
+
+void rbtree_mid_travel(util_rbtree_node_t *node,
+                       util_rbtree_node_t *sentinel,
+                       void (*opera)(util_rbtree_node_t *, void *),
+                       void *data) {
+    if (node->left != sentinel) {
+        rbtree_mid_travel(node->left, sentinel,  opera, data);
+    }
+    opera(node, data);
+    if (node->right != sentinel) {
+        rbtree_mid_travel(node->right, sentinel,  opera, data);
     }
 }
