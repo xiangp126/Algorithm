@@ -29,26 +29,30 @@ struct util_rbtree_node_s {
 /* util_rbtree_t
  *
  *     --------- --------- ---------
- *    |  root  |   null  |  size    |
+ *    |  root  |   nil  |  size    |
  *     --------- --------  ---------
  *
  */
 struct util_rbtree_s {
     util_rbtree_node_t *root;
     // all NIL node in the tree will point to it
-    util_rbtree_node_t null;
+    util_rbtree_node_t nil;
     uint size;
 };
 
+#define _NIL(rbtree)              (&((rbtree)->nil))
 #define util_rbt_black(rbnode)    ((rbnode)->color = 1)
 #define util_rbt_red(rbnode)      ((rbnode)->color = 0)
 #define util_rbt_isblack(rbnode)  ((rbnode)->color == 1)
 #define util_rbt_isred(rbnode)    ((rbnode)->color == 0)
 
+#define util_rbtree_min(rbtree)  util_rbsubtree_min(rbtree->root, _NIL(rbtree))
+#define util_rbtree_max(rbtree)  util_rbsubtree_max(rbtree->root, _NIL(rbtree))
+
 /*
  * check if the tree is empty
  */
-#define util_rbtree_isempty(rbtree) ((rbtree)->root == &(rbtree)->null)
+#define util_rbtree_isempty(rbtree) ((rbtree)->root == &(rbtree)->nil)
 
 /* RB-Tree Property
  * In addition to the requirements imposed on a binary search tree
@@ -79,21 +83,36 @@ void util_rbtree_insert(util_rbtree_t *rbtree, util_rbtree_node_t *node);
 void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node);
 
 /*
- * find the minimum node of the tree
- * return NULL if tree empty
+ * find the minimum node of the subtree
+ * @node: root of the subtree
+ * @sentinel: the sentinel node
+ * return NULL if subtree is empty
  */
-util_rbtree_node_t* util_rbtree_min(util_rbtree_t *rbtree);
+util_rbtree_node_t* util_rbsubtree_min(util_rbtree_node_t *node,
+                                       util_rbtree_node_t *sentinel);
 
-/* find the maximum node of the tree
- * return NULL if the tree empty
+/*
+ * find the maximum node of the subtree
+ * @node: root of the subtree
+ * @sentinel: the sentinel node
+ * return NULL if subtree is empty
  */
-util_rbtree_node_t* util_rbtree_max(util_rbtree_t *rbtree);
+util_rbtree_node_t* util_rbsubtree_max(util_rbtree_node_t *node,
+                                    util_rbtree_node_t *sentinel);
 
 /*
  * search node with key = @key in the tree
  * if no such key exist, return NULL
  */
 util_rbtree_node_t* util_rbtree_search(util_rbtree_t *rbtree, util_key_t key);
+
+/*
+ * lookup node in the tree (for Consistent Hash use)
+ * return the first node with key >= @key
+ * if @key > all the key values in the tree, return the node with minimum key
+ * return NULL if the tree is empty
+ */
+util_rbtree_node_t* util_rbtree_lookup(util_rbtree_t *rbtree, util_key_t key);
 
 /*
  * travel through a RB-Tree in in-node sequence, do Read-Only operation

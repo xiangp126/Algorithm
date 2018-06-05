@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include "util_rbtree.h"
 
-#define _NULL(rbtree) (&((rbtree)->null))
-
 static void rbtree_left_rotate(util_rbtree_t *rbtree,
                                util_rbtree_node_t *node);
 static void rbtree_right_rotate(util_rbtree_t *rbtree,
@@ -18,8 +16,8 @@ static void rbtree_mid_travel(util_rbtree_node_t *node,
 void util_rbtree_init(util_rbtree_t *rbtree) {
     if (rbtree != NULL) {
         // NIL must be black
-        util_rbt_black(_NULL(rbtree));
-        rbtree->root = _NULL(rbtree);
+        util_rbt_black(_NIL(rbtree));
+        rbtree->root = _NIL(rbtree);
         rbtree->size = 0;
     }
 }
@@ -27,16 +25,16 @@ void util_rbtree_init(util_rbtree_t *rbtree) {
 // An insert node is deemed color to Red
 void util_rbtree_insert(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     util_rbtree_node_t *x, *y;
-    if ((rbtree == NULL) && (node == NULL) && (node == _NULL(rbtree))) {
+    if ((rbtree == NULL) && (node == NULL) && (node == _NIL(rbtree))) {
         return;
     }
     // the tree is empty
-    if (rbtree->root == _NULL(rbtree)) {
+    if (rbtree->root == _NIL(rbtree)) {
         rbtree->root = node;
-        node->parent = _NULL(rbtree);
+        node->parent = _NIL(rbtree);
     } else {
         x = rbtree->root;
-        while (x != _NULL(rbtree)) {
+        while (x != _NIL(rbtree)) {
             y = x;
             if (node->key < x->key) {
                 x = x->left;
@@ -53,12 +51,38 @@ void util_rbtree_insert(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
         }
     }
     // Initialize node's link and color
-    node->left = _NULL(rbtree);
-    node->right = _NULL(rbtree);
+    node->left = _NIL(rbtree);
+    node->right = _NIL(rbtree);
     util_rbt_red(node);
     // fix up insert
     rbtree_insert_fixup(rbtree, node);
     rbtree->size++;
+}
+
+void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
+    int isblack;
+    util_rbtree_node_t *pTmp, *subst;
+    if ((rbtree == NULL) || (node == NULL) || (node == _NIL(rbtree))) {
+        return;
+    }
+    // if node's left is NULL
+    if (node->left == _NIL(rbtree)) {
+        pTmp = node;
+        subst = node->right;
+    } else {
+        // node's left not NULL, right NULL
+        if (node->right == _NIL(rbtree)) {
+            pTmp = node;
+            subst = node->left;
+        } else {
+            // node's left & right aren't NULL
+
+        }
+    }
+
+    if (pTmp == rbtree->root) {
+
+    }
 }
 
 // insert may violate the rbtree properties, need fix up the tree
@@ -356,7 +380,7 @@ void rbtree_left_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     // rc's left child to be node's right child
     node->right = rclc;
     // if rclc not NIL node
-    if (rclc != _NULL(rbtree)) {
+    if (rclc != _NIL(rbtree)) {
         rclc->parent = node;
     }
 }
@@ -397,7 +421,7 @@ void rbtree_right_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     // lc's right child to be node's left child
     node->right = lcrc;
     // if lcrc not NIL node
-    if (lcrc != _NULL(rbtree)) {
+    if (lcrc != _NIL(rbtree)) {
         lcrc->parent = node;
     }
 }
@@ -405,8 +429,8 @@ void rbtree_right_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
 util_rbtree_node_t* util_rbtree_search(util_rbtree_t *rbtree, util_key_t key) {
     if (rbtree != NULL) {
         util_rbtree_node_t *node = rbtree->root;
-        util_rbtree_node_t *null = _NULL(rbtree);
-        while (node != null) {
+        util_rbtree_node_t *nil = _NIL(rbtree);
+        while (node != nil) {
             if (key < node->key) {
                 node = node->left;
             } else {
@@ -421,25 +445,42 @@ util_rbtree_node_t* util_rbtree_search(util_rbtree_t *rbtree, util_key_t key) {
     return NULL;
 }
 
-util_rbtree_node_t* util_rbtree_min(util_rbtree_t *rbtree) {
-    util_rbtree_node_t *node = rbtree->root;
-    util_rbtree_node_t *null = _NULL(rbtree);
-    if (node == null) {
+util_rbtree_node_t* util_rbtree_lookup(util_rbtree_t *rbtree, util_key_t key) {
+    if (rbtree != NULL && ! util_rbtree_isempty(rbtree)) {
+        util_rbtree_node_t *node = NULL;
+        util_rbtree_node_t *pTmp = rbtree->root;
+        util_rbtree_node_t *nil = _NIL(rbtree);
+        while (pTmp != nil) {
+            if (key <= pTmp->key) {
+                node = pTmp;
+                pTmp = pTmp->left;
+            } else {
+                pTmp = pTmp->right;
+            }
+        }
+        // if node is default NULL, return minimum node of the tree
+        return (node != NULL) ? node : util_rbtree_min(rbtree);
+    }
+    return NULL;
+}
+
+util_rbtree_node_t* util_rbsubtree_min(util_rbtree_node_t *node,
+                                       util_rbtree_node_t *sentinel) {
+    if (node == sentinel) {
         return NULL;
     }
-    while (node->left != null) {
+    while (node->left != sentinel) {
         node = node->left;
     }
     return node;
 }
 
-util_rbtree_node_t* util_rbtree_max(util_rbtree_t *rbtree) {
-    util_rbtree_node_t *node = rbtree->root;
-    util_rbtree_node_t *null = _NULL(rbtree);
-    if (node == null) {
+util_rbtree_node_t* util_rbsubtree_max(util_rbtree_node_t *node,
+                                       util_rbtree_node_t *sentinel) {
+    if (node == sentinel) {
         return NULL;
     }
-    while (node->right != null) {
+    while (node->right != sentinel) {
         node = node->right;
     }
     return node;
@@ -449,7 +490,7 @@ void util_rbtree_mid_travel(util_rbtree_t *rbtree,
                             void (*opera)(util_rbtree_node_t *, void *),
                             void *data) {
     if (rbtree != NULL && ! util_rbtree_isempty(rbtree)) {
-        rbtree_mid_travel(rbtree->root, _NULL(rbtree), opera, data);
+        rbtree_mid_travel(rbtree->root, _NIL(rbtree), opera, data);
     }
 }
 
