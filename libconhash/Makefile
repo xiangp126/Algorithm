@@ -6,10 +6,13 @@ TARGET = demo
 
 all: $(TARGET)
 
-SOURCE = $(wildcard *.c)
-OBJS   = $(patsubst %.c, %.o, $(SOURCE))
+SOURCE  := $(wildcard *.c) $(wildcard *.cpp)
+OBJS    := $(patsubst %.c, %.o, $(patsubst %.cpp, %.o, $(SOURCE)))
 
 %.o: %.c
+	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@
+
+%.o: %.cpp
 	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@
 
 $(TARGET): $(OBJS)
