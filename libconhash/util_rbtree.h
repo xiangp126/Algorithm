@@ -16,6 +16,12 @@ typedef unsigned int  uint;
 typedef unsigned char uchar;
 typedef unsigned long ulong;
 
+#define oops(msg) { \
+    fprintf(stdout, "%s at:", msg); \
+    printf ("%s->%s:%u\n", __FILE__, __FUNCTION__, __LINE__); \
+    exit(1);\
+}
+
 typedef struct util_rbtree_node_s util_rbtree_node_t;
 typedef struct util_rbtree_s util_rbtree_t;
 typedef unsigned long util_key_t;
@@ -139,7 +145,7 @@ util_rbtree_node_t* util_rbtree_lookup(util_rbtree_t *rbtree, util_key_t key);
  *
  */
 void util_rbtree_mid_travel(util_rbtree_t *rbtree,
-                            void (*opear)(util_rbtree_node_t *, void *),
+                            void (*opera)(util_rbtree_node_t *, void *),
                             void *data);
 
 #endif /* ifndef __UTIL_RBTREE_H_ */
