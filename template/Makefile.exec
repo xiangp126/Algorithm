@@ -1,6 +1,6 @@
 # wildcard and pattern substitute, := directly expand
 SOURCE  := $(wildcard *.c) $(wildcard *.cpp)
-OBJS    := $(patsubst %.c, %.o, $(patsubst $.cpp, %.o, $(SOURCE)))
+OBJS    := $(patsubst %.c, %.o, $(patsubst %.cpp, %.o, $(SOURCE)))
 
 TARGET  := main
 

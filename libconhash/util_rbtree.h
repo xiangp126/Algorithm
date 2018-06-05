@@ -1,13 +1,24 @@
 #ifndef __UTIL_RBTREE_H_
 #define __UTIL_RBTREE_H_
 
+/* RB-Tree Property
+ * In addition to the requirements imposed on a binary search tree
+ * the following must be satisfied by a red–black tree:
+ * <1> Each node is either red or black.
+ * <2> The root is black. This rule is sometimes omitted.
+ * <3> All leaves (NIL) are black.
+ * <4> If a node is red, then both its children are black.
+ * <5> Every path from a given node to any of its descendant
+ * NIL nodes contains the same number of black nodes.
+ */
+
 typedef unsigned int  uint;
 typedef unsigned char uchar;
 typedef unsigned long ulong;
 
 typedef struct util_rbtree_node_s util_rbtree_node_t;
 typedef struct util_rbtree_s util_rbtree_t;
-typedef ulong  util_key_t;
+typedef unsigned long util_key_t;
 
 /* util_rbtree_node_t
  *
@@ -18,7 +29,7 @@ typedef ulong  util_key_t;
  */
 /* s denotes structure, t for type */
 struct util_rbtree_node_s {
-    ulong key;
+    util_key_t key;
     util_rbtree_node_t *parent;
     util_rbtree_node_t *left;
     util_rbtree_node_t *right;
@@ -40,30 +51,34 @@ struct util_rbtree_s {
     uint size;
 };
 
+enum RBTREE_COLOR {
+    RED = 0,
+    BLACK
+};
 #define _NIL(rbtree)              (&((rbtree)->nil))
-#define util_rbt_black(rbnode)    ((rbnode)->color = 1)
-#define util_rbt_red(rbnode)      ((rbnode)->color = 0)
-#define util_rbt_isblack(rbnode)  ((rbnode)->color == 1)
-#define util_rbt_isred(rbnode)    ((rbnode)->color == 0)
+#define util_rbt_black(rbnode)    ((rbnode)->color = BLACK)
+#define util_rbt_red(rbnode)      ((rbnode)->color = RED)
+#define util_rbt_isblack(rbnode)  ((rbnode)->color == BLACK)
+#define util_rbt_isred(rbnode)    ((rbnode)->color == RED)
 
 #define util_rbtree_min(rbtree)  util_rbsubtree_min(rbtree->root, _NIL(rbtree))
 #define util_rbtree_max(rbtree)  util_rbsubtree_max(rbtree->root, _NIL(rbtree))
 
 /*
+ * rbt_clear_link
+ * @node: node to clear link
+ * only clear node's link, not clear node's color
+ */
+#define rbt_clear_link(node) do { \
+    node->left = NULL; \
+    node->right = NULL; \
+    node->parent = NULL; \
+} while(0)
+
+/*
  * check if the tree is empty
  */
 #define util_rbtree_isempty(rbtree) ((rbtree)->root == &(rbtree)->nil)
-
-/* RB-Tree Property
- * In addition to the requirements imposed on a binary search tree
- * the following must be satisfied by a red–black tree:
- * <1> Each node is either red or black.
- * <2> The root is black. This rule is sometimes omitted.
- * <3> All leaves (NIL) are black.
- * <4> If a node is red, then both its children are black.
- * <5> Every path from a given node to any of its descendant
- * NIL nodes contains the same number of black nodes.
- */
 
 /*
  * initialize a RB-Tree

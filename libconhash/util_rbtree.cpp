@@ -8,6 +8,8 @@ static void rbtree_right_rotate(util_rbtree_t *rbtree,
                                 util_rbtree_node_t *node);
 static void rbtree_insert_fixup(util_rbtree_t *rbtree,
                                 util_rbtree_node_t *node);
+static void rbtree_delete_fixup(util_rbtree_t *rbtree,
+                                util_rbtree_node_t *node);
 static void rbtree_mid_travel(util_rbtree_node_t *node,
                               util_rbtree_node_t *sentinel,
                               void (*opera)(util_rbtree_node_t *, void *),
@@ -15,14 +17,23 @@ static void rbtree_mid_travel(util_rbtree_node_t *node,
 
 void util_rbtree_init(util_rbtree_t *rbtree) {
     if (rbtree != NULL) {
-        // NIL must be black
-        util_rbt_black(_NIL(rbtree));
-        rbtree->root = _NIL(rbtree);
+        util_rbtree_node_t *nil = _NIL(rbtree);
+
+        /* clear NIL's link */
+        rbt_clear_link(nil);
+        /* NIL must be black */
+        util_rbt_black(nil);
+        /* make this tree empty */
+        rbtree->root = nil;
         rbtree->size = 0;
     }
 }
 
-// An insert node is deemed color to Red
+/*
+ * util_rbtree_insert
+ * @rbtree: the RB-Tree
+ * @node: the node to insert
+ */
 void util_rbtree_insert(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     util_rbtree_node_t *x, *y;
     if ((rbtree == NULL) && (node == NULL) && (node == _NIL(rbtree))) {
@@ -53,39 +64,141 @@ void util_rbtree_insert(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     // Initialize node's link and color
     node->left = _NIL(rbtree);
     node->right = _NIL(rbtree);
+    // An insert node is deemed color to Red
     util_rbt_red(node);
     // fix up insert
     rbtree_insert_fixup(rbtree, node);
     rbtree->size++;
 }
 
+/*
+ * util_rbtree_delete
+ * @rbtree: the RB-Tree
+ * @node: the node to delete
+ */
 void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     int isblack;
     util_rbtree_node_t *pTmp, *subst;
+    util_rbtree_node_t *nil = _NIL(rbtree);
     if ((rbtree == NULL) || (node == NULL) || (node == _NIL(rbtree))) {
         return;
     }
-    // if node's left is NULL
-    if (node->left == _NIL(rbtree)) {
+    /*
+     * try to find out deletion position, indicated by pTmp
+     * if node's left is NULL
+     */
+    if (node->left == nil) {
+        /*
+         * N for node to delete, S for sibling, R for right child
+         *
+         *                |
+         *                P
+         *              /   \
+         *    pTmp->  N     S
+         *              \
+         *               R  <- subst
+         *
+         */
         pTmp = node;
         subst = node->right;
     } else {
         // node's left not NULL, right NULL
-        if (node->right == _NIL(rbtree)) {
+        if (node->right == nil) {
+            /*
+             * N for node to delete, S for sibling, L for left child
+             *
+             *                |
+             *                P
+             *              /   \
+             *    pTmp->  N     S
+             *           /
+             *          L  <- subst
+             *
+             */
             pTmp = node;
             subst = node->left;
         } else {
             // node's left & right aren't NULL
-
+            /*
+             * N for node to delete, S for sibling, L for left child
+             * R for right child
+             *
+             *                |
+             *                P
+             *              /   \
+             *    pTmp->  N     S
+             *           /   \
+             *          L      R <- subst
+             *
+             */
+            pTmp = util_rbsubtree_min(node->right, nil);
+            if (pTmp ->left != nil) {
+                subst = pTmp->left;
+            } else {
+                subst = pTmp->right;
+            }
         }
     }
 
+    /* if pTmp is root */
     if (pTmp == rbtree->root) {
+        rbtree->root = subst;
+        util_rbt_black(subst);
+        rbt_clear_link(pTmp);
+        return;
+    }
+    isblack = util_rbt_isblack(pTmp);
+    /*
+     * pTmp will be removed from its position, need rebuild tree link
+     * Note: if pTmp->parent = node,
+     *
+     *
+     */
+    if (pTmp->parent == node) {
+        subst->parent = pTmp;
+    } else {
+        subst->parent = pTmp->parent;
+    }
+    if (pTmp == pTmp->parent->left) {
+        pTmp->parent->left = subst;
+    } else {
+        pTmp->parent->right = subst;
+    }
 
+    /*
+     * Now pTmp is removed from the tree
+     * so we will make pTmp replace 'node' in the tree
+     */
+    if (pTmp != node) {
+        pTmp->parent = node->parent;
+        if (node == rbtree->root) {
+            rbtree->root = pTmp;
+        } else {
+            if (node->parent->left == node) {
+                node->parent->left = pTmp;
+            } else {
+                node->parent->right = pTmp;
+            }
+        }
+        pTmp->right = node->right;
+        pTmp->left = node->left;
+        if (pTmp->left != nil) {
+            pTmp->left->parent = pTmp;
+        }
+        if (pTmp->right != nil) {
+            pTmp->right->parent = pTmp;
+        }
+        pTmp->color = node->color;
+    }
+    rbt_clear_link(node);
+
+    if (isblack) {
+        // pTmp is black, fix up delete
+        rbtree_delete_fixup(rbtree, subst);
     }
 }
 
-// insert may violate the rbtree properties, need fix up the tree
+// fixup RB-Tree property after insert operation
 void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     // np denotes node's parent, nu for uncle, ng for grandparent
     util_rbtree_node_t *np, *nu, *ng;
@@ -342,6 +455,71 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     }
     // mark root as black
     util_rbt_black(rbtree->root);
+}
+
+// fixup RB-Tree property after delete operation
+void rbtree_delete_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
+    int h = 0;
+    util_rbtree_node_t *w;
+    while((node != rbtree->root) && util_rbt_isblack(node)) {
+        h++;
+        /* node is left child */
+        if(node == node->parent->left) {
+            w = node->parent->right;
+            if(util_rbt_isred(w)) {
+                util_rbt_black(w);
+                util_rbt_red(node->parent);
+                rbtree_left_rotate(rbtree, node->parent);
+                w = node->parent->right;
+            }
+            if(util_rbt_isblack(w->left) && util_rbt_isblack(w->right)) {
+                util_rbt_red(w);
+                node = node->parent;
+            }
+            else {
+                if(util_rbt_isblack(w->right)) {
+                    util_rbt_black(w->left);
+                    util_rbt_red(w);
+                    rbtree_right_rotate(rbtree, w);
+                    w = node->parent->right;
+                }
+                w->color = node->parent->color;
+                util_rbt_black(node->parent);
+                util_rbt_black(w->right);
+                rbtree_left_rotate(rbtree, node->parent);
+                node = rbtree->root; /* to break loop */
+            }
+        } else {
+            /* node is right child */
+            w = node->parent->left;
+            if(w == 0) {
+                int t = 4;
+            }
+            if(util_rbt_isred(w)) {
+                util_rbt_black(w);
+                util_rbt_red(node->parent);
+                rbtree_right_rotate(rbtree, node->parent);
+                w = node->parent->left;
+            }
+            if(util_rbt_isblack(w->left) && util_rbt_isblack(w->right)) {
+                util_rbt_red(w);
+                node = node->parent;
+            } else {
+                if(util_rbt_isblack(w->left)) {
+                    util_rbt_black(w->right);
+                    util_rbt_red(w);
+                    rbtree_left_rotate(rbtree, w);
+                    w = node->parent->left;
+                }
+                w->color = node->parent->color;
+                util_rbt_black(node->parent);
+                util_rbt_black(w->left);
+                rbtree_right_rotate(rbtree, node->parent);
+                node = rbtree->root; /* to break loop */
+            }
+        }
+    }
+    util_rbt_black(node);
 }
 
 // left rotate based on 'node', make 'node' left child of other's
