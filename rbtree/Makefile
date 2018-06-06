@@ -1,4 +1,4 @@
-CC = clang
+CC = gcc
 CFLAGXX := -Wall
 CFLAGXX += -g3
 INC := .

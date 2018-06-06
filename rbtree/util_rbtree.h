@@ -152,6 +152,13 @@ void util_rbtree_mid_travel(util_rbtree_t *rbtree,
                             void (*opera)(util_rbtree_node_t *, void *),
                             void *data);
 
+/*
+ * util_rbtree_height
+ * @rbtree
+ * return the height of the rbtree
+ */
+int util_rbtree_height(util_rbtree_t *rbtree);
+
 #ifdef __cplusplus
 }
 #endif

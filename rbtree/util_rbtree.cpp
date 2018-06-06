@@ -14,6 +14,8 @@ static void rbtree_mid_travel(util_rbtree_node_t *node,
                               util_rbtree_node_t *sentinel,
                               void (*opera)(util_rbtree_node_t *, void *),
                               void *data);
+static int rbtree_get_height(util_rbtree_node_t *node,
+                             util_rbtree_node_t *sentinel);
 
 void util_rbtree_init(util_rbtree_t *rbtree) {
     if (rbtree != NULL) {
@@ -36,7 +38,7 @@ void util_rbtree_init(util_rbtree_t *rbtree) {
  */
 void util_rbtree_insert(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     util_rbtree_node_t *x, *y;
-    if ((rbtree == NULL) && (node == NULL) && (node == _NIL(rbtree))) {
+    if ((rbtree == NULL) || (node == NULL) || (node == _NIL(rbtree))) {
         return;
     }
     // the tree is empty
@@ -722,4 +724,26 @@ void rbtree_mid_travel(util_rbtree_node_t *node,
     if (node->right != sentinel) {
         rbtree_mid_travel(node->right, sentinel,  opera, data);
     }
+}
+
+/*
+ * util_rbtree_height
+ * @rbtree: The RB-Tree tree
+ * recursive method
+ */
+int util_rbtree_height(util_rbtree_t *rbtree) {
+    if (rbtree != NULL && ! util_rbtree_isempty(rbtree)) {
+        return rbtree_get_height(rbtree->root, _NIL(rbtree));
+    }
+}
+
+int rbtree_get_height(util_rbtree_node_t *node, util_rbtree_node_t *sentinel) {
+    int tree_deep = 0;
+    if (node != sentinel) {
+        int left_height = rbtree_get_height(node->left, sentinel);
+        int right_height = rbtree_get_height(node->right, sentinel);
+        tree_deep
+            = left_height >= right_height ? left_height + 1 : right_height + 1;
+    }
+    return tree_deep;
 }
