@@ -323,9 +323,9 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                  *
                  */
                 util_rbt_black(np);
-                util_rbt_red(ng);
+                util_rbt_red(np->parent);
                 /* right rotate at New Node's grandparent */
-                rbtree_right_rotate(rbtree, ng);
+                rbtree_right_rotate(rbtree, np->parent);
             }
         } else {
             /* parent is the right child of its parent (node's grandparent)
@@ -447,9 +447,9 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                  *
                  */
                 util_rbt_black(np);
-                util_rbt_red(ng);
+                util_rbt_red(np->parent);
                 /* left rotate at New Node's grandparent */
-                rbtree_left_rotate(rbtree, ng);
+                rbtree_left_rotate(rbtree, np->parent);
             }
         }
     }
@@ -522,10 +522,22 @@ void rbtree_delete_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     util_rbt_black(node);
 }
 
-// left rotate based on 'node', make 'node' left child of other's
+/*
+ * rbtree_left_rotate
+ * @rbtree: the RB-Tree
+ * @node: the node centered to rotate
+ * make 'node' left child of other's
+ */
 void rbtree_left_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     /*
-     * N for new node
+     * np denotes node's parent, rc denotes right child, lc : left child
+     */
+    util_rbtree_node_t *np = node->parent;
+    util_rbtree_node_t *rc = node->right;
+    util_rbtree_node_t *rclc = rc->left;
+
+    /*
+     * N for new node, S for right child
      *
      *      |                       |
      *      N                       S
@@ -534,15 +546,12 @@ void rbtree_left_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
      *       /   \             /  \
      *      C     D           A    C
      *
+     * make rc replace node's position
      */
-    // np denotes node's parent, rc denotes right child, lc left child
-    util_rbtree_node_t *np = node->parent;
-    util_rbtree_node_t *rc = node->right;
-    util_rbtree_node_t *rclc = rc->left;
-    // make rc replace node's position
     rc->parent = np;
+
     // if 'node' is the root of the tree
-    if (node  == rbtree->root) {
+    if (node == rbtree->root) {
         rbtree->root = rc;
     } else {
         // 'node' is the left child of its parent
@@ -563,10 +572,23 @@ void rbtree_left_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     }
 }
 
-// right rotate based on 'node', make 'node' right child of other's
+/*
+ * rbtree_left_rotate
+ * @rbtree: the RB-Tree
+ * @node: the node centered to rotate
+ * make 'node' right child of other's
+ */
 void rbtree_right_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     /*
-     * S for node, just the reverse operation of left rotation
+     * np denotes node's parent, rc denotes right child, lc : left child
+     */
+    util_rbtree_node_t *np = node->parent;
+    util_rbtree_node_t *lc = node->left;
+    util_rbtree_node_t *lcrc = lc->right;
+
+    /*
+     * S for node, N for left child
+     * just the reverse operation of left rotation
      *
      *         |                       |
      *         S                       N
@@ -575,13 +597,10 @@ void rbtree_right_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
      *    /  \                          /   \
      *   A    C                        C     D
      *
+     * make lc replace node's position
      */
-    // np denotes node's parent, lc denotes left child, rc right child
-    util_rbtree_node_t *np = node->parent;
-    util_rbtree_node_t *lc = node->left;
-    util_rbtree_node_t *lcrc = lc->right;
-    // make lc replace node's position
     lc->parent = np;
+
     // if 'node' is the root of the tree
     if (node == rbtree->root) {
         rbtree->root = lc;
@@ -597,7 +616,7 @@ void rbtree_right_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     lc->right = node;
     node->parent = lc;
     // lc's right child to be node's left child
-    node->right = lcrc;
+    node->left = lcrc;
     // if lcrc not NIL node
     if (lcrc != _NIL(rbtree)) {
         lcrc->parent = node;

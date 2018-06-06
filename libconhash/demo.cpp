@@ -4,7 +4,7 @@
 #include "util_rbtree.h"
 #include "md5.h"
 
-#define N 5
+#define N 100
 
 void util_rbnode_opera(util_rbtree_node_t *node, void *data);
 void md5_digest(const uchar *str, uchar *digest);
@@ -18,10 +18,14 @@ int main(int argc, char *argv[])
     for (int i = 0; i < N; ++i) {
         char *str = (char *)malloc(BUFSIZ);
         memset(str, '\0', BUFSIZ);
+
         util_rbtree_node_t *node = (util_rbtree_node_t *)malloc(sizeof(util_rbtree_node_t));
         if (node == NULL) {
             oops("malloc node failed");
         }
+
+        // node->left = _NIL(rbtree);
+        // node->right = _NIL(rbtree);
         snprintf(str, BUFSIZ, "River%d",  i + 1);
 
         node->key = hash_def(str);
