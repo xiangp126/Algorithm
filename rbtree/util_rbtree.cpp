@@ -226,7 +226,7 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
              *    N
              *
              */
-            nu = np->right;
+            nu = ng->right;
             // case 1: parent & uncle are red
             if (util_rbt_isred(nu)) {
                 /*
@@ -349,7 +349,7 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
              *          N
              *
              */
-            nu = np->left;
+            nu = ng->left;
             // case 1: parent & uncle are red
             if (util_rbt_isred(nu)) {
                 /*
