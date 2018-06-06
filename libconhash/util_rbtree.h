@@ -86,6 +86,10 @@ enum RBTREE_COLOR {
  */
 #define util_rbtree_isempty(rbtree) ((rbtree)->root == &(rbtree)->nil)
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * initialize a RB-Tree
  */
@@ -147,5 +151,9 @@ util_rbtree_node_t* util_rbtree_lookup(util_rbtree_t *rbtree, util_key_t key);
 void util_rbtree_mid_travel(util_rbtree_t *rbtree,
                             void (*opera)(util_rbtree_node_t *, void *),
                             void *data);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* ifndef __UTIL_RBTREE_H_ */
