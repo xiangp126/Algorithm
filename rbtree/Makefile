@@ -1,16 +1,19 @@
-CC = g++
-CFLAGXX += -Wall
-CFLAGXX += -std=c++11 -fPIC -g3
-INCDIR = ../inc
-TARGET = treedemo
+CC = clang
+CFLAGXX := -Wall
+CFLAGXX += -g3
+INC := .
+TARGET = demo
 
 all: $(TARGET)
 
-SOURCE = $(wildcard *.cpp)
-OBJS   = $(patsubst %.cpp, %.o, $(SOURCE))
+SOURCE  := $(wildcard *.c) $(wildcard *.cpp)
+OBJS    := $(patsubst %.c, %.o, $(patsubst %.cpp, %.o, $(SOURCE)))
+
+%.o: %.c
+	$(CC) $(CFLAGXX) -I $(INC) -c $^ -o $@
 
 %.o: %.cpp
-	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@
+	$(CC) $(CFLAGXX) -I $(INC) -c $^ -o $@
 
 $(TARGET): $(OBJS)
 	$(CC) $^ -o $(TARGET)
