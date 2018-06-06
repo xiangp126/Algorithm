@@ -1,22 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "md5.h"
 #include "util_rbtree.h"
 
-#define N 10000000
 #define N 1000000
-#define N 10000
 
 void util_rbnode_opera(util_rbtree_node_t *node, void *data);
 void md5_digest(const uchar *str, uchar *digest);
 ulong hash_def(const char *str);
+inline void ECHO_TIME(const char *str, time_t startClock, time_t endClock);
 
 int main(int argc, char *argv[])
 {
     util_rbtree_t *rbtree = (util_rbtree_t *)malloc(sizeof(util_rbtree_t));
     util_rbtree_init(rbtree);
 
+    srand(unsigned(time(0)));
+    time_t startClock, insertClock, searchClock, endClock;
+
+    startClock = clock();
     for (int i = 0; i < N; ++i) {
         char *str = (char *)malloc(BUFSIZ);
         memset(str, '\0', BUFSIZ);
@@ -29,14 +33,30 @@ int main(int argc, char *argv[])
         snprintf(str, BUFSIZ, "River%d",  i + 1);
 
         node->key = hash_def(str);
-        node->key = i + 1;
         node->data = (void *)str;
         util_rbtree_insert(rbtree, node);
         printf("%d th Node inserted\n", i + 1);
     }
+    insertClock = clock();
 
-    util_rbtree_mid_travel(rbtree, util_rbnode_opera, (void *)0);
-    printf("RB-Tree Height: %d\n", util_rbtree_height(rbtree));
+    // mid travel the whole tree
+    // util_rbtree_mid_travel(rbtree, util_rbnode_opera, (void *)0);
+    printf("\nRB-Tree Height: %d\n", util_rbtree_height(rbtree));
+
+    /*
+     * Check to search a Node, record the time
+     *
+     * Node key = 16623759665, data = River872339
+     */
+    util_key_t key = 16623759665;
+    searchClock = clock();
+    util_rbtree_node_t *pF = util_rbtree_search(rbtree, key);
+    endClock = clock();
+
+    ECHO_TIME("Insert", startClock, insertClock);
+    ECHO_TIME("Search", searchClock, endClock);
+
+    util_rbnode_opera(pF, NULL);
 
     return 0;
 }
@@ -79,4 +99,11 @@ void md5_digest(const uchar *str, uchar *digest) {
     /* strlen(const char *) */
     md5_append(&md5state, str, strlen((const char *)str));
     md5_finish(&md5state, digest);
+}
+
+void ECHO_TIME(const char *str, time_t startClock, time_t endClock) {
+    time_t elapsedTime = ((endClock - startClock) * 1000000)
+                                             / (double)CLOCKS_PER_SEC;
+    printf("\n%s Time Elapsed: %ld ms %ld us\n", str, elapsedTime / 1000,
+                                                      elapsedTime % 1000);
 }
