@@ -6,7 +6,7 @@
 #include "util_rbtree.h"
 
 /* #define N 1000000 */
-#define N 1000000
+#define N 10000
 #define DEBUG 1
 
 void util_rbnode_opera(util_rbtree_node_t *node, void *data);
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
     util_rbnode_opera(pF, NULL);
 
-#if 0
+#if 1
     /*
      * Check to delete a Node, record the time
      *

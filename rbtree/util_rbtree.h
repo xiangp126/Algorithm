@@ -33,6 +33,14 @@ typedef struct util_rbtree_s util_rbtree_t;
 typedef ulong util_key_t;
 
 /*
+ * RB-Tree color enumerator
+ */
+typedef enum util_color_s {
+    RED = 0,
+    BLACK
+} util_color_t;
+
+/*
  * s denotes structure, t for type
  *
  * util_rbtree_node_s
@@ -47,7 +55,7 @@ struct util_rbtree_node_s {
     util_rbtree_node_t *parent;
     util_rbtree_node_t *left;
     util_rbtree_node_t *right;
-    int color;
+    util_color_t color;
     void *data;
 };
 
@@ -66,10 +74,6 @@ struct util_rbtree_s {
     uint size;
 };
 
-enum RBTREE_COLOR {
-    RED = 0,
-    BLACK
-};
 #define _NIL(rbtree)              (&((rbtree)->nil))
 #define util_rbt_black(rbnode)    ((rbnode)->color = BLACK)
 #define util_rbt_red(rbnode)      ((rbnode)->color = RED)
