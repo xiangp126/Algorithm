@@ -207,13 +207,12 @@ void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
  * @node: the inserted node, may cause fixup
  */
 void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
-    // np denotes node's parent, nu for uncle, ng for grandparent
+    /* np denotes node's parent, nu for uncle, ng for grandparent */
     util_rbtree_node_t *np, *nu, *ng;
-    // fix up the property recursive
     while (util_rbt_isred(node->parent)) {
         np = node->parent;
         ng = np->parent;
-        // if parent is the left child of its parent (node's grandparent)
+        /* if parent is the left child of its parent (that is node's grandparent) */
         if (np == ng->left) {
             /*
              * N for new node, P for parent, U for uncle, G for grandparent
@@ -228,9 +227,10 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
              *
              */
             nu = ng->right;
-            // case 1: parent & uncle are red
             if (util_rbt_isred(nu)) {
                 /*
+                 * case 1: parent & uncle are red
+                 *
                  * N for new node, P for parent, U for uncle, G for grandparent
                  * R for red, B for black
                  *
@@ -247,9 +247,10 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                 util_rbt_red(ng);
                 node = ng;
             } else {
-                // case 2: parent red, uncle black, node is right child
                 if (node == np->right) {
                     /*
+                     * case 2: parent red, uncle black, node is right child
+                     *
                      * N for new node, P for parent, U for uncle
                      * G for grandparent, S for sibling
                      * LR denotes for left rotate, RR for right rotate
@@ -257,14 +258,14 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                      * <1> Left Rotate at P
                      * <2> swap P and N to prepar the following right rotation
                      *
-                     *         |                     |
-                     *         G     LR at P         G
-                     *       /   \   ------>       /   \
-                     *      P     U               N     U
-                     *    /   \                 /
-                     *   S     N               P
-                     *                       /
-                     *                      S
+                     *         |                       |
+                     *         G     LR at P           G
+                     *       /   \   ------>         /   \
+                     *      P     U                 N     U
+                     *    /   \                   /
+                     *   S     N                 P
+                     *                         /
+                     *                        S
                      *
                      *
                      *               |                        |
@@ -299,15 +300,10 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                     node = np;
                     /* left rotate at New Node's parent */
                     rbtree_left_rotate(rbtree, node);
-                    np = node->parent;
-                    /*  Upper 3 line code operates same as below */
-                    // rbtree_left_rotate(rbtree, np);
-                    // util_rbtree_node_t *pTmp = np;
-                    // np = node;
-                    // node = pTmp;
                 }
-                // case 3: parent red, uncle black, node is left child
                 /*
+                 * case 3: parent red, uncle black, node is left child
+                 *
                  * N for new node, P for parent, U for uncle
                  * G for grandparent, S for sibling
                  *
@@ -329,16 +325,15 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                  *   R     B                R     B                B     B
                  *
                  */
-                util_rbt_black(np);
-                util_rbt_red(np->parent);
-                /* right rotate at New Node's grandparent */
-                rbtree_right_rotate(rbtree, np->parent);
+                util_rbt_black(node->parent);
+                util_rbt_red(node->parent->parent);
+                /* right rotate at this node's grandparent */
+                rbtree_right_rotate(rbtree, node->parent->parent);
             }
         } else {
-            /* parent is the right child of its parent (node's grandparent)
+            /* parent is the right child of its parent (that is node's grandparent)
              * Operation Symmetric
-             */
-            /*
+             *
              * N for new node, P for parent, U for uncle, G for grandparent
              * P is right child of G
              *
@@ -351,9 +346,10 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
              *
              */
             nu = ng->left;
-            // case 1: parent & uncle are red
             if (util_rbt_isred(nu)) {
                 /*
+                 * case 1: parent & uncle are red
+                 *
                  * N for new node, P for parent, U for uncle, G for grandparent
                  * R for red, B for black
                  *
@@ -370,9 +366,10 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                 util_rbt_red(ng);
                 node = ng;
             } else {
-                // case 2: parent red, uncle black, node is left child
                 if (node == np->left) {
                     /*
+                     * case 2: parent red, uncle black, node is left child
+                     *
                      * N for new node, P for parent, U for uncle
                      * G for grandparent, S for sibling
                      * LR denotes for left rotate, RR for right rotate
@@ -423,15 +420,10 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                     node = np;
                     /* right rotate at New Node's parent */
                     rbtree_right_rotate(rbtree, node);
-                    np = node->parent;
-                    /*  Upper 3 line code operates same as below */
-                    // rbtree_right_rotate(rbtree, np);
-                    // util_rbtree_node_t *pTmp = np;
-                    // np = node;
-                    // node = pTmp;
                 }
-                // case 3: parent red, uncle black, node is right child
                 /*
+                 * case 3: parent red, uncle black, node is right child
+                 *
                  * N for new node, P for parent, U for uncle
                  * G for grandparent, S for sibling
                  *
@@ -453,14 +445,14 @@ void rbtree_insert_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                  *         B     R            B     B         B     B
                  *
                  */
-                util_rbt_black(np);
-                util_rbt_red(np->parent);
-                /* left rotate at New Node's grandparent */
-                rbtree_left_rotate(rbtree, np->parent);
+                util_rbt_black(node->parent);
+                util_rbt_red(node->parent->parent);
+                /* left rotate at this node's grandparent */
+                rbtree_left_rotate(rbtree, node->parent->parent);
             }
         }
     }
-    // mark root as black
+    /* mark root as black */
     util_rbt_black(rbtree->root);
 }
 
