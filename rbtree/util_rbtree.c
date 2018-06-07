@@ -21,11 +21,14 @@ void util_rbtree_init(util_rbtree_t *rbtree) {
     if (rbtree != NULL) {
         util_rbtree_node_t *nil = _NIL(rbtree);
 
-        /* clear NIL's link */
+        /*
+         * clear NIL's link
+         * set NIL color black
+         * It doesn't matter what NIL's other element was
+         */
         rbt_clear_link(nil);
-        /* NIL must be black */
         util_rbt_black(nil);
-        /* make this tree empty */
+
         rbtree->root = nil;
         rbtree->size = 0;
     }
@@ -534,12 +537,7 @@ void rbtree_delete_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
 void rbtree_left_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     /*
      * np denotes node's parent, rc denotes right child, lc : left child
-     */
-    util_rbtree_node_t *np = node->parent;
-    util_rbtree_node_t *rc = node->right;
-    util_rbtree_node_t *rclc = rc->left;
-
-    /*
+     *
      * N for new node, S for right child
      *
      *      |                       |
@@ -549,30 +547,32 @@ void rbtree_left_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
      *       /   \             /  \
      *      C     D           A    C
      *
-     * make rc replace node's position
      */
-    rc->parent = np;
+    util_rbtree_node_t *rc = node->right;
+    util_rbtree_node_t *rclc = rc->left;
 
-    // if 'node' is the root of the tree
-    if (node == rbtree->root) {
-        rbtree->root = rc;
-    } else {
-        // 'node' is the left child of its parent
-        if (node == np->left) {
-            np->left = rc;
-        } else {
-            np->right = rc;
-        }
-    }
-    // make node to be rc's left child
-    node->parent = rc;
-    rc->left = node;
-    // rc's left child to be node's right child
+    /* make rclc be Node's right child */
     node->right = rclc;
-    // if rclc not NIL node
     if (rclc != _NIL(rbtree)) {
         rclc->parent = node;
     }
+    /* make rc take over Node's position */
+    rc->parent = node->parent;
+
+    /* if 'node' is the root of the tree */
+    if (node == rbtree->root) {
+        rbtree->root = rc;
+    } else {
+        /* 'node' is the left child of its parent */
+        if (node == node->parent->left) {
+            node->parent->left = rc;
+        } else {
+            node->parent->right = rc;
+        }
+    }
+    /* make Node be rc's left child */
+    rc->left = node;
+    node->parent = rc;
 }
 
 /*
@@ -583,13 +583,8 @@ void rbtree_left_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
  */
 void rbtree_right_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     /*
-     * np denotes node's parent, rc denotes right child, lc : left child
-     */
-    util_rbtree_node_t *np = node->parent;
-    util_rbtree_node_t *lc = node->left;
-    util_rbtree_node_t *lcrc = lc->right;
-
-    /*
+     * np denotes node's parent, rc denotes left child, lc : left child
+     *
      * S for node, N for left child
      * just the reverse operation of left rotation
      *
@@ -600,30 +595,32 @@ void rbtree_right_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
      *    /  \                          /   \
      *   A    C                        C     D
      *
-     * make lc replace node's position
      */
-    lc->parent = np;
+    util_rbtree_node_t *lc = node->left;
+    util_rbtree_node_t *lcrc = lc->right;
 
-    // if 'node' is the root of the tree
-    if (node == rbtree->root) {
-        rbtree->root = lc;
-    } else {
-        // 'node' is the left child of its parent
-        if (node == np->left) {
-            np->left = lc;
-        } else {
-            np->right = lc;
-        }
-    }
-    // make node lc's right child
-    lc->right = node;
-    node->parent = lc;
-    // lc's right child to be node's left child
+    /* make lcrc be Node's left child */
     node->left = lcrc;
-    // if lcrc not NIL node
     if (lcrc != _NIL(rbtree)) {
         lcrc->parent = node;
     }
+    /* make lc take over Node's position */
+    lc->parent = node->parent;
+
+    /* if 'node' is the root of the tree */
+    if (node == rbtree->root) {
+        rbtree->root = lc;
+    } else {
+        /* 'node' is the left child of its parent */
+        if (node == node->parent->left) {
+            node->parent->left = lc;
+        } else {
+            node->parent->right = lc;
+        }
+    }
+    /* make Node be rc's right child */
+    lc->right = node;
+    node->parent = lc;
 }
 
 /*
@@ -725,18 +722,19 @@ void rbtree_mid_travel(util_rbtree_node_t *node,
  * recursive method
  */
 int util_rbtree_height(util_rbtree_t *rbtree) {
-    if (rbtree != NULL && ! util_rbtree_isempty(rbtree)) {
+    if ((rbtree != NULL) && (! util_rbtree_isempty(rbtree))) {
         return rbtree_get_height(rbtree->root, _NIL(rbtree));
     }
+    return 0;
 }
 
 int rbtree_get_height(util_rbtree_node_t *node, util_rbtree_node_t *sentinel) {
-    int tree_deep = 0;
+    int treeHeight = 0;
     if (node != sentinel) {
-        int left_height = rbtree_get_height(node->left, sentinel);
-        int right_height = rbtree_get_height(node->right, sentinel);
-        tree_deep
-            = left_height >= right_height ? left_height + 1 : right_height + 1;
+        int leftHeight = rbtree_get_height(node->left, sentinel);
+        int rightHeight = rbtree_get_height(node->right, sentinel);
+        treeHeight
+            = leftHeight >= rightHeight ? leftHeight + 1 : rightHeight + 1;
     }
-    return tree_deep;
+    return treeHeight;
 }

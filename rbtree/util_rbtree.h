@@ -1,16 +1,22 @@
 #ifndef __UTIL_RBTREE_H_
 #define __UTIL_RBTREE_H_
 
-/* RB-Tree Property
+/*
+ * RB-Tree Property
+ *
  * In addition to the requirements imposed on a binary search tree
  * the following must be satisfied by a red–black tree:
- * <1> Each node is either red or black.
- * <2> The root is black. This rule is sometimes omitted.
- * <3> All leaves (NIL) are black.
- * <4> If a node is red, then both its children are black.
- * <5> Every path from a given node to any of its descendant
- * NIL nodes contains the same number of black nodes.
+ *
+ * 1> Each node is either red or black.
+ * 2> The root is black. This rule is sometimes omitted.
+ * 3> All leaves (NIL) are black.
+ * 4> If a node is red, then both its children are black.
+ * 5> Every path from a given node to any of its descendant
+ *      NIL nodes contains the same number of black nodes.
+ *
  */
+
+#include <stdlib.h>
 
 typedef unsigned int  uint;
 typedef unsigned char uchar;
@@ -24,16 +30,18 @@ typedef unsigned long ulong;
 
 typedef struct util_rbtree_node_s util_rbtree_node_t;
 typedef struct util_rbtree_s util_rbtree_t;
-typedef unsigned long util_key_t;
+typedef ulong util_key_t;
 
-/* util_rbtree_node_t
+/*
+ * s denotes structure, t for type
+ *
+ * util_rbtree_node_s
  *
  *     --------- --------- --------- -------- -------- ---------
  *    |  key    | parent  |  left   | right  |  color |  data   |
  *     --------- --------  --------- -------- -------- ---------
  *
  */
-/* s denotes structure, t for type */
 struct util_rbtree_node_s {
     util_key_t key;
     util_rbtree_node_t *parent;
@@ -43,7 +51,8 @@ struct util_rbtree_node_s {
     void *data;
 };
 
-/* util_rbtree_t
+/*
+ * util_rbtree_s
  *
  *     --------- --------- ---------
  *    |  root  |   nil  |  size    |
@@ -52,7 +61,7 @@ struct util_rbtree_node_s {
  */
 struct util_rbtree_s {
     util_rbtree_node_t *root;
-    // all NIL node in the tree will point to it
+    /* all NIL node in the tree will point to it */
     util_rbtree_node_t nil;
     uint size;
 };
@@ -155,7 +164,7 @@ void util_rbtree_mid_travel(util_rbtree_t *rbtree,
 /*
  * util_rbtree_height
  * @rbtree
- * return the height of the rbtree
+ * return 0 if tree is empty
  */
 int util_rbtree_height(util_rbtree_t *rbtree);
 
