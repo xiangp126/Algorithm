@@ -5,7 +5,9 @@
 #include "md5.h"
 #include "util_rbtree.h"
 
+/* #define N 1000000 */
 #define N 1000000
+#define DEBUG 1
 
 void util_rbnode_opera(util_rbtree_node_t *node, void *data);
 void md5_digest(const uchar *str, uchar *digest);
@@ -17,7 +19,7 @@ int main(int argc, char *argv[])
     util_rbtree_t *rbtree = (util_rbtree_t *)malloc(sizeof(util_rbtree_t));
     util_rbtree_init(rbtree);
 
-    srand(unsigned(time(0)));
+    srand((unsigned)time(0));
     time_t startClock, insertClock, searchClock, endClock;
 
     startClock = clock();
@@ -39,8 +41,10 @@ int main(int argc, char *argv[])
     }
     insertClock = clock();
 
-    // mid travel the whole tree
-    // util_rbtree_mid_travel(rbtree, util_rbnode_opera, (void *)0);
+    /* mid travel the whole tree */
+    printf("\nMid Travel the RB-Tree:\n");
+    util_rbtree_mid_travel(rbtree, util_rbnode_opera, (void *)0);
+    printf("\nRB-Tree Size: %d\n", rbtree->size);
     printf("\nRB-Tree Height: %d\n", util_rbtree_height(rbtree));
 
     /*
@@ -57,6 +61,25 @@ int main(int argc, char *argv[])
     ECHO_TIME("Search", searchClock, endClock);
 
     util_rbnode_opera(pF, NULL);
+
+#if 0
+    /*
+     * Check to delete a Node, record the time
+     *
+     * Node key = 16359823583, data = River1040
+     */
+    key = 16359823583;
+    pF = util_rbtree_search(rbtree, key);
+    util_rbtree_delete(rbtree, pF);
+
+    /* mid travel the whole tree */
+    printf("\nMid Travel the RB-Tree:\n");
+    util_rbtree_mid_travel(rbtree, util_rbnode_opera, (void *)0);
+    printf("\nRB-Tree Size: %d\n", rbtree->size);
+    printf("\nRB-Tree Height: %d\n", util_rbtree_height(rbtree));
+#endif
+
+    printf("\n");
 
     return 0;
 }

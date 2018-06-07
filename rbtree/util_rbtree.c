@@ -37,39 +37,39 @@ void util_rbtree_init(util_rbtree_t *rbtree) {
  * @node: the node to insert
  */
 void util_rbtree_insert(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
-    util_rbtree_node_t *x, *y;
     if ((rbtree == NULL) || (node == NULL) || (node == _NIL(rbtree))) {
         return;
     }
-    // the tree is empty
-    if (rbtree->root == _NIL(rbtree)) {
-        rbtree->root = node;
-        node->parent = _NIL(rbtree);
-    } else {
-        x = rbtree->root;
-        while (x != _NIL(rbtree)) {
-            y = x;
-            if (node->key < x->key) {
-                x = x->left;
-            } else {
-                x = x->right;
-            }
-        }
-        // now y is node's parent
-        node->parent = y;
-        if (node->key < y->key) {
-            y->left = node;
+    util_rbtree_node_t *pIter = rbtree->root;
+    util_rbtree_node_t *pTmp = _NIL(rbtree);
+    /* find out the insert position */
+    while (pIter != _NIL(rbtree)) {
+        pTmp = pIter;
+        if (node->key < pIter->key) {
+            pIter = pIter->left;
         } else {
-            y->right = node;
+            pIter = pIter->right;
         }
     }
-    // Initialize node's link and color
-    node->left = _NIL(rbtree);
+    /* pIter points to the insert position, and pTmp is the parent */
+    node->parent = pTmp;
+    /* if tree is empty */
+    if (pTmp == _NIL(rbtree)) {
+        rbtree->root = node;
+    } else {
+        /* adjust parent's left & right pointer */
+        if (node->key < pTmp->key) {
+            pTmp->left = node;
+        } else {
+            pTmp->right = node;
+        }
+    }
+    node->left  = _NIL(rbtree);
     node->right = _NIL(rbtree);
-    // An insert node is deemed color to Red
+    /* always color newly inserted node to RED */
     util_rbt_red(node);
-    // fix up insert
     rbtree_insert_fixup(rbtree, node);
+
     rbtree->size++;
 }
 
@@ -198,6 +198,7 @@ void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
         // pTmp is black, fix up delete
         rbtree_delete_fixup(rbtree, subst);
     }
+    rbtree->size--;
 }
 
 /*
