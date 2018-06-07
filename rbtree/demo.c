@@ -66,9 +66,22 @@ int main(int argc, char *argv[])
     /*
      * Check to delete a Node, record the time
      *
+     * Before delete
+     * Node key = 16116572318, data = River3168
+     * Node key = 16193871158, data = River316
      * Node key = 16359823583, data = River1040
+     * Node key = 16423966950, data = River8254
+     * Node key = 16540353187, data = River7257
+     *
+     * Will delete
+     * Node key = 16359823583, data = River1040
+     * Node key = 16423966950, data = River8254
      */
     key = 16359823583;
+    pF = util_rbtree_search(rbtree, key);
+    util_rbtree_delete(rbtree, pF);
+
+    key = 16423966950;
     pF = util_rbtree_search(rbtree, key);
     util_rbtree_delete(rbtree, pF);
 

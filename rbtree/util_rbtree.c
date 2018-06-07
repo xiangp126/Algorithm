@@ -88,7 +88,7 @@ void util_rbtree_insert(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
  * @rbtree: the RB-Tree
  * @orig: the subtree root with Node orig
  * @newt: the subtree root with Node newt
- * Did not handle the children of orig, let function call this do it
+ * Did not handle the children of orig, leave for function call this to do it
  */
 void rbtree_transplant(util_rbtree_t *rbtree, util_rbtree_node_t *orig,
                                               util_rbtree_node_t *newt) {
@@ -114,12 +114,18 @@ void rbtree_transplant(util_rbtree_t *rbtree, util_rbtree_node_t *orig,
             orig->parent->right = newt;
         }
     }
+    /* first node's parent points to _NIL(rbtree) */
     newt->parent = orig->parent;
 }
 
+/*
+ * util_rbtree_delete
+ * @rbtree: the RB-Tree
+ * @node: the node to delete
+ */
 void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     /*
-     * pIter: the node will replace node
+     * pIter: the node will replace 'node'
      * pIterColor: record original color of *pIter
      * pTmp: temporary pointer
      */
@@ -140,14 +146,17 @@ void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
         else {
             /*
              * case 3: both left & child are not NIL
+             *
              * find the minimum from the right child subtree
-             * pIter has no left child
+             * pIter has no left child, so pTmp may be NIL
+             * pIter will take place of 'node' and 'node' will be deleted,
+             *   so below all link to pIter rather than 'node'
              */
             pIter = util_rbsubtree_min(node->right, _NIL(rbtree));
             pIterColor = pIter->color;
             pTmp = pIter->right;
             if (pIter->parent == node) {
-                /* pIter is direct child of node */
+                /* pIter is just (right) child of 'node' */
                 pTmp->parent = pIter;
             } else {
                 rbtree_transplant(rbtree, pIter, pIter->right);
@@ -157,7 +166,7 @@ void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
             /*
              * call func transplant node with pIter
              * handle left child of pIter after call rbtree_transplant
-             * use original node's color, so need not change color
+             * use original node's color, so need not change the color
              */
             rbtree_transplant(rbtree, node, pIter);
             pIter->left = node->left;
@@ -173,14 +182,13 @@ void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
 }
 
 /*
- * rbtree_delete_fixup RB-Tree property after delete operation
+ * rbtree_delete_fixup | fixup RB-Tree property after delete operation
  * @rbtree: the RB-Tree
- * @node: the node may need to fixup
+ * @node: the node may cause fixup
  */
 void rbtree_delete_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     /*
      * ns denotes node's sibling
-     *
      */
     util_rbtree_node_t *ns;
     while (node != rbtree->root && node->color == BLACK) {
@@ -188,21 +196,37 @@ void rbtree_delete_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
         if (node == node->parent->left) {
             ns = node->parent->right;
             /* node's sibling is red */
-            if (ns->color == RED) {
+            if (util_rbt_isred(ns)) {
+                /*
+                 * case 1: node's sibling is red
+                 */
                 util_rbt_black(ns);
                 util_rbt_red(node->parent);
                 rbtree_left_rotate(rbtree, node->parent);
+                ns = node->parent->right;
             }
-            if (ns->left->color == BLACK && ns->right->color == BLACK) {
+            if (util_rbt_isblack(ns->left) && util_rbt_isblack(ns->right)) {
+                /*
+                 * case 2: node'sibling is black
+                 * and left & right child all black
+                 */
                 util_rbt_red(ns);
                 node = node->parent;
             } else {
-                if (ns->right->color == BLACK) {
+                if (util_rbt_isblack(ns->right)) {
+                    /*
+                     * case 3: node’s sibling is black,
+                     * sibling’s left child is red, and its right child is black
+                     */
                     util_rbt_black(ns->left);
                     util_rbt_red(ns);
                     rbtree_right_rotate(rbtree, ns);
                     ns = node->parent->right;
                 }
+                /*
+                 * case 4: node’s sibling w is black, and sibling’s right
+                 * child is red
+                 */
                 ns->color = node->parent->color;
                 util_rbt_black(node->parent);
                 util_rbt_black(ns->right);
@@ -210,14 +234,53 @@ void rbtree_delete_fixup(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
                 node = rbtree->root;
             }
         } else {
-            /* node is the right child of its parent */
+            /* node is the right child of its parent, symmetric operation */
+            ns = node->parent->left;
+            /* node's sibling is red */
+            if (util_rbt_isred(ns)) {
+                /*
+                 * case 1: node's sibling is red
+                 */
+                util_rbt_black(ns);
+                util_rbt_red(node->parent);
+                rbtree_right_rotate(rbtree, node->parent);
+                ns = node->parent->left;
+            }
+            if (util_rbt_isblack(ns->left) && util_rbt_isblack(ns->right)) {
+                /*
+                 * case 2: node'sibling is black
+                 * and left & right child all black
+                 */
+                util_rbt_red(ns);
+                node = node->parent;
+            } else {
+                if (util_rbt_isblack(ns->left)) {
+                    /*
+                     * case 3: node’s sibling is black,
+                     * sibling’s left child is black, right child is red
+                     */
+                    util_rbt_black(ns->right);
+                    util_rbt_red(ns);
+                    rbtree_left_rotate(rbtree, ns);
+                    ns = node->parent->left;
+                }
+                /*
+                 * case 4: node’s sibling is black, and sibling’s left
+                 * child is red
+                 */
+                ns->color = node->parent->color;
+                util_rbt_black(node->parent);
+                util_rbt_black(ns->left);
+                rbtree_right_rotate(rbtree, node->parent);
+                node = rbtree->root;
+            }
         }
     }
     util_rbt_black(node);
 }
 
 /*
- * rbtree_insert_fixup  fixup RB-Tree property after insert operation
+ * rbtree_insert_fixup | fixup RB-Tree property after insert operation
  * @rbtree: the RB-Tree
  * @node: the inserted node, may cause fixup
  */
@@ -499,7 +562,7 @@ void rbtree_left_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     if (rclc != _NIL(rbtree)) {
         rclc->parent = node;
     }
-    /* make rc take over Node's position */
+    /* make rc take place of Node's position */
     rc->parent = node->parent;
 
     /* if 'node' is the root of the tree */
@@ -547,7 +610,7 @@ void rbtree_right_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     if (lcrc != _NIL(rbtree)) {
         lcrc->parent = node;
     }
-    /* make lc take over Node's position */
+    /* make lc take place of Node's position */
     lc->parent = node->parent;
 
     /* if 'node' is the root of the tree */
