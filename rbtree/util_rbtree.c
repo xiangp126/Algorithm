@@ -1,3 +1,7 @@
+/*
+ * RB-Tree implementation and check source
+ * Copyright by (C) 2018 PENG hi.pxiang@gmail.com
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include "util_rbtree.h"
@@ -124,6 +128,9 @@ void rbtree_transplant(util_rbtree_t *rbtree, util_rbtree_node_t *orig,
  * @node: the node to delete
  */
 void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
+    if (rbtree == NULL || node == NULL || node == _NIL(rbtree)) {
+        return;
+    }
     /*
      * pIter: the node will replace 'node'
      * pIterColor: record original color of *pIter

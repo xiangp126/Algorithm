@@ -1,3 +1,7 @@
+/*
+ * RB-Tree implementation and check source
+ * Copyright by (C) 2018 PENG hi.pxiang@gmail.com
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,17 +9,26 @@
 #include "md5.h"
 #include "util_rbtree.h"
 
-#define N 1000
-#define DEBUG 1
+#define N 1000000
+#define DEBUG 0
 
 void util_rbnode_opera(util_rbtree_node_t *node, void *data);
 void md5_digest(const uchar *str, uchar *digest);
 ulong hash_def(const char *str);
 inline void ECHO_TIME(const char *str, time_t startClock, time_t endClock);
 
+/*
+ * Check rbtree if works well
+ * 1> insert 100 0000 nodes
+ * 2> delete 10  0000 nodes
+ * 3> in-order travel the tree
+ */
 int main(int argc, char *argv[])
 {
     util_rbtree_t *rbtree = (util_rbtree_t *)malloc(sizeof(util_rbtree_t));
+    if (rbtree == NULL) {
+        oops("malloc rbtree failed");
+    }
     util_rbtree_init(rbtree);
 
     srand((unsigned)time(0));
@@ -23,6 +36,7 @@ int main(int argc, char *argv[])
     time_t searchStart, searchEnd;
     time_t delStart, delEnd;
 
+    /* start to insert node */
     insertStart = clock();
     for (int i = 0; i < N; ++i) {
         char *str = (char *)malloc(BUFSIZ);
@@ -36,19 +50,21 @@ int main(int argc, char *argv[])
         snprintf(str, BUFSIZ, "River%d",  i + 1);
 
         node->key = hash_def(str);
-        node->key = i + 1;
         node->data = (void *)str;
         util_rbtree_insert(rbtree, node);
         printf("%d th Node inserted\n", i + 1);
     }
     insertEnd = clock();
 
+#if 1
     /* mid travel the whole tree */
     printf("\nMid Travel the RB-Tree:\n");
     util_rbtree_mid_travel(rbtree, util_rbnode_opera, (void *)0);
     printf("\nRB-Tree Size: %d\n", rbtree->size);
     printf("\nRB-Tree Height: %d\n", util_rbtree_height(rbtree));
+#endif
 
+#if DEBUG
     /*
      * Check to search a Node, record the time
      *
@@ -81,7 +97,7 @@ int main(int argc, char *argv[])
 
     char sTmp[BUFSIZ] = {'\0'};
     delStart = clock();
-    for (int i = 125; i < 200; ++i) {
+    for (int i = 0; i < N; ++i) {
         snprintf(sTmp, BUFSIZ, "River%d",  i + 1);
         key = hash_def(sTmp);
         key = i + 1;
@@ -92,11 +108,29 @@ int main(int argc, char *argv[])
 
     ECHO_TIME("Delete", delStart, delEnd);
 
-    util_rbtree_node_t *node = (util_rbtree_node_t *)malloc(sizeof(util_rbtree_node_t));
-    node->key = 10005;
-    util_rbtree_insert(rbtree, node);
+    /* start to insert node */
+    insertStart = clock();
+    for (int i = 0; i < N; ++i) {
+        char *str = (char *)malloc(BUFSIZ);
+        memset(str, '\0', BUFSIZ);
 
-#if 1
+        util_rbtree_node_t *node = (util_rbtree_node_t *)malloc(sizeof(util_rbtree_node_t));
+        if (node == NULL) {
+            oops("malloc node failed");
+        }
+
+        snprintf(str, BUFSIZ, "River%d",  i + 1);
+
+        node->key = hash_def(str);
+        node->key = i + 1;
+        node->data = (void *)str;
+        util_rbtree_insert(rbtree, node);
+        printf("%d th Node inserted\n", i + 1);
+    }
+    insertEnd = clock();
+#endif
+
+#if DEBUG
     /* mid travel the whole tree */
     printf("\nMid Travel the RB-Tree:\n");
     util_rbtree_mid_travel(rbtree, util_rbnode_opera, (void *)0);
