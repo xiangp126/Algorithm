@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGXX := -Wall
+CFLAGXX := -Wall -std=c99
 CFLAGXX += -g3
 INC := .
 TARGET = demo

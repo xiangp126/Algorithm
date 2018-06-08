@@ -174,6 +174,9 @@ void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
             pIter->color = node->color;
         }
     }
+    /* truly destroy 'node' */
+    rbt_clear_link(node);
+    free(node);
 
     if (pIterColor == BLACK) {
         rbtree_delete_fixup(rbtree, pTmp);
