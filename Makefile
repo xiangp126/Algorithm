@@ -7,7 +7,7 @@ BINDIR = bin
 MAKE = make
 LIBS = libmybasic.so libmysort.so libmykmp.so
 
-SUBDIRS = basic kmp sort test
+SUBDIRS = basic kmp sort test rbtree
 
 all:
 	for i in $(SUBDIRS); do $(MAKE) -C $$i || exit 1; done

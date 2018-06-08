@@ -4,13 +4,16 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <string.h>
 #include <time.h>
 #include "md5.h"
 #include "util_rbtree.h"
 
-#define N 1000000
-#define DEBUG 0
+#define N 100000
+#define DEBUG 1
+/* sleep time unit second */
+#define SLEEPTIME 4
 
 void util_rbnode_opera(util_rbtree_node_t *node, void *data);
 void md5_digest(const uchar *str, uchar *digest);
@@ -30,13 +33,10 @@ int main(int argc, char *argv[])
         oops("malloc rbtree failed");
     }
     util_rbtree_init(rbtree);
-
     srand((unsigned)time(0));
-    time_t insertStart, insertEnd;
-    time_t searchStart, searchEnd;
-    time_t delStart, delEnd;
 
     /* start to insert node */
+    time_t insertStart, insertEnd;
     insertStart = clock();
     for (int i = 0; i < N; ++i) {
         char *str = (char *)malloc(BUFSIZ);
@@ -56,58 +56,64 @@ int main(int argc, char *argv[])
     }
     insertEnd = clock();
 
-#if 1
+#if DEBUG
     /* mid travel the whole tree */
     printf("\nMid Travel the RB-Tree:\n");
     util_rbtree_mid_travel(rbtree, util_rbnode_opera, (void *)0);
+#endif
+    ECHO_TIME("Insert", insertStart, insertEnd);
     printf("\nRB-Tree Size: %d\n", rbtree->size);
     printf("\nRB-Tree Height: %d\n", util_rbtree_height(rbtree));
-#endif
+    /* unit second */
+    sleep(SLEEPTIME);
 
-#if DEBUG
+#if 1
     /*
      * Check to search a Node, record the time
      *
      * Node key = 16623759665, data = River872339
      */
+    time_t searchStart, searchEnd;
     util_key_t key = 16623759665;
+
+    printf("\nWant to Search Node Key: %lu", key);
     searchStart = clock();
     util_rbtree_node_t *pF = util_rbtree_search(rbtree, key);
     searchEnd = clock();
 
-    ECHO_TIME("Insert", insertStart, insertEnd);
     ECHO_TIME("Search", searchStart, searchEnd);
-
-    util_rbnode_opera(pF, NULL);
+    /* util_rbnode_opera(pF, NULL); */
+    sleep(SLEEPTIME);
+#endif
 
     /*
      * Check to delete a Node, record the time
      *
      * Before delete
-     * Node key = 16116572318, data = River3168
-     * Node key = 16193871158, data = River316
      * Node key = 16359823583, data = River1040
      * Node key = 16423966950, data = River8254
+     * Node key = 16456595410, data = River55784
+     * Node key = 16515287870, data = River86997
      * Node key = 16540353187, data = River7257
      *
      * Will delete
-     * Node key = 16359823583, data = River1040
-     * Node key = 16423966950, data = River8254
+     * Node key = 16456595410, data = River55784
      */
 
-    char sTmp[BUFSIZ] = {'\0'};
+    time_t delStart, delEnd;
+
+    printf("\nWant to Delete Node Key: %lu", key);
+    sleep(SLEEPTIME);
+
     delStart = clock();
-    for (int i = 0; i < N; ++i) {
-        snprintf(sTmp, BUFSIZ, "River%d",  i + 1);
-        key = hash_def(sTmp);
-        key = i + 1;
-        pF = util_rbtree_search(rbtree, key);
-        util_rbtree_delete(rbtree, pF);
-    }
+    key = 16456595410;
+    pF = util_rbtree_search(rbtree, key);
+    util_rbtree_delete(rbtree, pF);
     delEnd = clock();
 
     ECHO_TIME("Delete", delStart, delEnd);
 
+#if 0
     /* start to insert node */
     insertStart = clock();
     for (int i = 0; i < N; ++i) {
@@ -132,7 +138,8 @@ int main(int argc, char *argv[])
 
 #if DEBUG
     /* mid travel the whole tree */
-    printf("\nMid Travel the RB-Tree:\n");
+    printf("\nInorder Travel the RB-Tree:\n");
+    sleep(SLEEPTIME);
     util_rbtree_mid_travel(rbtree, util_rbnode_opera, (void *)0);
     printf("\nRB-Tree Size: %d\n", rbtree->size);
     printf("\nRB-Tree Height: %d\n", util_rbtree_height(rbtree));

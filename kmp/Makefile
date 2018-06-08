@@ -5,7 +5,7 @@ LIBDIR = ../lib
 INCDIR = ../inc
 LIB = libmykmp.so
 
-all: ${LIB}
+all: $(LIB)
 
 SOURCE = $(wildcard *.cpp)
 OBJS   = $(patsubst %.cpp, %.o, $(SOURCE))
@@ -13,9 +13,9 @@ OBJS   = $(patsubst %.cpp, %.o, $(SOURCE))
 %.o: %.cpp
 	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@
 
-${LIB}: ${OBJS}
-	@mkdir -p ${LIBDIR}
-	${CC} -fPIC -shared $^ -L ${LIBDIR} -lmybasic -o ${shell pwd}/${LIBDIR}/${LIB}
+$(LIB): $(OBJS)
+	@mkdir -p $(LIBDIR)
+	$(CC) -fPIC -shared $^ -L $(LIBDIR) -lmybasic -o $(shell pwd)/$(LIBDIR)/$(LIB)
 
 .PHONY:
 clean:

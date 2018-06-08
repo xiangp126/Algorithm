@@ -1,15 +1,32 @@
 ## Algorithm
-- source algorithm will generate dynamic library, can be used for outer usage.
-- can be directly compiled on MAC and Linux
-- key kind of algorithm
-    - sort
+- Thoughts come from Web or classical books like 'Introduction to Algorithms, Third Edition'
+- Some source will generate dynamic library, for outer usage
+- Can be directly compiled on MAC and Linux
+- Key kind of algorithm
+    - 8+ kind of sort
+        - Linear
+            - bucketSort
+            - radixSort
+        - O(Nlog(N))
+            - quickSort
+            - quickSortOptimized
+            - shellSort
+            - heapSort
+            - mergeSort
+        - O(N^2)
+            - bubbleSort
+            - insertSort
     - kmp
+        - kmp
+        - kmpOptimized
+    - rbtree
 
 ## Quick Start
+- kmp & sort need c++11 support
+- rbtree is a standalone source
 ```bash
-# gcc need support C++11
-make
-source env.sh
+make -j
+source env.sh (need not for MAC)
 ldd bin/sortdemo
         linux-vdso.so.1 =>  (0x00007fffe4fc2000)
         libmybasic.so => ./lib/libmybasic.so (0x00007fae138aa000)      <== mylib
@@ -19,28 +36,12 @@ ldd bin/sortdemo
         libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fae12d3e000)
         libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fae12a35000)
         /lib64/ld-linux-x86-64.so.2 (0x00007fae13aad000)
+
+binary was under ./bin
 ```
 
-## Summarize Sort
-    basic sort No. 9+, according to description in book & website, implement as it.
-
-- Linear
-    - bucketSort
-    - radixSort
-- O(Nlog(N))
-    - quickSort
-    - quickSortOptimized
-    - shellSort
-    - heapSort
-    - mergeSort
-- O(N^2)
-    - bubbleSort
-    - insertSort
-
 ### Example
-
-You should source env.sh first (not needed for MAC).
-
+#### Sort
 ``` bash
 source env.sh
 ```
@@ -70,22 +71,17 @@ Input Here: 5
 -91 -84 -81 -67 -62 -37 -34 -33 -11 -7 11 13 17 31 40 40 44 60 77 82
 ```
 
-## Summarize Kmp
-    K.M.P Algorithm was very useful in context of sub string search.
-    - kmp
-    - kmpOptimized
-
-### Figures about Next array
-    You May Know Well about the Next Array From Below Two Figures.
+#### KMP
+You may know well about the next array from below two figures.
 
 ![next1](http://img1.tuicool.com/2E36nuQ.png!web)
 
 ![next2](http://img1.tuicool.com/qYN3u2v.png!web)
 
-### Example
-
+``` bash
+source env.sh
+```
 ```bash
-source env.sh (not needed for MAC)
 ./bin/kmpdemo
 basic kmp:
 str = BBCABCDABABCDABCDABDET

@@ -2,7 +2,8 @@ CC = gcc
 CFLAGXX := -Wall -std=c99
 CFLAGXX += -g3
 INC := .
-TARGET = demo
+BIN := ../bin
+TARGET = rbtreedemo
 
 all: $(TARGET)
 
@@ -16,7 +17,8 @@ OBJS    := $(patsubst %.c, %.o, $(patsubst %.cpp, %.o, $(SOURCE)))
 	$(CC) $(CFLAGXX) -I $(INC) -c $^ -o $@
 
 $(TARGET): $(OBJS)
-	$(CC) $^ -o $(TARGET)
+	@mkdir -p $(BIN)
+	$(CC) $^ -o $(shell pwd)/$(BIN)/$(TARGET)
 
 .PHONY:
 clean:
