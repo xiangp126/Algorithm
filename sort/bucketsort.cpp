@@ -1,5 +1,5 @@
-#include "mybasic.h"
-#include "mysort.h"
+#include "common.h"
+#include "sort.h"
 
 void bucketSort(vector<int> &nums) {
     int maxNum = 0;

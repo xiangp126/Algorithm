@@ -3,19 +3,19 @@ CFLAGXX += -Wall
 CFLAGXX += -std=c++11 -fPIC -g3
 LIBDIR = ../lib
 INCDIR = ../inc
-LIB = libmybasic.so
+LIB = libcommon.so
 
 SOURCE = $(wildcard *.cpp)
 OBJS   = $(patsubst %.cpp, %.o, $(SOURCE))
 
 all: $(LIB)
 
+%.o: %.cpp
+	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@
+
 $(LIB): $(OBJS)
 	@mkdir -p $(LIBDIR)
 	$(CC) -fPIC -shared $^ -o $(shell pwd)/$(LIBDIR)/$(LIB)
-
-%.o: %.cpp
-	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@
 
 .PHONY:
 clean:

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <algorithm>
-#include "mybasic.h"
-#include "mysort.h"
+#include "common.h"
+#include "sort.h"
 
 using namespace std;
 

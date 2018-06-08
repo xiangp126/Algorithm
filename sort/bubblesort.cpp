@@ -1,5 +1,5 @@
-#include "mybasic.h"
-#include "mysort.h"
+#include "common.h"
+#include "sort.h"
 
 void bubbleSort(vector<int> &nums) {
     int N = nums.size();

@@ -2,20 +2,25 @@ CC = g++
 CFLAGXX += -Wall
 CFLAGXX += -std=c++11 -fPIC -g3
 LIBDIR = ../lib
+BINDIR = ../bin
 INCDIR = ../inc
-LIB = libmykmp.so
+LIB := libkmp.so
 
-all: $(LIB)
+TARGET := kmpdemo
+
+all: $(TARGET)
 
 SOURCE = $(wildcard *.cpp)
 OBJS   = $(patsubst %.cpp, %.o, $(SOURCE))
+LIBOBJS = $(filter-out kmpdemo.o, $(OBJS))
 
 %.o: %.cpp
 	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@
 
-$(LIB): $(OBJS)
-	@mkdir -p $(LIBDIR)
-	$(CC) -fPIC -shared $^ -L $(LIBDIR) -lmybasic -o $(shell pwd)/$(LIBDIR)/$(LIB)
+$(TARGET): $(OBJS)
+	@mkdir -p $(BINDIR)
+	$(CC) $^ -L $(LIBDIR) -lcommon -o $(shell pwd)/$(BINDIR)/$(TARGET)
+	${CC} -fPIC -shared $(LIBOBJS) -L ${LIBDIR} -lcommon -o ${shell pwd}/${LIBDIR}/${LIB}
 
 .PHONY:
 clean:

@@ -1,4 +1,4 @@
-#include "mybasic.h"
+#include "common.h"
 
 void printArray(vector<int> &nums) {
     for (auto val : nums) {

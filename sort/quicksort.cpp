@@ -1,5 +1,5 @@
-#include "mybasic.h"
-#include "mysort.h"
+#include "common.h"
+#include "sort.h"
 
 static void qSort(vector<int> &, int, int);
 static int partition(vector<int> &, int, int);

@@ -1,5 +1,5 @@
-#include "mybasic.h"
-#include "mysort.h"
+#include "common.h"
+#include "sort.h"
 
 void makeHeap(vector<int> &);
 void percolateDown(vector<int> &, int, int);

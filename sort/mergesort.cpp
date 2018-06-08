@@ -1,5 +1,5 @@
-#include "mysort.h"
-#include "mybasic.h"
+#include "sort.h"
+#include "common.h"
 
 static void
 mergeTwoSortedArray(vector<int> &, vector<int> &, int, int);

@@ -1,12 +1,12 @@
 #include <iostream>
-#include "mybasic.h"
-#include "mykmp.h"
+#include "common.h"
+#include "kmp.h"
 
 int main(int argc, char *argv[])
 {
     const char *str = "BBCABCDABABCDABCDABDET";
     const char *pattern = "BCDABDE";
-    int ptLen = strlen(pattern);
+    // int ptLen = strlen(pattern);
     int kmpIndex = -1;
 
     cout << "basic kmp: " << endl;

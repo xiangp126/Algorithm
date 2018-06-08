@@ -1,4 +1,4 @@
-#include "mysort.h"
+#include "sort.h"
 
 void insertSort(vector<int> &nums) {
     int N = nums.size();

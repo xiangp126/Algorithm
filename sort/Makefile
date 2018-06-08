@@ -3,19 +3,24 @@ CFLAGXX += -Wall
 CFLAGXX += -std=c++11 -fPIC -g3
 LIBDIR = ../lib
 INCDIR = ../inc
-LIB = libmysort.so
+BINDIR = ../bin
+LIB = libsort.so
 
-all: ${LIB}
+TARGET := sortdemo
+
+all: ${TARGET}
 
 SOURCE = $(wildcard *.cpp)
 OBJS   = $(patsubst %.cpp, %.o, $(SOURCE))
+LIBOBJS = $(filter-out sortdemo.o, $(OBJS))
 
 %.o: %.cpp
 	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@
 
-${LIB}: ${OBJS}
-	@mkdir -p ${LIBDIR}
-	${CC} -fPIC -shared $^ -L ${LIBDIR} -lmybasic -o ${shell pwd}/${LIBDIR}/${LIB}
+${TARGET}: ${OBJS}
+	@mkdir -p ${BINDIR}
+	$(CC) -L $(LIBDIR) -lcommon $^ -o $(shell pwd)/$(BINDIR)/$(TARGET)
+	${CC} -fPIC -shared $(LIBOBJS) -L ${LIBDIR} -lcommon -o ${shell pwd}/${LIBDIR}/${LIB}
 
 .PHONY:
 clean:

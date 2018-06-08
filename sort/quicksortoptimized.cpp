@@ -1,6 +1,6 @@
 #include <utility>
-#include "mybasic.h"
-#include "mysort.h"
+#include "common.h"
+#include "sort.h"
 
 using std::pair;
 using std::make_pair;

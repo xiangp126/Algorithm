@@ -5,9 +5,8 @@ INCDIR = inc
 LIBDIR = lib
 BINDIR = bin
 MAKE = make
-LIBS = libmybasic.so libmysort.so libmykmp.so
 
-SUBDIRS = basic kmp sort test rbtree
+SUBDIRS = common kmp sort rbtree
 
 all:
 	for i in $(SUBDIRS); do $(MAKE) -C $$i || exit 1; done
@@ -15,3 +14,4 @@ all:
 .PHONY:
 clean:
 	for i in $(SUBDIRS); do $(MAKE) -C $$i clean || exit 1; done
+	-rm -rf $(BINDIR) $(LIBDIR)

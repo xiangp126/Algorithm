@@ -1,7 +1,5 @@
 ## Algorithm
 - Thoughts come from Web or classical books like 'Introduction to Algorithms, Third Edition'
-- Some source will generate dynamic library, for outer usage
-- Can be directly compiled on MAC and Linux
 - Key kind of algorithm
     - 8+ kind of sort
         - Linear
@@ -21,12 +19,19 @@
         - kmpOptimized
     - rbtree
 
-## Quick Start
-- kmp & sort need c++11 support
-- rbtree is a standalone source
+## Note
+- [Inc](./inc) use soft link, making each template itself can be used as standalone
 ```bash
-make -j
-source env.sh (need not for MAC)
+./inc
+
+common.h@ -> ../common/common.h
+kmp.h@ -> ../kmp/kmp.h
+md5.h@ -> ../rbtree/md5.h
+rbtree.h@ -> ../rbtree/util_rbtree.h
+sort.h@ -> ../sort/sort.h
+```
+- Each template will generate dynamic library, for outer usage
+```bash
 ldd bin/sortdemo
         linux-vdso.so.1 =>  (0x00007fffe4fc2000)
         libmybasic.so => ./lib/libmybasic.so (0x00007fae138aa000)      <== mylib
@@ -36,6 +41,16 @@ ldd bin/sortdemo
         libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fae12d3e000)
         libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fae12a35000)
         /lib64/ld-linux-x86-64.so.2 (0x00007fae13aad000)
+```
+- Need source env.sh before use
+MAC need not
+
+## Quick Start
+- kmp & sort need c++11 support
+- rbtree is a standalone source
+```bash
+make -j
+source env.sh
 
 binary was under ./bin
 ```

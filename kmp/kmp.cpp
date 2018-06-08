@@ -1,5 +1,5 @@
-#include "mykmp.h"
-#include "mybasic.h"
+#include "kmp.h"
+#include "common.h"
 
 static void getNext(const char *, int *next);
 

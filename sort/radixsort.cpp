@@ -1,8 +1,8 @@
-#include "mysort.h"
-#include "mybasic.h"
+#include "sort.h"
+#include "common.h"
 
 void radixSort(vector<int> &nums) {
-    int N = nums.size();
+    // int N = nums.size();
     int minNum = 0, maxNum = 0;
     for (auto val: nums) {
         minNum = std::min(minNum, val);
