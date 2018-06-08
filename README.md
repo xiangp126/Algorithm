@@ -1,49 +1,56 @@
-## Algorithm
+- This projects aims to implement basic data structure and algorithm
 - Thoughts come from Web or classical books like 'Introduction to Algorithms, Third Edition'
-- Key kind of algorithm
+- Walked through
     - 8+ kind of sort
-        - Linear
-            - bucketSort
-            - radixSort
-        - O(Nlog(N))
-            - quickSort
-            - quickSortOptimized
-            - shellSort
-            - heapSort
-            - mergeSort
-        - O(N^2)
-            - bubbleSort
-            - insertSort
+     - Linear
+     - bucketSort
+     - radixSort
+     - O(Nlog(N))
+       - quickSort
+       - quickSortOptimized
+       - shellSort
+       - heapSort
+     - mergeSort
+     - O(N^2)
+       - bubbleSort
+       - insertSort
     - kmp
-        - kmp
-        - kmpOptimized
+     - kmp
+     - kmpOptimized
     - rbtree
 
 ## Note
-- [Inc](./inc) use soft link, making each template itself can be used as standalone
+- Need set env variables before execute binary (Mac need not do this)
+```bash
+export LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH
+```
+or just
+```bash
+source env.sh
+```
+
+- Header directory [Inc](./inc) use soft link, making each template itself can be used as standalone
 ```bash
 ./inc
-
+# example
 common.h@ -> ../common/common.h
 kmp.h@ -> ../kmp/kmp.h
 md5.h@ -> ../rbtree/md5.h
 rbtree.h@ -> ../rbtree/util_rbtree.h
 sort.h@ -> ../sort/sort.h
 ```
-- Each template will generate dynamic library, for outer usage
+- Each template will generate dynamic library, for shared use
 ```bash
-ldd bin/sortdemo
-        linux-vdso.so.1 =>  (0x00007fffe4fc2000)
-        libmybasic.so => ./lib/libmybasic.so (0x00007fae138aa000)      <== mylib
-        libmysort.so => ./lib/libmysort.so (0x00007fae136a0000)        <== mylib
-        libstdc++.so.6 => /usr/lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007fae1331e000)
-        libgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007fae13108000)
-        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007fae12d3e000)
-        libm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007fae12a35000)
-        /lib64/ld-linux-x86-64.so.2 (0x00007fae13aad000)
+# example
+ldd lib/libsort.so
+        linux-vdso.so.1 =>  (0x00007ffdd0929000)
+        libcommon.so => ./lib/libcommon.so (0x00002afbcd8e0000)     <= mylib
+        libstdc++.so.6 => /lib64/libstdc++.so.6 (0x00002afbcdae3000)
+        libm.so.6 => /lib64/libm.so.6 (0x00002afbcddeb000)
+        libgcc_s.so.1 => /lib64/libgcc_s.so.1 (0x00002afbce0ed000)
+        libc.so.6 => /lib64/libc.so.6 (0x00002afbce303000)
+        /lib64/ld-linux-x86-64.so.2 (0x00002afbcd4b2000)
 ```
-- Need source env.sh before use
-MAC need not
 
 ## Quick Start
 - kmp & sort need c++11 support
@@ -52,15 +59,11 @@ MAC need not
 make -j
 source env.sh
 
-binary was under ./bin
+# binary was under ./bin
 ```
 
 ### Example
 #### Sort
-``` bash
-source env.sh
-```
-
 ```bash
 ./bin/sortdemo
 ||=>> Select Sort Algorithm @
@@ -93,9 +96,6 @@ You may know well about the next array from below two figures.
 
 ![next2](http://img1.tuicool.com/qYN3u2v.png!web)
 
-``` bash
-source env.sh
-```
 ```bash
 ./bin/kmpdemo
 basic kmp:

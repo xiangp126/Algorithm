@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGXX := -Wall -std=c99
-CFLAGXX += -g3
+CFLAGXX += -g3 -fPIC
 INCDIR := .
 BINDIR := ../bin
 LIBDIR := ../lib
