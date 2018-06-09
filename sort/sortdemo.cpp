@@ -84,6 +84,7 @@ int main(int argc, char *argv[])
         cout << endl;
         printArray(nums);
         cout << endl;
+        sleep(2);
     }
 
     return 0;

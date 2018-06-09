@@ -1,22 +1,22 @@
-- This projects aims to implement basic data structure and algorithm
+- This projects aims to implement and test basic data structure and algorithm
 - Thoughts come from Web or classical books like 'Introduction to Algorithms, Third Edition'
 - Walked through
     - 8+ kind of sort
-     - Linear
-     - bucketSort
-     - radixSort
-     - O(Nlog(N))
-       - quickSort
-       - quickSortOptimized
-       - shellSort
-       - heapSort
-     - mergeSort
-     - O(N^2)
-       - bubbleSort
-       - insertSort
+        - Linear
+        - bucketSort
+        - radixSort
+        - O(Nlog(N))
+            - quickSort
+            - quickSortOptimized
+            - shellSort
+            - heapSort
+        - mergeSort
+        - O(N^2)
+            - bubbleSort
+            - insertSort
     - kmp
-     - kmp
-     - kmpOptimized
+        - kmp
+        - kmpOptimized
     - rbtree
 
 ## Note
@@ -66,6 +66,7 @@ source env.sh
 #### Sort
 ```bash
 ./bin/sortdemo
+
 ||=>> Select Sort Algorithm @
 [1]: Bubble Sort       [2]: Insert Sort       [3]: Quick  Sort
 [4]: Quick  Sort(Op)   [5]: Shell  Sort       [6]: Heap   Sort
@@ -84,9 +85,7 @@ Input Here: 3
 [10]:Library Fun       [*]: Quit Selection
 -------------------------- Original Array --------------------------
 11 -91 40 -37 -84 31 44 -62 -11 -67 -33 -34 60 -81 77 40 -7 82 13 17
-Input Here: 5
--------------------------- Shell Sort --------------------------
--91 -84 -81 -67 -62 -37 -34 -33 -11 -7 11 13 17 31 40 40 44 60 77 82
+Input Here:
 ```
 
 #### KMP
