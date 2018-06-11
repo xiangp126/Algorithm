@@ -1,4 +1,4 @@
-- This projects aims to implement and test basic data structure and algorithm
+- This projects aims to implement and utilize basic data structure and algorithm
 - Thoughts come from Web or classical books like 'Introduction to Algorithms, Third Edition'
 - Walked through
     - 8+ kind of sort

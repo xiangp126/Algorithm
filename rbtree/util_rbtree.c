@@ -643,7 +643,7 @@ void rbtree_right_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
  * util_rbtree_search
  * @rbtree: the RB-Tree
  * @key: the item to compare in the node
- * return the node found
+ * return NULL if not found
  */
 util_rbtree_node_t* util_rbtree_search(util_rbtree_t *rbtree, util_key_t key) {
     if (rbtree != NULL) {

@@ -9,8 +9,9 @@
 #include <time.h>
 #include "util_rbtree.h"
 
-#define N 100000
-#define DEBUG 1
+#define N       1000000
+#define DEBUG   1
+#define KEY_MAX 1000000
 /* sleep time unit second */
 #define SLEEPTIME 4
 
@@ -46,7 +47,7 @@ int main(int argc, char *argv[])
 
         snprintf(str, BUFSIZ, "River%d",  i + 1);
 
-        node->key = i + 1;
+        node->key = rand() % KEY_MAX;
         node->data = (void *)str;
         util_rbtree_insert(rbtree, node);
         printf("%d th Node inserted\n", i + 1);
@@ -68,16 +69,22 @@ int main(int argc, char *argv[])
     /*
      * Check to search a Node, record the time
      *
-     * Node key = 16623759665, data = River872339
+     * random key to search
      */
     time_t searchStart, searchEnd;
-    util_key_t key = 16623759665;
+    util_key_t key = rand() % KEY_MAX;
 
     printf("\nWant to Search Node Key: %lu", key);
     searchStart = clock();
     util_rbtree_node_t *pF = util_rbtree_search(rbtree, key);
     searchEnd = clock();
 
+    if (pF == NULL) {
+        printf(" Not Found\n");
+    } else {
+        printf(" Found\n");
+        util_rbnode_opera(pF, NULL);
+    }
     ECHO_TIME("Search", searchStart, searchEnd);
     /* util_rbnode_opera(pF, NULL); */
     sleep(SLEEPTIME);
@@ -86,28 +93,25 @@ int main(int argc, char *argv[])
     /*
      * Check to delete a Node, record the time
      *
-     * Before delete
-     * Node key = 16359823583, data = River1040
-     * Node key = 16423966950, data = River8254
-     * Node key = 16456595410, data = River55784
-     * Node key = 16515287870, data = River86997
-     * Node key = 16540353187, data = River7257
-     *
-     * Will delete
-     * Node key = 16456595410, data = River55784
+     * random delete
      */
-
     time_t delStart, delEnd;
+    key = rand() % KEY_MAX;
 
     printf("\nWant to Delete Node Key: %lu", key);
     sleep(SLEEPTIME);
 
     delStart = clock();
-    key = 16456595410;
     pF = util_rbtree_search(rbtree, key);
     util_rbtree_delete(rbtree, pF);
     delEnd = clock();
 
+    if (pF == NULL) {
+        printf(" Not Found\n");
+    } else {
+        printf(" Found\n");
+        util_rbnode_opera(pF, NULL);
+    }
     ECHO_TIME("Delete", delStart, delEnd);
 
 #if 0
@@ -160,6 +164,6 @@ void util_rbnode_opera(util_rbtree_node_t *node, void *data) {
 void ECHO_TIME(const char *str, time_t startClock, time_t endClock) {
     time_t elapsedTime = ((endClock - startClock) * 1000000)
                                              / (double)CLOCKS_PER_SEC;
-    printf("\n%s Time Elapsed: %ld ms %ld us\n", str, elapsedTime / 1000,
+    printf("%s Time Elapsed: %ld ms %ld us\n", str, elapsedTime / 1000,
                                                       elapsedTime % 1000);
 }
