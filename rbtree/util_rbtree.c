@@ -23,15 +23,20 @@ static void rbtree_transplant(util_rbtree_t *rbtree,
                               util_rbtree_node_t *orig,
                               util_rbtree_node_t *newt);
 
-
+/*
+ * initialize a RB-Tree
+ */
 void util_rbtree_init(util_rbtree_t *rbtree) {
     if (rbtree != NULL) {
         util_rbtree_node_t *nil = _NIL(rbtree);
-
         /*
          * clear NIL's link
          * set NIL color black
+         *
          * It doesn't matter what NIL's other element was
+         *
+         * nil->left = nil;
+         * nil->right = nil;
          */
         rbt_clear_link(nil);
         util_rbt_black(nil);
@@ -128,7 +133,8 @@ void rbtree_transplant(util_rbtree_t *rbtree, util_rbtree_node_t *orig,
  * @return void
  */
 void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
-    if (rbtree == NULL || node == NULL || node == _NIL(rbtree)) {
+    if (rbtree == NULL || util_rbtree_isempty(rbtree)
+                       || node == NULL || node == _NIL(rbtree)) {
         return;
     }
 
@@ -764,9 +770,10 @@ void rbtree_mid_travel(util_rbtree_node_t *node, util_rbtree_node_t *sentinel,
 }
 
 /*
- * util_rbtree_height
- * @rbtree: The RB-Tree tree
+ * util_rbtree_height | get height of the tree
  * recursive method
+ *
+ * @rbtree: The RB-Tree tree
  */
 int util_rbtree_height(util_rbtree_t *rbtree) {
     if ((rbtree != NULL) && (! util_rbtree_isempty(rbtree))) {

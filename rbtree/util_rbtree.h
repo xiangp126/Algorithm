@@ -177,7 +177,7 @@ void util_rbtree_mid_travel(util_rbtree_t *rbtree,
                             void (*nodefunc)(util_rbtree_node_t *));
 
 /*
- * util_rbtree_height
+ * util_rbtree_height | get height of the tree
  * @rbtree
  * return 0 if tree is empty
  */

@@ -112,14 +112,14 @@ int main(int argc, char *argv[])
             printf(" Not Found\n");
         } else {
             printf(" Found\n");
-            treenode_data_handle(pF);
             util_rbtree_delete(rbtree, pF);
+            treenode_data_handle(pF);
         }
     }
     delEnd = clock();
 
     /* treenode_data_handle(pF); */
-    ECHO_TIME("Delete", delStart, delEnd);
+    ECHO_TIME("\nDelete", delStart, delEnd);
     sleep(SLEEPTIME);
 
 #if 0

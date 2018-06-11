@@ -17,7 +17,7 @@
     - kmp
         - kmp
         - kmpOptimized
-    - rbtree
+    - red-black tree
     - hash
         - consistent hash
 

@@ -3,3 +3,4 @@ demo
 bin/
 lib/
 *.dSYM/
+core*
