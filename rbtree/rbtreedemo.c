@@ -9,9 +9,8 @@
 #include <time.h>
 #include "util_rbtree.h"
 
-/* #define N       1000000 */
-#define N       2
-#define DEBUG   1
+#define N       1000000
+#define DEBUG   0
 /* maximum key value */
 #define KEY_MAX N
 /* sleep time unit second */
@@ -108,16 +107,20 @@ int main(int argc, char *argv[])
         key = rand() % KEY_MAX;
         printf("\nWant to Delete Node Key: %lu", key);
 
-        node = &rbtreeNodes[key];
-        util_rbtree_delete(rbtree, node);
+        pF = util_rbtree_search(rbtree, key);
+        if (pF == NULL) {
+            printf(" Not Found\n");
+        } else {
+            printf(" Found\n");
+            treenode_data_handle(pF);
+            util_rbtree_delete(rbtree, pF);
+        }
     }
     delEnd = clock();
 
     /* treenode_data_handle(pF); */
     ECHO_TIME("Delete", delStart, delEnd);
     sleep(SLEEPTIME);
-
-    return 0;
 
 #if 0
     /* start to insert node */
@@ -142,17 +145,14 @@ int main(int argc, char *argv[])
     insertEnd = clock();
 #endif
 
-#if DEBUG
     /* mid travel the whole tree */
     printf("\nInorder Travel the RB-Tree:\n");
     sleep(SLEEPTIME);
     util_rbtree_mid_travel(rbtree, treenode_data_handle);
     printf("\nRB-Tree Size: %d\n", rbtree->size);
     printf("\nRB-Tree Height: %d\n", util_rbtree_height(rbtree));
-#endif
 
     printf("\n");
-
     return 0;
 }
 
@@ -169,7 +169,7 @@ void treenode_data_handle(util_rbtree_node_t *node) {
 
 void ECHO_TIME(const char *str, time_t startClock, time_t endClock) {
     time_t elapsedTime = ((endClock - startClock) * 1000000)
-                                             / (double)CLOCKS_PER_SEC;
+        / (double)CLOCKS_PER_SEC;
     printf("%s Time Elapsed: %ld ms %ld us\n", str, elapsedTime / 1000,
-                                                      elapsedTime % 1000);
+                elapsedTime % 1000);
 }

@@ -131,6 +131,19 @@ void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     if (rbtree == NULL || node == NULL || node == _NIL(rbtree)) {
         return;
     }
+
+    /*
+     * fix issue 1 on Github
+     * in case node passed in was not returned from util_rbtree_search
+     * may cause segmentation fault afterwards
+     */
+    /*
+    util_key_t key = node->key;
+    util_rbtree_node_t *pF = util_rbtree_search(rbtree, key);
+    if (pF != node) {
+        return;
+    } */
+
     /*
      * pIter: the node will replace 'node'
      * pIterColor: record original color of *pIter
@@ -158,6 +171,10 @@ void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
              * pIter has no left child, so pTmp may be NIL
              * pIter will take place of 'node' and 'node' will be deleted,
              *   so below all link to pIter rather than 'node'
+             *
+             * Issue 1 on github was crashed here, wrong passed node
+             * node->right = 0x0 not _NIL(rbtree)
+             * causing pIter NULL
              */
             pIter = util_rbsubtree_min(node->right, _NIL(rbtree));
             pIterColor = pIter->color;
