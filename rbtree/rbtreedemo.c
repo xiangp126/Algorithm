@@ -108,13 +108,19 @@ int main(int argc, char *argv[])
         key = rand() % KEY_MAX;
         printf("\nWant to Delete Node Key: %lu", key);
 
-        node = &rbtreeNodes[key];
-        util_rbtree_delete(rbtree, node);
+        pF = util_rbtree_search(rbtree, key);
+        if (pF == NULL) {
+            printf(" Not Found\n");
+        } else {
+            printf(" Found\n");
+            util_rbtree_delete(rbtree, pF);
+            treenode_data_handle(pF);
+        }
     }
     delEnd = clock();
 
     /* treenode_data_handle(pF); */
-    ECHO_TIME("Delete", delStart, delEnd);
+    ECHO_TIME("\nDelete", delStart, delEnd);
     sleep(SLEEPTIME);
 
     return 0;
