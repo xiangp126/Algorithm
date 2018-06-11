@@ -4,6 +4,7 @@
 
 static void md5_digest(const uchar *str, uchar *digest);
 static int conhash_add_replica(conhash_t *conhash, conhash_node_t *node);
+static int conhash_del_replica(conhash_t *conhash, conhash_node_t *node);
 
 /*
  * hashfunc_md5 | default hash function using md5
@@ -128,7 +129,8 @@ int conhash_add_replica(conhash_t *conhash, conhash_node_t *node) {
             rbnode = (util_rbtree_node_t *)malloc(sizeof(util_rbtree_node_t));
             if (rbnode != NULL) {
                 rbnode->key = hashVal;
-                conhash_vnode_t *vnode = (conhash_vnode_t *)malloc(sizeof(conhash_vnode_t));
+                conhash_vnode_t *vnode =
+                    (conhash_vnode_t *)malloc(sizeof(conhash_vnode_t));
                 if (vnode != NULL) {
                     vnode->hash = hashVal;
                     vnode->node = node;
@@ -182,4 +184,72 @@ conhash_node_t *conhash_lookup(conhash_t *conhash, const char *object) {
         return vnode->node;
     }
     return NULL;
+}
+
+/*
+ * conhash_del_node | del node in consistent hash table
+ * @conhash: the consistent hash table
+ * @node: the node in the hash table that will be deleted
+ * @return CONHASH_ERROR when error
+ */
+int conhash_del_node(conhash_t *conhash, conhash_node_t *node) {
+    if (conhash == NULL || node == NULL) {
+        return CONHASH_ERROR;
+    }
+
+    /* if (! (node->flag & NODE_FLAG_INIT) || node->flag & NODE_FLAG_IN) { */
+        /* return CONHASH_ERROR; */
+    /* } */
+    /* node->flag |= NODE_FLAG_IN; */
+
+    conhash_del_replica(conhash, node);
+    return CONHASH_OK;
+}
+
+/*
+ * conhash_del_replica | add replicas into the RB-Tree of hash table
+ * @conhash: the consistent hash table
+ * @node: the node that will be added
+ * @return CONHASH_ERROR if add error
+ */
+int conhash_del_replica(conhash_t *conhash, conhash_node_t *node) {
+    if (conhash == NULL || node == NULL) {
+        return CONHASH_ERROR;
+    }
+
+    util_rbtree_t *vnodeTree = &conhash->vnodeTree;
+    util_rbtree_node_t *rbnode;
+    ulong hashVal;
+    char buff[BUFSIZ];
+
+    for (uint idx = 0; idx < node->replicas; ++idx) {
+        memset(buff, '\0', BUFSIZ);
+        /*
+         * %3d -> right align padding 0 if not 3bit width, %-3d -> left align
+         * str: Hello
+         * Hello-000, Hello-010, Hello-1234
+         */
+        snprintf(buff, BUFSIZ - 1, "%s-%03d", node->identity, idx);
+        /* calculate the hash value */
+        hashVal = conhash->hashfunc(buff);
+
+        rbnode = util_rbtree_search(vnodeTree, hashVal);
+        if (rbnode != NULL) {
+            conhash_vnode_t *vnode = (conhash_vnode_t *)rbnode->data;
+            /*
+             * in case has hash collision, double check the condition
+             */
+            if (vnode->node == node) {
+                util_rbtree_delete(vnodeTree, rbnode);
+                --conhash->vnodeCnt;
+                /*
+                 * util_rbtree_delete did not do free itself
+                 * leave it for the function call it
+                 */
+                free(vnode);
+                free(rbnode);
+            }
+        }
+    }
+    return CONHASH_OK;
 }

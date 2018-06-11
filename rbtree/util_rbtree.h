@@ -122,6 +122,10 @@ void util_rbtree_insert(util_rbtree_t *rbtree, util_rbtree_node_t *node);
 /*
  * delete a node from the tree
  * will call fix_up routine after deletion
+ *
+ * Attention:
+ * for node->data may points to other structure, so leave free(node)
+ * to the function calls this 'delete'
  */
 void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node);
 

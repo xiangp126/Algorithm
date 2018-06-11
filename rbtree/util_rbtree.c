@@ -81,7 +81,7 @@ void util_rbtree_insert(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     util_rbt_red(node);
     rbtree_insert_fixup(rbtree, node);
 
-    rbtree->size++;
+    ++rbtree->size;
 }
 
 /*
@@ -126,6 +126,7 @@ void rbtree_transplant(util_rbtree_t *rbtree, util_rbtree_node_t *orig,
  * util_rbtree_delete
  * @rbtree: the RB-Tree
  * @node: the node to delete
+ * @return void
  */
 void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
     if (rbtree == NULL || node == NULL || node == _NIL(rbtree)) {
@@ -181,14 +182,18 @@ void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
             pIter->color = node->color;
         }
     }
-    /* truly destroy 'node' */
+
     rbt_clear_link(node);
-    free(node);
+    /*
+     * free(node);
+     * for node->data may points to other structure, so leave free(node)
+     * to the function calls this 'delete'
+     */
 
     if (pIterColor == BLACK) {
         rbtree_delete_fixup(rbtree, pTmp);
     }
-    rbtree->size--;
+    --rbtree->size;
 }
 
 /*

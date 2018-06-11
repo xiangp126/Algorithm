@@ -54,7 +54,7 @@ struct conhash_vnode_s {
  */
 struct conhash_s {
     util_rbtree_t vnodeTree;
-    uint vnodeCnt;
+    volatile uint vnodeCnt;
     ulong (*hashfunc)(const char *);
 };
 
@@ -110,6 +110,14 @@ uint conhash_vnode_cnt(const conhash_t *conhash);
  * @return NULL if not found
  */
 conhash_node_t *conhash_lookup(conhash_t *conhash, const char *object);
+
+/*
+ * conhash_del_node | del node in consistent hash table
+ * @conhash: the consistent hash table
+ * @node: the node in the hash table that will be deleted
+ * @return CONHASH_ERROR when error
+ */
+int conhash_del_node(conhash_t *conhash, conhash_node_t *node);
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,7 @@
 #include "conhash.h"
 
-#define NODECNT 5
+#define NODECNT     5
+#define ECHO_TRAVEL 0
 conhash_node_t conhashNodes[NODECNT];
 
 static void conhash_vnode_opera(util_rbtree_node_t *node, void *data);
@@ -13,14 +14,14 @@ int main(int argc, char *argv[])
 
     /*
      *
-     *                           key (hashVal)
-     *                          /
-     *                    rbnode
-     *                   /      \
-     *          vnodeTree        data * -> hashVal
-     *        /          \ ...             node * -> identity
-     * conhash  vnodeCnt                             replicas
-     *        \                                      flag
+     *                             key (hashVal)
+     *                            /
+     *                    rbnode *
+     *                   /        \
+     *          vnodeTree          data * -> hashVal
+     *        /          \ ...               node * -> identity
+     * conhash  vnodeCnt                               replicas
+     *        \                                        flag
      *          hashfunc
      *
      *
@@ -38,10 +39,27 @@ int main(int argc, char *argv[])
         conhash_add_node(conhash, &conhashNodes[3]);
         conhash_add_node(conhash, &conhashNodes[4]);
 
-        printf("virtual nodes number %d\n", conhash_vnode_cnt(conhash));
-        printf("the hashing results--------------------------------------:\n");
+        printf("Total Virtual Node Count : %d\n", conhash_vnode_cnt(conhash));
 
-        /* util_rbtree_mid_travel(&conhash->vnodeTree, conhash_vnode_opera, NULL); */
+#if ECHO_TRAVEL
+        printf("\nIn-Order travel RB-Tree\n");
+        util_rbtree_mid_travel(&conhash->vnodeTree, conhash_vnode_opera, NULL);
+#endif
+
+        for(int idx = 0; idx < 20; idx++) {
+            snprintf(buff, BUFSIZ - 1, "James.km%03d", idx);
+            node = conhash_lookup(conhash, buff);
+            if(node) {
+                printf("[%16s] is in node: [%16s]\n", buff, node->identity);
+            }
+        }
+
+        conhash_node_t *delNode = &conhashNodes[1];
+        conhash_del_node(conhash, &conhashNodes[1]);
+        printf("\nDelete Node [%s], Total Virtual Node Count: %d\n\n", delNode->identity, conhash_vnode_cnt(conhash));
+#if ECHO_TRAVEL
+        util_rbtree_mid_travel(&conhash->vnodeTree, conhash_vnode_opera, NULL);
+#endif
 
         for(int idx = 0; idx < 20; idx++) {
             snprintf(buff, BUFSIZ - 1, "James.km%03d", idx);
