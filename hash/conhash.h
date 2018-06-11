@@ -3,6 +3,7 @@
 
 #include "rbtree.h"
 
+#define CONHASH_DEBUG  0
 typedef struct conhash_node_s conhash_node_t;
 typedef struct conhash_vnode_s conhash_vnode_t;
 typedef struct conhash_s conhash_t;

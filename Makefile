@@ -14,4 +14,4 @@ all:
 .PHONY:
 clean:
 	for i in $(SUBDIRS); do $(MAKE) -C $$i clean || exit 1; done
-	-rm -rf $(BINDIR) $(LIBDIR)
+	-rm -rf $(BINDIR)

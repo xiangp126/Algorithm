@@ -1,8 +1,9 @@
 #include "conhash.h"
 
 #define NODECNT 5
-#define DEBUG   1
 conhash_node_t conhashNodes[NODECNT];
+
+static void conhash_vnode_opera(util_rbtree_node_t *node, void *data);
 
 int main(int argc, char *argv[])
 {
@@ -16,10 +17,10 @@ int main(int argc, char *argv[])
      *                          /
      *                    rbnode
      *                   /      \
-     *          vnodeTree        data ()
-     *        /          \
-     * conhash  vnodeCnt
-     *        \
+     *          vnodeTree        data * -> hashVal
+     *        /          \ ...             node * -> identity
+     * conhash  vnodeCnt                             replicas
+     *        \                                      flag
      *          hashfunc
      *
      *
@@ -40,6 +41,8 @@ int main(int argc, char *argv[])
         printf("virtual nodes number %d\n", conhash_vnode_cnt(conhash));
         printf("the hashing results--------------------------------------:\n");
 
+        /* util_rbtree_mid_travel(&conhash->vnodeTree, conhash_vnode_opera, NULL); */
+
         for(int idx = 0; idx < 20; idx++) {
             snprintf(buff, BUFSIZ - 1, "James.km%03d", idx);
             node = conhash_lookup(conhash, buff);
@@ -52,3 +55,9 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+void conhash_vnode_opera(util_rbtree_node_t *rbnode, void *data) {
+    if (rbnode != NULL) {
+        conhash_vnode_t *vnode = (conhash_vnode_t *)rbnode->data;
+        printf("Node key = %lu, data = %s\n", vnode->hash, vnode->node->identity);
+    }
+}

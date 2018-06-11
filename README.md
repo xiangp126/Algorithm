@@ -18,6 +18,8 @@
         - kmp
         - kmpOptimized
     - rbtree
+    - hash
+        - consistent hash
 
 ## Note
 - Need set env variables before execute binary (Mac need not do this)

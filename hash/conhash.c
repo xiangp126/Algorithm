@@ -108,11 +108,11 @@ int conhash_add_replica(conhash_t *conhash, conhash_node_t *node) {
     for (uint idx = 0; idx < node->replicas; ++idx) {
         memset(buff, '\0', BUFSIZ);
         /*
-         * %3d -> right align, %-3d -> left align
+         * %3d -> right align padding 0 if not 3bit width, %-3d -> left align
          * str: Hello
-         * Hello-  1, Hello- 10, Hello-1234
+         * Hello-000, Hello-010, Hello-1234
          */
-        snprintf(buff, BUFSIZ - 1, "%s-%3d", node->identity, idx);
+        snprintf(buff, BUFSIZ - 1, "%s-%03d", node->identity, idx);
         /* calculate the hash value */
         hashVal = conhash->hashfunc(buff);
 
@@ -161,9 +161,9 @@ uint conhash_vnode_cnt(const conhash_t *conhash) {
 
 /*
  * conhash_lookup
- * 
+ *
  * @conhash: the consistent hash table
- * @object: input object
+ * @object: input object for lookup
  * @return NULL if not found
  */
 conhash_node_t *conhash_lookup(conhash_t *conhash, const char *object) {
@@ -172,7 +172,10 @@ conhash_node_t *conhash_lookup(conhash_t *conhash, const char *object) {
     }
 
     ulong hashVal = conhash->hashfunc(object);
-    util_rbtree_node_t *rbnode = 
+#if CONHASH_DEBUG
+    printf("%s Hash value = %lu\n", (char *)object, hashVal);
+#endif
+    util_rbtree_node_t *rbnode =
         util_rbtree_lookup(&conhash->vnodeTree, hashVal);
     if (rbnode != NULL) {
         conhash_vnode_t *vnode = (conhash_vnode_t *)rbnode->data;
