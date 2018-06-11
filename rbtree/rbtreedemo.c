@@ -9,14 +9,23 @@
 #include <time.h>
 #include "util_rbtree.h"
 
-#define N       1000000
+/* #define N       1000000 */
+#define N       2
 #define DEBUG   1
-#define KEY_MAX 1000000
+/* maximum key value */
+#define KEY_MAX N
 /* sleep time unit second */
 #define SLEEPTIME 4
+util_rbtree_node_t rbtreeNodes[N];
 
-void util_rbnode_opera(util_rbtree_node_t *node, void *data);
-inline void ECHO_TIME(const char *str, time_t startClock, time_t endClock);
+/*
+ * treenode_data_handle | handle data of the node
+ * @node: the node to handle
+ * @return void
+ */
+static void treenode_data_handle(util_rbtree_node_t *node);
+static inline
+void ECHO_TIME(const char *str, time_t startClock, time_t endClock);
 
 /*
  * Check rbtree if works well
@@ -31,22 +40,21 @@ int main(int argc, char *argv[])
         oops("malloc rbtree failed");
     }
     util_rbtree_init(rbtree);
+    /* random seed */
     srand((unsigned)time(0));
 
     /* start to insert node */
     time_t insertStart, insertEnd;
+    util_rbtree_node_t *node;
+
     insertStart = clock();
     for (int i = 0; i < N; ++i) {
+        /* every node should has its own str */
         char *str = (char *)malloc(BUFSIZ);
         memset(str, '\0', BUFSIZ);
-
-        util_rbtree_node_t *node = (util_rbtree_node_t *)malloc(sizeof(util_rbtree_node_t));
-        if (node == NULL) {
-            oops("malloc node failed");
-        }
-
         snprintf(str, BUFSIZ, "River%d",  i + 1);
 
+        node = &rbtreeNodes[i];
         node->key = rand() % KEY_MAX;
         node->data = (void *)str;
         util_rbtree_insert(rbtree, node);
@@ -57,15 +65,15 @@ int main(int argc, char *argv[])
 #if DEBUG
     /* mid travel the whole tree */
     printf("\nMid Travel the RB-Tree:\n");
-    util_rbtree_mid_travel(rbtree, util_rbnode_opera, (void *)0);
+    util_rbtree_mid_travel(rbtree, treenode_data_handle);
+
 #endif
     ECHO_TIME("Insert", insertStart, insertEnd);
     printf("\nRB-Tree Size: %d\n", rbtree->size);
-    printf("\nRB-Tree Height: %d\n", util_rbtree_height(rbtree));
+    printf("RB-Tree Height: %d\n", util_rbtree_height(rbtree));
     /* unit second */
     sleep(SLEEPTIME);
 
-#if 1
     /*
      * Check to search a Node, record the time
      *
@@ -83,12 +91,11 @@ int main(int argc, char *argv[])
         printf(" Not Found\n");
     } else {
         printf(" Found\n");
-        util_rbnode_opera(pF, NULL);
+        treenode_data_handle(pF);
     }
     ECHO_TIME("Search", searchStart, searchEnd);
-    /* util_rbnode_opera(pF, NULL); */
+    /* treenode_data_handle(pF); */
     sleep(SLEEPTIME);
-#endif
 
     /*
      * Check to delete a Node, record the time
@@ -96,23 +103,21 @@ int main(int argc, char *argv[])
      * random delete
      */
     time_t delStart, delEnd;
-    key = rand() % KEY_MAX;
-
-    printf("\nWant to Delete Node Key: %lu", key);
-    sleep(SLEEPTIME);
-
     delStart = clock();
-    pF = util_rbtree_search(rbtree, key);
-    util_rbtree_delete(rbtree, pF);
+    for (int i = 0; i < 100; ++i) {
+        key = rand() % KEY_MAX;
+        printf("\nWant to Delete Node Key: %lu", key);
+
+        node = &rbtreeNodes[key];
+        util_rbtree_delete(rbtree, node);
+    }
     delEnd = clock();
 
-    if (pF == NULL) {
-        printf(" Not Found\n");
-    } else {
-        printf(" Found\n");
-        util_rbnode_opera(pF, NULL);
-    }
+    /* treenode_data_handle(pF); */
     ECHO_TIME("Delete", delStart, delEnd);
+    sleep(SLEEPTIME);
+
+    return 0;
 
 #if 0
     /* start to insert node */
@@ -121,7 +126,8 @@ int main(int argc, char *argv[])
         char *str = (char *)malloc(BUFSIZ);
         memset(str, '\0', BUFSIZ);
 
-        util_rbtree_node_t *node = (util_rbtree_node_t *)malloc(sizeof(util_rbtree_node_t));
+        util_rbtree_node_t *node =
+            (util_rbtree_node_t *)malloc(sizeof(util_rbtree_node_t));
         if (node == NULL) {
             oops("malloc node failed");
         }
@@ -140,7 +146,7 @@ int main(int argc, char *argv[])
     /* mid travel the whole tree */
     printf("\nInorder Travel the RB-Tree:\n");
     sleep(SLEEPTIME);
-    util_rbtree_mid_travel(rbtree, util_rbnode_opera, (void *)0);
+    util_rbtree_mid_travel(rbtree, treenode_data_handle);
     printf("\nRB-Tree Size: %d\n", rbtree->size);
     printf("\nRB-Tree Height: %d\n", util_rbtree_height(rbtree));
 #endif
@@ -151,11 +157,11 @@ int main(int argc, char *argv[])
 }
 
 /*
- * util_rbnode_opera
+ * treenode_data_handle | handle data of the tree node
  * @node: the node to handle
- * @data:
+ * @return void
  */
-void util_rbnode_opera(util_rbtree_node_t *node, void *data) {
+void treenode_data_handle(util_rbtree_node_t *node) {
     if (node != NULL) {
         printf("Node key = %lu, data = %s\n", node->key, (char *)node->data);
     }

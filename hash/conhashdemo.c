@@ -4,7 +4,7 @@
 #define ECHO_TRAVEL 0
 conhash_node_t conhashNodes[NODECNT];
 
-static void conhash_vnode_opera(util_rbtree_node_t *node, void *data);
+static void conhash_vnode_handle(util_rbtree_node_t *node);
 
 int main(int argc, char *argv[])
 {
@@ -40,10 +40,11 @@ int main(int argc, char *argv[])
         conhash_add_node(conhash, &conhashNodes[4]);
 
         printf("Total Virtual Node Count : %d\n", conhash_vnode_cnt(conhash));
+        printf("------------------ Consistent Hash -------------------------\n");
 
 #if ECHO_TRAVEL
         printf("\nIn-Order travel RB-Tree\n");
-        util_rbtree_mid_travel(&conhash->vnodeTree, conhash_vnode_opera, NULL);
+        util_rbtree_mid_travel(&conhash->vnodeTree, conhash_vnode_handle);
 #endif
 
         for(int idx = 0; idx < 20; idx++) {
@@ -56,9 +57,11 @@ int main(int argc, char *argv[])
 
         conhash_node_t *delNode = &conhashNodes[1];
         conhash_del_node(conhash, &conhashNodes[1]);
-        printf("\nDelete Node [%s], Total Virtual Node Count: %d\n\n", delNode->identity, conhash_vnode_cnt(conhash));
+        printf("\nDelete Node [%s], Total Virtual Node Count: %d\n\n",
+                            delNode->identity, conhash_vnode_cnt(conhash));
+        printf("------------------ Consistent Hash -------------------------\n");
 #if ECHO_TRAVEL
-        util_rbtree_mid_travel(&conhash->vnodeTree, conhash_vnode_opera, NULL);
+        util_rbtree_mid_travel(&conhash->vnodeTree, conhash_vnode_handle);
 #endif
 
         for(int idx = 0; idx < 20; idx++) {
@@ -73,9 +76,10 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void conhash_vnode_opera(util_rbtree_node_t *rbnode, void *data) {
+void conhash_vnode_handle(util_rbtree_node_t *rbnode) {
     if (rbnode != NULL) {
         conhash_vnode_t *vnode = (conhash_vnode_t *)rbnode->data;
-        printf("Node key = %lu, data = %s\n", vnode->hash, vnode->node->identity);
+        printf("Node key = %lu, data = %s\n", vnode->hash,
+                                              vnode->node->identity);
     }
 }

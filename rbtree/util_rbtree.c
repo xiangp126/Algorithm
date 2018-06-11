@@ -16,8 +16,7 @@ static void rbtree_delete_fixup(util_rbtree_t *rbtree,
                                 util_rbtree_node_t *node);
 static void rbtree_mid_travel(util_rbtree_node_t *node,
                               util_rbtree_node_t *sentinel,
-                              void (*opera)(util_rbtree_node_t *, void *),
-                              void *data);
+                              void (*opera)(util_rbtree_node_t *));
 static int rbtree_get_height(util_rbtree_node_t *node,
                              util_rbtree_node_t *sentinel);
 static void rbtree_transplant(util_rbtree_t *rbtree,
@@ -696,7 +695,7 @@ util_rbtree_node_t* util_rbtree_lookup(util_rbtree_t *rbtree, util_key_t key) {
 
 util_rbtree_node_t* util_rbsubtree_min(util_rbtree_node_t *node,
                                        util_rbtree_node_t *sentinel) {
-    if (node == sentinel) {
+    if (node == NULL || node == sentinel) {
         return NULL;
     }
     while (node->left != sentinel) {
@@ -716,24 +715,34 @@ util_rbtree_node_t* util_rbsubtree_max(util_rbtree_node_t *node,
     return node;
 }
 
+/*
+ * In-order travel a RB-Tree, read-only operation
+ * T for root, L for left, R for right
+ *
+ *        T
+ *      /   \       L -> T -> R
+ *     L     R
+ *
+ * @rbtree: The RB-Tree
+ * @nodefunc: function pointer to handle data of the node
+ * @return void
+ */
 void util_rbtree_mid_travel(util_rbtree_t *rbtree,
-                            void (*opera)(util_rbtree_node_t *, void *),
-                            void *data) {
+                            void (*nodefunc)(util_rbtree_node_t *)) {
     if (rbtree != NULL && ! util_rbtree_isempty(rbtree)) {
-        rbtree_mid_travel(rbtree->root, _NIL(rbtree), opera, data);
+        rbtree_mid_travel(rbtree->root, _NIL(rbtree), nodefunc);
     }
 }
 
-void rbtree_mid_travel(util_rbtree_node_t *node,
-                       util_rbtree_node_t *sentinel,
-                       void (*opera)(util_rbtree_node_t *, void *),
-                       void *data) {
+void rbtree_mid_travel(util_rbtree_node_t *node, util_rbtree_node_t *sentinel,
+                       void (*nodefunc)(util_rbtree_node_t *)) {
     if (node->left != sentinel) {
-        rbtree_mid_travel(node->left, sentinel,  opera, data);
+        rbtree_mid_travel(node->left, sentinel,  nodefunc);
     }
-    opera(node, data);
+    /* handle data of the node */
+    nodefunc(node);
     if (node->right != sentinel) {
-        rbtree_mid_travel(node->right, sentinel,  opera, data);
+        rbtree_mid_travel(node->right, sentinel,  nodefunc);
     }
 }
 

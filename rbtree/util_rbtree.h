@@ -162,17 +162,19 @@ util_rbtree_node_t* util_rbtree_search(util_rbtree_t *rbtree, util_key_t key);
 util_rbtree_node_t* util_rbtree_lookup(util_rbtree_t *rbtree, util_key_t key);
 
 /*
- * travel through a RB-Tree in in-node sequence, do Read-Only operation
+ * In-order travel a RB-Tree, read-only operation
  * T for root, L for left, R for right
  *
  *        T
  *      /   \       L -> T -> R
  *     L     R
  *
+ * @rbtree: The RB-Tree
+ * @nodefunc: function pointer to handle data of the node
+ * @return void
  */
 void util_rbtree_mid_travel(util_rbtree_t *rbtree,
-                            void (*opera)(util_rbtree_node_t *, void *),
-                            void *data);
+                            void (*nodefunc)(util_rbtree_node_t *));
 
 /*
  * util_rbtree_height
