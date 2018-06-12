@@ -1,19 +1,21 @@
 - This projects aims to implement and utilize basic data structure and algorithm
 - Thoughts come from Web or classical books like 'Introduction to Algorithms, Third Edition'
 - Walked through
-    - sort
-        - bucketSort  - o(N)
-        - radixSort
-        - quickSort   - o(Nlog(N))
-        - quickSortOptimized
-        - shellSort
-        - heapSort
-        - mergeSort
-        - bubbleSort  - o(N^2)
-        - insertSort
+    - N sort (Complexity of Time)
+        - bucket sort
+        - radix  sort
+    - NlogN sort
+        - shell  sort
+        - heap   sort
+        - merge  sort
+        - quick  sort
+        - quick  sort optimize
+    - N^2 sort
+        - bubble sort
+        - insert sort
     - kmp
         - kmp
-        - kmpOptimized
+        - kmp optimize
     - tree
         - red-black tree
     - hash
