@@ -1,23 +1,21 @@
 - This projects aims to implement and utilize basic data structure and algorithm
 - Thoughts come from Web or classical books like 'Introduction to Algorithms, Third Edition'
 - Walked through
-    - 8+ kind of sort
-        - Linear
-        - bucketSort
+    - sort
+        - bucketSort  - o(N)
         - radixSort
-        - O(Nlog(N))
-            - quickSort
-            - quickSortOptimized
-            - shellSort
-            - heapSort
+        - quickSort   - o(Nlog(N))
+        - quickSortOptimized
+        - shellSort
+        - heapSort
         - mergeSort
-        - O(N^2)
-            - bubbleSort
-            - insertSort
+        - bubbleSort  - o(N^2)
+        - insertSort
     - kmp
         - kmp
         - kmpOptimized
-    - red-black tree
+    - tree
+        - red-black tree
     - hash
         - consistent hash
 
