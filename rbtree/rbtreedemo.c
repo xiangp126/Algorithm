@@ -160,14 +160,12 @@ int main(int argc, char *argv[])
 #endif
     printf("\nRB-Tree Size: %d\n", rbtree->size);
     printf("\nRB-Tree Height: %d\n", util_rbtree_height(rbtree));
-
     printf("\n");
 
     /*
      * free this tree safely
      */
     rbtree_free_tree(rbtree);
-
     return 0;
 }
 

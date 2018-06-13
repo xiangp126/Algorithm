@@ -5,6 +5,8 @@
 static void md5_digest(const uchar *str, uchar *digest);
 static int conhash_add_replica(conhash_t *conhash, conhash_node_t *node);
 static int conhash_del_replica(conhash_t *conhash, conhash_node_t *node);
+static void rbtree_free_node(util_rbtree_node_t *node);
+void conhash_free(conhash_t *conhash);
 
 /*
  * hashfunc_md5 | default hash function using md5
@@ -241,15 +243,44 @@ int conhash_del_replica(conhash_t *conhash, conhash_node_t *node) {
              */
             if (vnode->node == node) {
                 util_rbtree_delete(vnodeTree, rbnode);
-                --conhash->vnodeCnt;
                 /*
-                 * util_rbtree_delete did not do free itself
+                 * util_rbtree_delete did not free the node it delete
                  * leave it for the function call it
+                 * so, do it here
                  */
-                free(vnode);
-                free(rbnode);
+                rbtree_free_node(rbnode);
+                --conhash->vnodeCnt;
             }
         }
     }
     return CONHASH_OK;
+}
+
+/*
+ * rbtree_free_node | free rb-node
+ * @node: the node in RB-Tree that needs to free
+ * @return void
+ */
+void rbtree_free_node(util_rbtree_node_t *node) {
+    conhash_vnode_t *vnode = (conhash_vnode_t *)node->data;
+    free(vnode);
+    free(node);
+}
+
+/*
+ * conhash_free_tree | free consistent hash table
+ * @node: the hash table needs freed
+ * @return void
+ */
+void conhash_free(conhash_t *conhash) {
+    if (conhash != NULL) {
+        util_rbtree_t *vnodeTree = &conhash->vnodeTree;
+        while (! util_rbtree_isempty(vnodeTree)) {
+            /* delete from root node */
+            util_rbtree_node_t *node = vnodeTree->root;
+            util_rbtree_delete(vnodeTree, node);
+            rbtree_free_node(node);
+        }
+        free(vnodeTree);
+    }
 }

@@ -127,9 +127,18 @@ void rbtree_transplant(util_rbtree_t *rbtree, util_rbtree_node_t *orig,
 }
 
 /*
- * util_rbtree_delete
+ * util_rbtree_delete | delete a node from the tree
+ * will call fix_up routine after deletion
+ *
+ * !!Attention
+ * But it did not free the node it delete
+ * the free-node function
+ * util_rbtree_free_node(util_rbtree_node_t *node);
+ * needs to be implemented by caller itself
+ * for what exactly the structure node->data points to was unknown
+ *
  * @rbtree: the RB-Tree
- * @node: the node to delete
+ * @node: the node of the tree needs to be deleted
  * @return void
  */
 void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node) {

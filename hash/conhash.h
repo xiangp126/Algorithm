@@ -119,6 +119,13 @@ conhash_node_t *conhash_lookup(conhash_t *conhash, const char *object);
  */
 int conhash_del_node(conhash_t *conhash, conhash_node_t *node);
 
+/*
+ * conhash_free_tree | free consistent hash table
+ * @node: the hash table needs freed
+ * @return void
+ */
+void conhash_free(conhash_t *conhash);
+
 #ifdef __cplusplus
 }
 #endif

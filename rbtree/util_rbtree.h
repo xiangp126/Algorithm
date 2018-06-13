@@ -120,12 +120,19 @@ void util_rbtree_init(util_rbtree_t *rbtree);
 void util_rbtree_insert(util_rbtree_t *rbtree, util_rbtree_node_t *node);
 
 /*
- * delete a node from the tree
+ * util_rbtree_delete | delete a node from the tree
  * will call fix_up routine after deletion
  *
- * Attention:
- * for node->data may points to other structure, so leave free(node)
- * to the function calls this 'delete'
+ * !!Attention
+ * But it did not free the node it delete
+ * the free-node function
+ * util_rbtree_free_node(util_rbtree_node_t *node);
+ * needs to be implemented by caller itself
+ * for what exactly the structure node->data points to was unknown
+ *
+ * @rbtree: the RB-Tree
+ * @node: the node of the tree needs to be deleted
+ * @return void
  */
 void util_rbtree_delete(util_rbtree_t *rbtree, util_rbtree_node_t *node);
 
