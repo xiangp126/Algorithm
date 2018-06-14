@@ -20,9 +20,9 @@ int main(int argc, char *argv[])
      *                    rbnode *
      *                   /        \
      *          vnodeTree          data * -> hashVal
-     *        /          \ ...               node * -> identity
-     * conhash  vnodeCnt                               replicas
-     *        \                                        flag
+     *        /          \ ...               conhash_node_t *node -> identity
+     * conhash  vnodeCnt                                             replicas
+     *        \                                                      flag
      *          hashfunc
      *
      *
@@ -56,6 +56,7 @@ int main(int argc, char *argv[])
                             delNode->identity, conhash_vnode_cnt(conhash));
         printf("------------------ Consistent Hash ------------------------\n");
 #if ECHO_TRAVEL
+        printf("\nIn-Order travel RB-Tree\n");
         util_rbtree_mid_travel(&conhash->vnodeTree, conhash_vnode_handle_data);
 #endif
 
@@ -83,7 +84,8 @@ void conhash_print(conhash_t *conhash, char *buff) {
         snprintf(buff, BUFSIZ - 1, "PENG%03d", idx);
         node = conhash_lookup(conhash, buff);
         if(node) {
-            printf("[%10s ] is in node: [%10s ]\n", buff, node->identity);
+            printf("[%10s ] ------ Hash To ------> [%10s ]\n",
+                        buff, node->identity);
         }
     }
 }
