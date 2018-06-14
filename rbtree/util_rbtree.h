@@ -1,7 +1,7 @@
 /*
- * RB-Tree implementation and check source
- * Copyright by (C) 2018 PENG hi.pxiang@gmail.com
+ * Copyright (C) PENG hi.pxiang@gmail.com
  */
+
 #ifndef __UTIL_RBTREE_H_
 #define __UTIL_RBTREE_H_
 

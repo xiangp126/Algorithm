@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) hi.pxiang@gmail.com
+ */
+
 #include "conhash.h"
 
 #define NODECNT     5

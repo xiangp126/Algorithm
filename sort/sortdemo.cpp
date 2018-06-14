@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) hi.pxiang@gmail.com
+ */
+
 #include <iostream>
 #include <algorithm>
 #include "common.h"
@@ -104,5 +108,5 @@ void usage()
         "[8]: Bucket Sort       "
         "[9]: Radix  Sort     \n"
         "[10]:Library Fun       "
-        "[*]: Quit Selection  \n";
+        "[*]: Quit            \n";
 }

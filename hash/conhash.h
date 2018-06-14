@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) hi.pxiang@gmail.com
+ */
+
 #ifndef __CON_HASH_H_
 #define __CON_HASH_H_
 

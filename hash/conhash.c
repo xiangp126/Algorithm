@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) hi.pxiang@gmail.com
+ */
+
 #include <string.h>
 #include "conhash.h"
 #include "md5.h"
