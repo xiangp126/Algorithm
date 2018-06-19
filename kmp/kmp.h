@@ -1,8 +1,8 @@
-#ifndef MYKMP_H_
-#define MYKMP_H_
+#ifndef _KMP_H_
+#define _KMP_H_
 
 #include <string.h>
 int subStrSearch(const char *, const char *);
 int subStrSearchOptimized(const char *, const char *);
 
-#endif /* ifndef MYKMP_H_ */
+#endif /* ifndef _KMP_H_ */

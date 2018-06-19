@@ -1,5 +1,5 @@
-#ifndef MYBASIC_H_
-#define MYBASIC_H_
+#ifndef _COMMOM_H_
+#define _COMMOM_H_
 
 #include <iostream>
 #include <vector>
@@ -22,4 +22,4 @@ void randomArray(vector<int> &);
 // print repeat symbols char: repeatCount
 void repeatSymbol(char, int);
 
-#endif /* ifndef MYBASIC_H_ */
+#endif /* ifndef _COMMOM_H_ */

@@ -1,5 +1,5 @@
-#ifndef MYSORT_H_
-#define MYSORT_H_
+#ifndef _SORT_H_
+#define _SORT_H_
 
 #include <iostream>
 #include <vector>
@@ -12,7 +12,7 @@ using std::vector;
  *
  *  sort type enumerator
  */
-enum SORTTYPE { 
+enum SORTTYPE {
     BUBBLESORT = 1,
     INSERTSORT,
     QUICKSORT,
@@ -34,4 +34,4 @@ void bucketSort(vector<int> &);
 void radixSort(vector<int> &);
 void mergeSort(vector<int> &);
 
-#endif /* ifndef MYSORT_H_ */
+#endif /* ifndef _SORT_H_ */
