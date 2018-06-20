@@ -8,9 +8,14 @@
 #define ECHO_TRAVEL 0
 conhash_node_t conhashNodes[NODECNT];
 
-static void conhash_vnode_handle_data(util_rbtree_node_t *node);
-static
-void conhash_print(conhash_t *conhash, char *buff);
+static void rbnode_travel_func(util_rbtree_node_t *node);
+/*
+ * conhash_dump | dump message in the consistent hash table
+ * @conhash: the consistent hash table
+ * @buff: used for buffer
+ * return void
+ */
+static void conhash_dump(conhash_t *conhash, char *buff);
 
 int main(int argc, char *argv[])
 {
@@ -49,10 +54,10 @@ int main(int argc, char *argv[])
 
 #if ECHO_TRAVEL
         printf("\nIn-Order travel RB-Tree\n");
-        util_rbtree_mid_travel(&conhash->vnodeTree, conhash_vnode_handle_data);
+        util_rbtree_mid_travel(&conhash->vnodeTree, rbnode_travel_func);
 #endif
 
-        conhash_print(conhash, buff);
+        conhash_dump(conhash, buff);
 
         conhash_node_t *delNode = &conhashNodes[1];
         conhash_del_node(conhash, &conhashNodes[1]);
@@ -61,10 +66,10 @@ int main(int argc, char *argv[])
         printf("------------------ Consistent Hash ------------------------\n");
 #if ECHO_TRAVEL
         printf("\nIn-Order travel RB-Tree\n");
-        util_rbtree_mid_travel(&conhash->vnodeTree, conhash_vnode_handle_data);
+        util_rbtree_mid_travel(&conhash->vnodeTree, rbnode_travel_func);
 #endif
 
-        conhash_print(conhash, buff);
+        conhash_dump(conhash, buff);
     }
 
     /*
@@ -74,7 +79,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void conhash_vnode_handle_data(util_rbtree_node_t *rbnode) {
+void rbnode_travel_func(util_rbtree_node_t *rbnode) {
     if (rbnode != NULL) {
         conhash_vnode_t *vnode = (conhash_vnode_t *)rbnode->data;
         printf("Node key = %lu, data = %s\n", vnode->hash,
@@ -82,7 +87,13 @@ void conhash_vnode_handle_data(util_rbtree_node_t *rbnode) {
     }
 }
 
-void conhash_print(conhash_t *conhash, char *buff) {
+/*
+ * conhash_dump | dump message in the consistent hash table
+ * @conhash: the consistent hash table
+ * @buff: used for buffer
+ * return void
+ */
+void conhash_dump(conhash_t *conhash, char *buff) {
     conhash_node_t *node;
     for(int idx = 0; idx < 20; idx++) {
         snprintf(buff, BUFSIZ - 1, "PENG%03d", idx);

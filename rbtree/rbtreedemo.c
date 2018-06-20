@@ -19,11 +19,11 @@
 util_rbtree_node_t rbtreeNodes[N];
 
 /*
- * rbnode_handle_data | handle data of the node
+ * rbnode_travel_func | travel data of the node
  * @node: the node to handle
  * @return void
  */
-static void rbnode_handle_data(util_rbtree_node_t *node);
+static void rbnode_travel_func(util_rbtree_node_t *node);
 static inline
 void ECHO_TIME(const char *str, time_t startClock, time_t endClock);
 /* need implement by youself, for what exactly node->void points to did known */
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 #if DEBUG
     /* mid travel the whole tree */
     printf("\nMid Travel the RB-Tree:\n");
-    util_rbtree_mid_travel(rbtree, rbnode_handle_data);
+    util_rbtree_mid_travel(rbtree, rbnode_travel_func);
 #endif
 
     ECHO_TIME("Insert", insertStart, insertEnd);
@@ -94,10 +94,10 @@ int main(int argc, char *argv[])
         printf(" Not Found\n");
     } else {
         printf(" Found\n");
-        rbnode_handle_data(pF);
+        rbnode_travel_func(pF);
     }
     ECHO_TIME("Search", searchStart, searchEnd);
-    /* rbnode_handle_data(pF); */
+    /* rbnode_travel_func(pF); */
     sleep(SLEEPTIME);
 
 #if 1
@@ -117,14 +117,14 @@ int main(int argc, char *argv[])
             printf(" Not Found\n");
         } else {
             printf(" Found\n");
-            rbnode_handle_data(pF);
+            rbnode_travel_func(pF);
             util_rbtree_delete(rbtree, pF);
             rbtree_free_node(pF);
         }
     }
     delEnd = clock();
 
-    /* rbnode_handle_data(pF); */
+    /* rbnode_travel_func(pF); */
     ECHO_TIME("\nDelete", delStart, delEnd);
     sleep(SLEEPTIME);
 #endif
@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
     printf("\nInorder Travel the RB-Tree:\n");
     sleep(SLEEPTIME);
 #if DEBUG
-    util_rbtree_mid_travel(rbtree, rbnode_handle_data);
+    util_rbtree_mid_travel(rbtree, rbnode_travel_func);
 #endif
     printf("\nRB-Tree Size: %d\n", rbtree->size);
     printf("\nRB-Tree Height: %d\n", util_rbtree_height(rbtree));
@@ -170,11 +170,11 @@ int main(int argc, char *argv[])
 }
 
 /*
- * rbnode_handle_data | handle data of the tree node
+ * rbnode_travel_func | travel data of the tree node
  * @node: the node to handle
  * @return void
  */
-void rbnode_handle_data(util_rbtree_node_t *node) {
+void rbnode_travel_func(util_rbtree_node_t *node) {
     if (node != NULL) {
         printf("Node key = %lu, data = %s\n", node->key, (char *)node->data);
     }

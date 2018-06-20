@@ -33,8 +33,7 @@ void util_rbtree_init(util_rbtree_t *rbtree) {
          * clear NIL's link
          * set NIL color black
          *
-         * It doesn't matter what NIL's other element was
-         *
+         * It doesn't matter what NIL's other element was:
          * nil->left = nil;
          * nil->right = nil;
          */
@@ -756,25 +755,25 @@ util_rbtree_node_t* util_rbsubtree_max(util_rbtree_node_t *node,
  *     L     R
  *
  * @rbtree: The RB-Tree
- * @nodefunc: function pointer to handle data of the node
+ * @travel_func: function pointer to handle data of the node
  * @return void
  */
 void util_rbtree_mid_travel(util_rbtree_t *rbtree,
-                            void (*nodefunc)(util_rbtree_node_t *)) {
+                            void (*travel_func)(util_rbtree_node_t *)) {
     if (rbtree != NULL && ! util_rbtree_isempty(rbtree)) {
-        rbtree_mid_travel(rbtree->root, _NIL(rbtree), nodefunc);
+        rbtree_mid_travel(rbtree->root, _NIL(rbtree), travel_func);
     }
 }
 
 void rbtree_mid_travel(util_rbtree_node_t *node, util_rbtree_node_t *sentinel,
-                       void (*nodefunc)(util_rbtree_node_t *)) {
+                       void (*travel_func)(util_rbtree_node_t *)) {
     if (node->left != sentinel) {
-        rbtree_mid_travel(node->left, sentinel,  nodefunc);
+        rbtree_mid_travel(node->left, sentinel, travel_func);
     }
-    /* handle data of the node */
-    nodefunc(node);
+    /* travel data of the node */
+    travel_func(node);
     if (node->right != sentinel) {
-        rbtree_mid_travel(node->right, sentinel,  nodefunc);
+        rbtree_mid_travel(node->right, sentinel, travel_func);
     }
 }
 

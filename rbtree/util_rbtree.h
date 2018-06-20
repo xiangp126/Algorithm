@@ -177,11 +177,11 @@ util_rbtree_node_t* util_rbtree_lookup(util_rbtree_t *rbtree, util_key_t key);
  *     L     R
  *
  * @rbtree: The RB-Tree
- * @nodefunc: function pointer to handle data of the node
+ * @travel_func: function pointer to handle data of the node
  * @return void
  */
 void util_rbtree_mid_travel(util_rbtree_t *rbtree,
-                            void (*nodefunc)(util_rbtree_node_t *));
+                            void (*travel_func)(util_rbtree_node_t *));
 
 /*
  * util_rbtree_height | get height of the tree
