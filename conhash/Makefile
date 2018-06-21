@@ -6,13 +6,13 @@ BINDIR := ../bin
 LIBDIR := ../lib
 LIB := libconhash.so
 
-TARGET = conhashdemo
+TARGET = conhash_demo
 
 all: $(TARGET)
 
 SOURCE  := $(wildcard *.c) $(wildcard *.cpp)
 OBJS    := $(patsubst %.c, %.o, $(patsubst %.cpp, %.o, $(SOURCE)))
-LIBOBJS = $(filter-out rbtreedemo.o, $(OBJS))
+LIBOBJS = $(filter-out conhash_demo, $(OBJS))
 
 %.o: %.c
 	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@

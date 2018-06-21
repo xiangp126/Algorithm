@@ -6,13 +6,13 @@ BINDIR := ../bin
 LIBDIR := ../lib
 LIB := librbtree.so
 
-TARGET = rbtreedemo
+TARGET = rbtree_demo
 
 all: $(TARGET)
 
 SOURCE  := $(wildcard *.c) $(wildcard *.cpp)
 OBJS    := $(patsubst %.c, %.o, $(patsubst %.cpp, %.o, $(SOURCE)))
-LIBOBJS = $(filter-out rbtreedemo.o, $(OBJS))
+LIBOBJS = $(filter-out rbtree_demo.o, $(OBJS))
 
 %.o: %.c
 	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@

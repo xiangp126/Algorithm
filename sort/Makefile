@@ -6,13 +6,13 @@ INCDIR = ../inc
 BINDIR = ../bin
 LIB = libsort.so
 
-TARGET := sortdemo
+TARGET := sort_demo
 
 all: ${TARGET}
 
 SOURCE = $(wildcard *.cpp)
 OBJS   = $(patsubst %.cpp, %.o, $(SOURCE))
-LIBOBJS = $(filter-out sortdemo.o, $(OBJS))
+LIBOBJS = $(filter-out sort_demo.o, $(OBJS))
 
 %.o: %.cpp
 	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@

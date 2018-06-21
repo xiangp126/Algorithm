@@ -6,13 +6,13 @@ BINDIR = ../bin
 INCDIR = ../inc
 LIB := libkmp.so
 
-TARGET := kmpdemo
+TARGET := kmp_demo
 
 all: $(TARGET)
 
 SOURCE = $(wildcard *.cpp)
 OBJS   = $(patsubst %.cpp, %.o, $(SOURCE))
-LIBOBJS = $(filter-out kmpdemo.o, $(OBJS))
+LIBOBJS = $(filter-out kmp_demo.o, $(OBJS))
 
 %.o: %.cpp
 	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@
