@@ -9,12 +9,6 @@
 conhash_node_t conhashNodes[NODECNT];
 
 static void rbnode_travel_func(util_rbtree_node_t *node);
-/*
- * conhash_dump | dump message in the consistent hash table
- * @conhash: the consistent hash table
- * @buff: used for buffer
- * return void
- */
 static void conhash_dump(conhash_t *conhash, char *buff);
 
 int main(int argc, char *argv[])
@@ -79,6 +73,12 @@ int main(int argc, char *argv[])
     return 0;
 }
 
+/*
+ * conhash_dump | dump message in the consistent hash table
+ * @conhash: the consistent hash table
+ * @buff: used for buffer
+ * return void
+ */
 void rbnode_travel_func(util_rbtree_node_t *rbnode) {
     if (rbnode != NULL) {
         conhash_vnode_t *vnode = (conhash_vnode_t *)rbnode->data;
