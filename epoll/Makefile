@@ -4,26 +4,23 @@ CFLAGXX += -fPIC
 INCDIR := . -I ../inc
 BINDIR := ../bin
 LIBDIR := ../lib
-LIB := libconhash.so
 
-TARGET = conhashdemo
+SERVER_NAME = epoll_server
+CLIENT_NAME = epoll_client
+TARGET = $(SERVER_NAME) $(CLIENT_NAME)
 
 all: $(TARGET)
-
-SOURCE  := $(wildcard *.c) $(wildcard *.cpp)
-OBJS    := $(patsubst %.c, %.o, $(patsubst %.cpp, %.o, $(SOURCE)))
-LIBOBJS = $(filter-out rbtreedemo.o, $(OBJS))
 
 %.o: %.c
 	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@
 
-%.o: %.cpp
-	$(CC) $(CFLAGXX) -I $(INCDIR) -c $^ -o $@
-
-$(TARGET): $(OBJS)
+epoll_client: epoll_client.o
 	@mkdir -p $(BINDIR)
-	$(CC) $^ -L $(LIBDIR) -lrbtree -o $(shell pwd)/$(BINDIR)/$(TARGET)
-	$(CC) -fPIC -shared $(LIBOBJS) -L $(LIBDIR) -lrbtree -o $(shell pwd)/$(LIBDIR)/$(LIB)
+	$(CC) $^ -o $(shell pwd)/$(BINDIR)/$(CLIENT_NAME)
+
+epoll_server: epoll_server.o
+	@mkdir -p $(BINDIR)
+	$(CC) $^ -o $(shell pwd)/$(BINDIR)/$(SERVER_NAME)
 
 .PHONY:
 clean:

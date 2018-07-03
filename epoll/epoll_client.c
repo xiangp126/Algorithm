@@ -12,7 +12,7 @@
 
 int main(int argc, char *argv[])
 {
-    char msg[MAXDATASIZE];
+    char msg[MAX_DATA_SIZE];
     int sockFd;
     struct sockaddr_in servAddr;
 
