@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGXX := -Wall -std=c99
+CFLAGXX := -Wall -g3
 CFLAGXX += -fPIC
 INCDIR := . -I ../inc
 BINDIR := ../bin
@@ -22,7 +22,7 @@ LIBOBJS = $(filter-out rbtreedemo.o, $(OBJS))
 
 $(TARGET): $(OBJS)
 	@mkdir -p $(BINDIR)
-	$(CC) $^ -L $(LIBDIR) -lrbtree -o $(shell pwd)/$(BINDIR)/$(TARGET)
+	$(CC) $^ -o $(shell pwd)/$(BINDIR)/$(TARGET)
 	# $(CC) -fPIC -shared $(LIBOBJS) -L $(LIBDIR) -lrbtree -o $(shell pwd)/$(LIBDIR)/$(LIB)
 
 .PHONY:

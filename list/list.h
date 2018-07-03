@@ -14,6 +14,16 @@ struct list_head_s {
     list_head_t *next;
 };
 
+#ifndef offsetof
+#define offsetof(type, member) ((size_t) &((type *)0)->member)
+#endif
+
+#ifndef container_of
+#define container_of(ptr, type, member) ({ \
+    const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
+    (type *)( (char *)__mptr - offsetof(type,member) );})
+#endif
+
 #define LIST_POISON1  ((void *) 0x00100100)
 #define LIST_POISON2  ((void *) 0x00200200)
 
@@ -111,12 +121,6 @@ static inline int list_is_last(const list_head_t *node,
     return (node->next == head);
 }
 
-
-#ifndef container_of
-#define container_of(ptr, type, member) ({ \
-    const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
-    (type *)( (char *)__mptr - offsetof(type,member) );})
-#endif
 
 #ifdef __cplusplus
 }
