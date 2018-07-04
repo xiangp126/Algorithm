@@ -1,11 +1,44 @@
+/*
+ * impmelented by hi.pxiang@gmail.com
+ * modified from linux kernel
+ */
 #ifndef _LIST_H_
 #define _LIST_H_
 
 #include "config.h"
 
 /*
- * list_head_t list with head node
- * double-linked circular list
+ * list_head_t double-linked circular list
+ * list was embeded into the structure itself
+ * @type: the structure
+ * @list: member of the @type
+ * @head: head entry of the list
+ *
+ *                type1                   type2
+ *                +-------------+         +-------------+
+ *                |             |         |             |
+ *                +-------------+         +-------------+
+ *                |             |         |             |
+ *                +-------------+         +-------------+
+ *   head ------> | list_head_t | ------> | list_head_t | ------> ...
+ *        <-----  | list        | <-----  | list        | <-----  ...
+ *                +-------------+         +-------------+
+ *                | data3       |         | data3       |
+ *                +-------------+         +-------------+
+ *
+ *
+ *              typem                   typen
+ *              +-------------+         +-------------+
+ *              | data1       |         | data1       |
+ *              +-------------+         +-------------+
+ *              | data2       |         | data2       |
+ *              +-------------+         +-------------+
+ *      ------> | list_head_t | ------> | list_head_t | ------> head
+ *      <-----  | list        | <-----  | list        | <----- (circular list)
+ *              +-------------+         +-------------+
+ *              | data3       |         | data3       |
+ *              +-------------+         +-------------+
+ *
  */
 typedef struct list_head_s list_head_t;
 
@@ -14,10 +47,19 @@ struct list_head_s {
     list_head_t *next;
 };
 
+/*
+ * offsetof - get the offset of member in type
+ */
 #ifndef offsetof
 #define offsetof(type, member) ((size_t) &((type *)0)->member)
 #endif
 
+/*
+ * container_of - cast a member of a structure out to the containing structure
+ * @ptr:	the pointer to the member.
+ * @type:	the type of the container struct @member was embedded in.
+ * @member:	the name of the member within the struct.
+ */
 #ifndef container_of
 #define container_of(ptr, type, member) ({ \
     const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
@@ -121,6 +163,41 @@ static inline int list_is_last(const list_head_t *node,
     return (node->next == head);
 }
 
+/*
+ * list_empty - test if the list is empty
+ * @head: head of the list
+ */
+static inline int list_empty(const list_head_t *head) {
+    return head->next == head;
+}
+
+/*
+ * list_entry - get the struct for this entry
+ * @ptr: pointer to one @member
+ * @type: type of the struct that @member was embeded in
+ * @menber: the name of the member within the struct
+ */
+#define list_entry(ptr, type, member) container_of(ptr, type, member)
+
+/*
+ * list_first_entry - get the first entry from a list
+ * @head: head of the list
+ * @type: type of the struct that @member was embeded in
+ * @menber: the name of the member within the struct
+ */
+#define list_first_entry(head, type, member) \
+    list_entry((head)->next, type, member)
+
+/*
+ * list_for_each_entry interate over list of given type
+ * @pos: the type * to use as a loop counter
+ * @head: head of the list
+ * @member: the name of the member within the list structure
+ */
+#define list_for_each_entry(pos, head, member) \
+    for (pos = list_entry((head)->next, typeof(*pos), member); \
+         &pos->member != (head); \
+         pos = list_entry(pos->member.next, typeof(*pos), member))
 
 #ifdef __cplusplus
 }
