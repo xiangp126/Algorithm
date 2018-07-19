@@ -14,7 +14,7 @@
  * @list: member of the @type
  * @head: head entry of the list
  *
- *                type1                   type2
+ *                node-1                   node-2
  *                +-------------+         +-------------+
  *                |             |         |             |
  *                +-------------+         +-------------+
@@ -23,20 +23,20 @@
  *   head ------> | list_head_t | ------> | list_head_t | ------> ...
  *        <-----  | list        | <-----  | list        | <-----  ...
  *                +-------------+         +-------------+
- *                | data3       |         | data3       |
+ *                | ...         |         | ...         |
  *                +-------------+         +-------------+
  *
  *
- *              typem                   typen
+ *              node-m                   node-n
  *              +-------------+         +-------------+
- *              | data1       |         | data1       |
+ *              |             |         |             |
  *              +-------------+         +-------------+
- *              | data2       |         | data2       |
+ *              |             |         |             |
  *              +-------------+         +-------------+
  *      ------> | list_head_t | ------> | list_head_t | ------> head
  *      <-----  | list        | <-----  | list        | <----- (circular list)
  *              +-------------+         +-------------+
- *              | data3       |         | data3       |
+ *              | ...         |         | ...         |
  *              +-------------+         +-------------+
  *
  */
@@ -48,7 +48,11 @@ struct list_head_s {
 };
 
 /*
- * offsetof - get the offset of member in type
+ * offsetof - get the offset value of member in type
+ * (type *)0 : cast 0 to 'type' type *
+ * ((type *)0)->member : get the value of 'member' of type
+ * &((type *)0)->member : get the address of the 'member'
+ * note: priority of '->' is higher than get address '&' and type cast '()'
  */
 #ifndef offsetof
 #define offsetof(type, member) ((size_t) &((type *)0)->member)
