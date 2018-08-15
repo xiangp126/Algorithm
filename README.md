@@ -1,47 +1,56 @@
+## Illustrate
 - This projects aims to implement and utilize basic data structure and algorithm
-- Thoughts come from Web or classical books like 'Introduction to Algorithms, Third Edition'
-- Walked through
-    - N sort (Complexity of Time)
-        - bucket sort
-        - radix  sort
-    - NlogN sort
-        - shell  sort
-        - heap   sort
-        - merge  sort
-        - quick  sort
-        - quick  sort optimize
-    - N^2 sort
-        - bubble sort
-        - insert sort
+- Thoughts come from the Web and classical books like 'Introduction to Algorithms'
+- N sort (Complexity of Time)
+
+> Sort algorithm Complexity of Time
+
+| Sort Method | Average | Best | Worst | Stable |
+| :--: | :--: | :--: | :--: | :--: |
+| Bubble | N<sup>2</sup> | O(N) | N<sup>2</sup> | &radic; |
+| Insert | N<sup>2</sup> | O(N) | N<sup>2</sup> | &radic; |
+| Bucket | O(N) | O(N) | O(N) | &Chi; |
+| Radix | O(N) | O(N) | O(N) | &radic; |
+| Shell | N<sup>1.3</sup> |  |  | &Chi; |
+| Heap | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | &Chi; |
+| Merge | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | &radic; |
+| Quick | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | N<sup>2</sup> | &Chi; |
+
+- KMP
     - kmp
-        - kmp
-        - kmp optimize
-    - tree
-        - red-black tree
-    - hash
-        - consistent hash
+    - kmp optimize
+- Tree
+    - red-black tree
+- Hash
+    - consistent hash
 
 ## Note
-- Need set env variables before execute binary (Mac need not do this)
+> Need set env variables before execute binary (Mac need not do this)
+
 ```bash
 export LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH
 ```
-or just
+> or just
+
 ```bash
 source env.sh
 ```
 
-- Header directory [Inc](./inc) use soft link, making each template itself can be used as standalone
+> Header directory [Inc](./inc) use soft link, making each template itself can be used as standalone
+
 ```bash
-./inc
 # example
+ll ./inc
+
 common.h@ -> ../common/common.h
 kmp.h@ -> ../kmp/kmp.h
 md5.h@ -> ../rbtree/md5.h
 rbtree.h@ -> ../rbtree/util_rbtree.h
 sort.h@ -> ../sort/sort.h
 ```
-- Each template will generate dynamic library, for shared use
+
+> Each template will generate dynamic library, for shared use
+
 ```bash
 # example
 ldd lib/libsort.so
@@ -55,17 +64,17 @@ ldd lib/libsort.so
 ```
 
 ## Quick Start
-- kmp & sort need c++11 support
-- rbtree is a standalone source
+> kmp & sort need c++11 support
+> rbtree is a standalone source
+
 ```bash
 make -j
 source env.sh
 
-# binary was under ./bin
+# then binary was under ./bin
 ```
 
-### Example
-#### Sort
+### Sort
 ```bash
 ./bin/sortdemo
 
@@ -90,12 +99,13 @@ Input Here: 3
 Input Here:
 ```
 
-#### KMP
-You may know well about the next array from below two figures.
+### KMP
+> You may know well about the next array from below two figures.
 
 ![next1](http://img1.tuicool.com/2E36nuQ.png!web)
-
 ![next2](http://img1.tuicool.com/qYN3u2v.png!web)
+
+> Execute
 
 ```bash
 ./bin/kmpdemo
