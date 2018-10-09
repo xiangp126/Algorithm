@@ -1,4 +1,7 @@
 ## Dijkstra
+### _Breadth-First-Search_
+
+Dijkstra’s algorithm solves the **single-source** shortest-paths problem on a **weighted**,**directed** graph `G = (V, E)` for the case in which all edge weights are **nonnegative**.
 
 ### Algorithm
 1. Mark all nodes unvisited. Create a set of all the unvisited nodes called the unvisited set.

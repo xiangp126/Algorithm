@@ -4,10 +4,20 @@
 <https://blog.csdn.net/Jack_CJZ/article/details/78883157>
 
 ### Input
-```
+```c
 [[2,1,1],[2,3,1],[3,4,1]]
 4
 2
+
+[[1,2,1],[2,3,2]]
+3
+1
+```
+
+### Output
+```c
+2
+3
 ```
 
 ### Code
@@ -15,13 +25,31 @@
 class Solution {
 public:
     int networkDelayTime(vector<vector<int>>& times, int N, int K) {
-        vector<vector<int> > graph(N + 1, vector<int>(N + 1, 60001));
-        vector<int> cost(N + 1);
-        vector<bool> visited(N + 1, false); 
+#define MAX_VAL 6001
+        /*
+         * @graph: record the path length from i --> j
+         *         dimension N + 1 * N + 1. default MAX_VAL
+         * @cost:  record the 'shortest' path length from K --> i
+         *         dimemsion N + 1 * 1. default MAX_VAL
+         * @visited: mark if Node i was visited, dimemsion N + 1 * 1
+         *         default false
+         */
+        vector<vector<int> > graph(N + 1, vector<int>(N + 1, MAX_VAL));
+        vector<int>  cost(N + 1, MAX_VAL);
+        vector<bool> visited(N + 1, false);
 
+        /*
+         * create graph array，Node index from 1 ... N
+         * graph[i][j] of means the path length directly from i --> j
+         */
         for (int i = 0; i < times.size(); ++i) {
             graph[times[i][0]][times[i][1]] = times[i][2];
         }
+
+        /*
+         * Initialize 'cost' array
+         * cost[i]: path length directly from K --> i
+         */
         for (int i = 1; i <= N; ++i) {
             cost[i] = graph[K][i];
         }
@@ -29,41 +57,68 @@ public:
         visited[K] = true;
 
         for (int i = 1; i <= N; ++i) {
-            int minNode = findMinNode(cost, visited);
-            if (minNode == 0) { break; }
+            int midNode = findShortestNode(cost, visited);
+            // if no effective shortest path found
+            if (midNode == -1) {
+                break;
+            }
             for (int j = 1; j <= N; ++j) {
-                if (!visited[j] && cost[j] > cost[minNode] + graph[minNode][j]) {
-                    cost[j] = cost[minNode] + graph[minNode][j];
+                /*
+                 * Breadth-First-Search relaxation path
+                 * check path length between directly K --> j
+                 *                     and indirectly K --> midNode --> j
+                 * cost[j]: path length from K --> j
+                 * graph[midNode][j]: path length from midNode --> j
+                 */
+                if (!visited[j] && (cost[midNode] + graph[midNode][j] < cost[j])) {
+                    cost[j] = cost[midNode] + graph[midNode][j];
                 }
             }
-            visited[minNode] = true;
+            // mark this Node as visited
+            visited[midNode] = true;
         }
 
-        return calSum(cost);
+        // final handle function
+        return handleFunc(cost);
     }
 
-    int findMinNode(vector<int>& cost, vector<bool>& visited) {
-        int minIndex = 0, minV = 60001;
+    /*
+     * findShortestNode: find the shortest node among 'unvisited node set'
+     *                   according to 'cost' array
+     * @cost: 'cost' array of path K --> i
+     * @visited: set of un-visited node
+     * @return -1 if not found
+     */
+    int findShortestNode(vector<int> &cost, vector<bool> &visited) {
+        // the shortest path node, can be 0 for Node index starts from 1
+        int sNode = -1;
+        int minV  = MAX_VAL;
         for (int i = 1; i < cost.size(); ++i) {
-            if (!visited[i] && minV > cost[i]) { 
-                minIndex = i; 
+            if (!visited[i] && (cost[i] < minV)) {
                 minV = cost[i];
+                sNode = i;
             }
         }
-        return minIndex;
+        return sNode;
     }
 
-    int calSum(vector<int>& cost) {
-        int sum = 0;
+    /* handleFunc: validate and find the maximum Delay Time
+     * @cost: 'cost' array of path K --> i
+     * @return -1 if no effective value found
+     */
+    int handleFunc(vector<int> &cost) {
+        int maxDelay = 0;
+        // index of 'cost'(represents Node) starts from 1
         for (int i = 1; i < cost.size(); ++i) {
-            if (cost[i] == 60001) {
+            // cout << "cost[" << i << "] = " << cost[i] << endl;
+            if (cost[i] == MAX_VAL) {
                 return -1;
             }
-            if (sum < cost[i]) {
-                sum = cost[i];
+            if (maxDelay < cost[i]) {
+                maxDelay = cost[i];
             }
         }
-        return sum;
+        return maxDelay;
     }
 };
 ```
