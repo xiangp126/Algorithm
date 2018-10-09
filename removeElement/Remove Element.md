@@ -1,11 +1,12 @@
 ## Remove Element
+### Illustrate
 <https://leetcode.com/problems/remove-element/>
 
-### core concept
+### Core Concept
 
 two iterators
 
-### code
+### Code
 ```c
 class Solution {
 public:
