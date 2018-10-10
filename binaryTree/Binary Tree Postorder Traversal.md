@@ -1,6 +1,6 @@
-## Binary Tree Preorder Traversal
+## Binary Tree Postorder Traversal
 ### Illustrate
-<https://leetcode.com/problems/binary-tree-preorder-traversal/>
+<https://leetcode.com/problems/binary-tree-postorder-traversal/>
 
 ### Input
 ```c
@@ -15,11 +15,30 @@
 
 ### Output
 ```c
-[2,1,4,3]
+[4,1,3,2]
 ```
 
+### Concept
+_According to definition of InOrder Traversal_
+
+`PostOrder` left -> right -> root
+
+`PreOrder`&nbsp;&nbsp;&nbsp;root -> left -> right
+
+---
+take advantage of **preorderTraversal**
+
+> first push `right` node into stack, meanwhile insert val into `ret` from head not tail<br>
+or you could inverse `ret` in the end
+
+_root -> right -> left_
+
+reverse it yields
+
+_left -> right -> root_
+
 ### Iteratively - Stack
-_According to definition of PreOrder Traversal_
+
 
 ```c
 /**
@@ -33,21 +52,23 @@ _According to definition of PreOrder Traversal_
  */
 class Solution {
 public:
-    vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> postorderTraversal(TreeNode* root) {
         vector<int> ret;
         stack<TreeNode *> stk;
         TreeNode *ptr = root;
         while (!stk.empty() || ptr) {
             if (ptr != NULL) {
-                // only one-line change with inorderTraversal
-                ret.push_back(ptr->val);
+                // insert value from the head, not tail
+                ret.insert(ret.begin(), ptr->val);
                 stk.push(ptr);
-                ptr = ptr->left;
+                // first push right node
+                ptr = ptr->right;
             } else {
                 // stk.top() only get top of stack, not pop it
                 ptr = stk.top();
                 stk.pop();
-                ptr = ptr->right;
+                // last handle left node
+                ptr = ptr->left;
             }
         }
         return ret;
@@ -68,19 +89,19 @@ public:
  */
 class Solution {
 public:
-    vector<int> preorderTraversal(TreeNode* root) {
+    vector<int> postorderTraversal(TreeNode* root) {
         vector<int> ret;
-        preOrder(root, ret);
+        postOrder(root, ret);
         return ret;
     }
 
-    void preOrder(TreeNode *root, vector<int> &ret) {
+    void postOrder(TreeNode *root, vector<int> &ret) {
         if (root == NULL) {
             return;
         }
+        postOrder(root->left, ret);
+        postOrder(root->right, ret);
         ret.push_back(root->val);
-        preOrder(root->left, ret);
-        preOrder(root->right, ret);
     }
 };
 ```
