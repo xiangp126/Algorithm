@@ -31,11 +31,11 @@ take advantage of **preorderTraversal**
 > first push `right` node into stack, meanwhile insert val into `ret` from head not tail<br>
 or you could inverse `ret` in the end
 
-_root -> right -> left_
+`root -> right -> left`
 
-reverse it yields
+_reverse it yields_
 
-_left -> right -> root_
+`left -> right -> root`
 
 ### Iteratively - Stack
 
