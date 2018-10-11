@@ -4,3 +4,4 @@ bin/
 lib/
 *.dSYM/
 core*
+main.cpp
