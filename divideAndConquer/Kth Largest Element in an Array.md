@@ -16,7 +16,14 @@ Input: [3,1,2,4] and k = 2
 Output: 3
 ```
 
-### Code - _quick sort basic_
+### Contents
+- [Code - quick sort basic](#quicksortbasic)
+- [Code - quick select](#quickselect)
+- [Code - heap sort](#heapsort)
+- [Code - heap select](#heapselect)
+
+<a id=quicksortbasic></a>
+### Code - _quick sort (basic)_
 _full sort from Largest to Smallest_
 
 ```c
@@ -26,11 +33,11 @@ public:
         quickSort(nums);
         return nums[k - 1];
     }
-    
+
     void quickSort(vector<int> &nums) {
         return qSort(nums, 0, nums.size() - 1);
     }
-    
+
     void qSort(vector<int> &nums, int start, int end) {
         if (start >= end) {
             return;
@@ -63,7 +70,8 @@ public:
 };
 ```
 
-### Code - _quick select basic_
+<a id=quickselect></a>
+### Code - _quick select_
 _from Largest to Smallest_
 
 ```c
@@ -73,11 +81,11 @@ public:
         quickSelect(nums, k - 1);
         return nums[k - 1];
     }
-    
+
     void quickSelect(vector<int> &nums, int k) {
         return qSelect(nums, 0, nums.size() - 1, k);
     }
-    
+
     void qSelect(vector<int> &nums, int start, int end, int k) {
         if (start >= end) {
             return;
@@ -91,7 +99,7 @@ public:
             } else {
                 qSelect(nums, pIndex + 1, end, k);
             }
-        }  
+        }
     }
     /*
      * partition: partition array range [start, end] into three parts
@@ -117,7 +125,10 @@ public:
 };
 ```
 
+<a id=heapsort></a>
 ### Code - _heap sort_
+_full sort from Largest to Smallest_
+
 ```c
 class Solution {
 public:
@@ -125,7 +136,7 @@ public:
         heapSort(nums);
         return nums[k - 1];
     }
-    
+
     void heapSort(vector<int> &nums) {
         // make Heap
         const int N = nums.size();
@@ -142,7 +153,14 @@ public:
         }
     }
 
-    // heap percolate down, minHeap default, range [start, end]
+    /*
+     * heapAdjust: adjust Heap, originally percolate down routine
+     *             construct Min-Peak Heap here
+     * @nums:  input array
+     * @start: start index of the array
+     * @end:   end index of the array, included
+     * @return void
+     */
     void heapAdjust(vector<int> &nums, int start, int end) {
         int i = start;
         int child = 2 * i + 1;
@@ -166,10 +184,81 @@ public:
         // inset into right position
         nums[i] = sentinel;
     }
-    
+
     void printArray(vector<int> &nums) {
+        cout << "[ ";
         for (auto num : nums) {
-            cout << "[ " << num << " ";
+             cout << num << " ";
+        }
+        cout << " ]" << endl;
+    }
+};
+```
+
+<a id=heapselect></a>
+### Code - _heap select_
+_from smallest to Largest_
+
+```c
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        return heapSort(nums, k);
+    }
+
+    int heapSort(vector<int> &nums, int k) {
+        // make Heap
+        const int N = nums.size();
+        // index starts from 0
+        for (int i = (N - 1) / 2; i >= 0; --i) {
+            heapAdjust(nums, i, N - 1);
+        }
+        // sort main body
+        for (int i = N - 1; i >= N - k; --i) {
+            // printArray(nums);
+            swap(nums[0], nums[i]);
+            // Heap length minus 1
+            heapAdjust(nums, 0, i - 1);
+        }
+        return nums[N - k];
+    }
+
+    /*
+     * heapAdjust: adjust Heap, originally percolate down routine
+     *             construct Max-Peak Heap here
+     * @nums:  input array
+     * @start: start index of the array
+     * @end:   end index of the array, included
+     * @return void
+     */
+    void heapAdjust(vector<int> &nums, int start, int end) {
+        int i = start;
+        int child = 2 * i + 1;
+        int sentinel = nums[i];
+        // main loop
+        while (i < end && child <= end) {
+            // find out smallest child
+            if (child + 1 <= end && nums[child + 1] > nums[child]) {
+                ++child;
+            }
+            // move smaller child to root
+            if (nums[child] > sentinel) {
+                nums[i] = nums[child];
+            } else {
+                break;
+            }
+            // for next loop
+            i = child;
+            child = 2 * i + 1;
+        }
+        // inset into right position
+        nums[i] = sentinel;
+    }
+
+    void printArray(vector<int> &nums) {
+        cout << "[ ";
+        for (auto num : nums) {
+             cout << num << " ";
         }
         cout << " ]" << endl;
     }
