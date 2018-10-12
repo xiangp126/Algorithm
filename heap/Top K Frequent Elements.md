@@ -20,4 +20,38 @@ Output: [1]
 
 ### Code
 ```c
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> ret;
+        priority_queue<pair<int, int> > que;
+        // <integer, frequency>
+        unordered_map<int, int> hashMap;
+        for (auto num : nums) {
+            ++hashMap[num];
+        }
+        
+        for (auto &pair : hashMap) {
+            que.push(make_pair(pair.second, pair.first));
+        }
+        
+        // printPQ(que);
+        while (k--) {
+            ret.push_back(que.top().second);
+            que.pop();
+        }
+        return ret;
+    }
+    
+    void printPQ(priority_queue<pair<int, int> > &que) {
+        while (!que.empty()) {
+            auto pair = que.top();
+            que.pop();
+            cout << "(";
+            cout << pair.first << ", " << pair.second;
+            cout << ")";
+        }
+        cout << endl;
+    }
+};
 ```

@@ -13,13 +13,3 @@
    / \ / \
   4  5 6  7
 ```
-
-### STL - Priority Queue
-
-Priority queues are a type of container adaptors, specifically designed such that its first element is always the **greatest** of the elements it contains, according to some strict weak ordering criterion.
-
-- empty
-- size
-- top
-- push
-- pop
