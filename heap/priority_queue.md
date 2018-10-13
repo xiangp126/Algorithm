@@ -14,7 +14,7 @@ _Default **Max-Peak** Heap_
     template <class T, class Container = vector<T>,
     class Compare = less<typename Container::value_type> > class priority_queue;
 
-### Sample    
+### Example    
 ```c
 priority_queue<int> que;
 que.push(3);
@@ -24,3 +24,5 @@ while (!que.empty()) {
     que.pop();
 }
 ```
+
+_refer [Top K Frequent Elements](./Top\ K\ Frequent\ Elements.md) for mor info about priority\_queue_
