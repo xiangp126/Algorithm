@@ -12,8 +12,8 @@ static void getNext(const char *, int *next);
 int subStrSearch(const char *str, const char *pattern) {
     int strLen = strlen(str);
     int ptLen = strlen(pattern);
-    int *next = new int[ptLen];
-    memset(next, 0, (ptLen + 1) * sizeof(int));
+    int next[ptLen];
+    memset(next, 0, ptLen * sizeof(int));
     getNext(pattern, next);
     cout << "Next Array: ";
     printArray(next, ptLen);

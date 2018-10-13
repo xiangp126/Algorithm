@@ -1,6 +1,6 @@
 ## Illustrate
 - This projects aims to implement and utilize basic **data structure and algorithm**
-- Thoughts come from the _Web_ and _classical books_ like 'Introduction to Algorithms'
+- Thoughts come from the _Web_ and _classical books_
 
 ## Note
 _Need set env variables before execute binary (Mac need not do this)_
@@ -56,14 +56,14 @@ source env.sh
 #### Complexity of Time
 | Sort Method | Average | Best | Worst | Stable |
 | :--: | :--: | :--: | :--: | :--: |
-| Bubble | N<sup>2</sup> | O(N) | N<sup>2</sup> | &radic; |
-| Insert | N<sup>2</sup> | O(N) | N<sup>2</sup> | &radic; |
-| Bucket | O(N) | O(N) | O(N) | &Chi; |
-| Radix | O(N) | O(N) | O(N) | &radic; |
-| Shell | N<sup>1.3</sup> |  |  | &Chi; |
-| Heap | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | &Chi; |
-| Merge | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | &radic; |
-| Quick | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | N<sup>2</sup> | &Chi; |
+| bubble | N<sup>2</sup> | O(N) | N<sup>2</sup> | &radic; |
+| insert | N<sup>2</sup> | O(N) | N<sup>2</sup> | &radic; |
+| bucket | O(N) | O(N) | O(N) | &Chi; |
+| radix | O(N) | O(N) | O(N) | &radic; |
+| shell | N<sup>1.3</sup> |  |  | &Chi; |
+| heap | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | &Chi; |
+| merge | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | &radic; |
+| quick | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | N<sup>2</sup> | &Chi; |
 
 #### _Demonstrate_
 ```bash
