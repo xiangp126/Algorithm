@@ -43,7 +43,7 @@ public:
          * pair(frequency, word)
          */
         struct MyCompare {
-            bool operator()(const pair<int, string> &node1,
+            inline bool operator()(const pair<int, string> &node1,
                                     const pair<int, string> &node2) {
                 if (node1.first == node2.first) {
                     return node1.second.compare(node2.second) > 0;
