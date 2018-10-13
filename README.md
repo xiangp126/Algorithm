@@ -1,42 +1,20 @@
 ## Illustrate
-- This projects aims to implement and utilize basic data structure and algorithm
-- Thoughts come from the Web and classical books like 'Introduction to Algorithms'
-- N sort (Complexity of Time)
-
-> Sort algorithm Complexity of Time
-
-| Sort Method | Average | Best | Worst | Stable |
-| :--: | :--: | :--: | :--: | :--: |
-| Bubble | N<sup>2</sup> | O(N) | N<sup>2</sup> | &radic; |
-| Insert | N<sup>2</sup> | O(N) | N<sup>2</sup> | &radic; |
-| Bucket | O(N) | O(N) | O(N) | &Chi; |
-| Radix | O(N) | O(N) | O(N) | &radic; |
-| Shell | N<sup>1.3</sup> |  |  | &Chi; |
-| Heap | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | &Chi; |
-| Merge | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | &radic; |
-| Quick | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | N<sup>2</sup> | &Chi; |
-
-- KMP
-    - kmp
-    - kmp optimize
-- Tree
-    - red-black tree
-- Hash
-    - consistent hash
+- This projects aims to implement and utilize basic **data structure and algorithm**
+- Thoughts come from the _Web_ and _classical books_ like 'Introduction to Algorithms'
 
 ## Note
-> Need set env variables before execute binary (Mac need not do this)
+_Need set env variables before execute binary (Mac need not do this)_
 
 ```bash
 export LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH
 ```
-> or just
+_or just_
 
 ```bash
 source env.sh
 ```
 
-> Header directory [Inc](./inc) use soft link, making each template itself can be used as standalone
+_Header directory [Inc](./inc) use soft link, making each template itself can be used as standalone_
 
 ```bash
 # example
@@ -49,7 +27,7 @@ rbtree.h@ -> ../rbtree/util_rbtree.h
 sort.h@ -> ../sort/sort.h
 ```
 
-> Each template will generate dynamic library, for shared use
+_Each template will generate dynamic library, for shared use_
 
 ```bash
 # example
@@ -63,9 +41,9 @@ ldd lib/libsort.so
         /lib64/ld-linux-x86-64.so.2 (0x00002afbcd4b2000)
 ```
 
-## Quick Start
-> kmp & sort need c++11 support
-> rbtree is a standalone source
+## Gallery
+### _Quick Start_
+_`kmp` & `sort` need c++11 support while `rbtree` is a standalone source_
 
 ```bash
 make -j
@@ -74,7 +52,20 @@ source env.sh
 # then binary was under ./bin
 ```
 
-### Sort
+### _Concept of Sort_
+#### Complexity of Time
+| Sort Method | Average | Best | Worst | Stable |
+| :--: | :--: | :--: | :--: | :--: |
+| Bubble | N<sup>2</sup> | O(N) | N<sup>2</sup> | &radic; |
+| Insert | N<sup>2</sup> | O(N) | N<sup>2</sup> | &radic; |
+| Bucket | O(N) | O(N) | O(N) | &Chi; |
+| Radix | O(N) | O(N) | O(N) | &radic; |
+| Shell | N<sup>1.3</sup> |  |  | &Chi; |
+| Heap | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | &Chi; |
+| Merge | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | &radic; |
+| Quick | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | N<sup>2</sup> | &Chi; |
+
+#### _Demonstrate_
 ```bash
 ./bin/sortdemo
 
@@ -99,14 +90,14 @@ Input Here: 3
 Input Here:
 ```
 
-### KMP
-> You may know well about the next array from below two figures.
+### _Concept of KMP_
+#### _next array_
+_You may know well about the next array from below two figures._
 
 ![next1](http://img1.tuicool.com/2E36nuQ.png!web)
 ![next2](http://img1.tuicool.com/qYN3u2v.png!web)
 
-> Execute
-
+#### _Demonstrate_
 ```bash
 ./bin/kmpdemo
 basic kmp:
