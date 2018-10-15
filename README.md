@@ -64,73 +64,7 @@ make -j
 
 ### _Concept of Sort_
 #### Complexity of Time
-<!-- Github did not support <style></style> -->
-<!-- th was same as td except that it hilight with black -->
-<table style="width:98%;border-collapse:collapse;border-top:2px solid #333;border-bottom:2px solid #333;border-left-style:none;">
-    <tr style="border-bottom:2px solid #333;">
-        <th>Sort Method</th>
-        <th>Average</th>
-        <th>Best</th>
-        <th>Worst</th>
-        <th>Stable</th>
-    </tr>
-    <tr>
-        <td>bubble</th>
-        <td>N<sup>2</sup</td>
-        <td>O(N)</td>
-        <td>N<sup>2</sup></td>
-        <td>&radic;</td>
-    </tr>
-    <tr>
-        <td>insert</th>
-        <td>N<sup>2</sup</td>
-        <td>O(N)</td>
-        <td>N<sup>2</sup></td>
-        <td>&radic;</td>
-    </tr>
-    <tr>
-        <td>bucket</th>
-        <td>O(N)</td>
-        <td>O(N)</td>
-        <td>O(N)</td>
-        <td>&Chi;</td>
-    </tr>
-    <tr>
-        <td>radix</th>
-        <td>O(N)</td>
-        <td>O(N)</td>
-        <td>O(N)</td>
-        <td>&radic;</td>
-    </tr>
-    <tr>
-        <td>shell</th>
-        <td>N<sup>1.3</sup></td>
-        <td colspan=2>---</td>
-        <td>&radic;</td>
-    </tr>
-    <tr>
-        <td>heap</th>
-        <td>Nlog<sub>2</sub><sup>N</sup></td>
-        <td>Nlog<sub>2</sub><sup>N</sup></td>
-        <td>Nlog<sub>2</sub><sup>N</sup></td>
-        <td>&radic;</td>
-    </tr>
-    <tr>
-        <td>merge</th>
-        <td>Nlog<sub>2</sub><sup>N</sup></td>
-        <td>Nlog<sub>2</sub><sup>N</sup></td>
-        <td>Nlog<sub>2</sub><sup>N</sup></td>
-        <td>&radic;</td>
-    </tr>
-    <tr>
-        <td>quick</th>
-        <td>Nlog<sub>2</sub><sup>N</sup></td>
-        <td>Nlog<sub>2</sub><sup>N</sup></td>
-        <td>N<sup>2<sup></td>
-        <td>&radic;</td>
-    </tr>
-</table>
-
+![](./gif/sort_table.png)
 #### _Demonstrate_
 ![](./gif/sortdemo.gif)
 
@@ -157,9 +91,7 @@ Index = 14
 ```
 
 ### _Red-Black Tree && Consistent Hash_
-_refer [Red-Black Tree](./rbtree/Red\ Black.md)_
-
-_refer [Consistent Hash](./conhash/Consistent\ Hash.md)_
+_go to [Red-Black Tree](./rbtree) && [Consistent Hash](./conhash) for detail_
 
 ## License
 The [MIT](./LICENSE.txt) License (MIT)
