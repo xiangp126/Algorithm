@@ -64,15 +64,15 @@ make -j
 
 ### _Concept of Sort_
 #### Complexity of Time
-![](./gif/sort_table.png)
+![](./res/sort_table.png)
 #### _Demonstrate_
-![](./gif/sortdemo.gif)
+![](./res/sortdemo.gif)
 
 ### _Concept of KMP_
 #### _next array_
 _you may know well about the `next` array from this figure_
 
-![](./gif/next.png)
+![](./res/next.png)
 
 #### _Demonstrate_
 ```bash
