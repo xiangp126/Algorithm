@@ -43,7 +43,8 @@ ldd lib/libsort.so
 
 ## Gallery
 ### _Quick Start_
-_`kmp` & `sort` need c++11 support while `rbtree` is a standalone source_
+> _`kmp` & `sort` need c++11 support_<br>
+_`consistent hash` uses `rbtree` which is a standalone source_
 
 ```bash
 make -j
@@ -70,10 +71,9 @@ source env.sh
 
 ### _Concept of KMP_
 #### _next array_
-_You may know well about the next array from below two figures._
+_You may know well about the `next` array from this figure_
 
-![next1](http://img1.tuicool.com/2E36nuQ.png!web)
-![next2](http://img1.tuicool.com/qYN3u2v.png!web)
+![](./gif/next.png)
 
 #### _Demonstrate_
 ```bash
