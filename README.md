@@ -3,7 +3,7 @@
 - Thoughts come from the _Web_ and _classical books_
 
 ## Note
-_Need set env variables before execute binary (Mac need not do this)_
+_Need set env variables before execute binary (`Mac` need not do this)_
 
 ```bash
 export LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH
@@ -42,36 +42,101 @@ ldd lib/libsort.so
 ```
 
 ## Gallery
-### _Quick Start_
+
 > _`kmp` & `sort` need c++11 support_<br>
 _`consistent hash` uses `rbtree` which is a standalone source_
 
 ```bash
+# cd Algorithm
 make -j
 source env.sh
 
-# then binary was under ./bin
+# then all binary were under ./bin
+```
+_you can also compile each demo separately, take `sort` as example_
+
+```bash
+cd sort/
+make -j
+
+../bin/sort_demo
 ```
 
 ### _Concept of Sort_
 #### Complexity of Time
-| Sort Method | Average | Best | Worst | Stable |
-| :--: | :--: | :--: | :--: | :--: |
-| bubble | N<sup>2</sup> | O(N) | N<sup>2</sup> | &radic; |
-| insert | N<sup>2</sup> | O(N) | N<sup>2</sup> | &radic; |
-| bucket | O(N) | O(N) | O(N) | &Chi; |
-| radix | O(N) | O(N) | O(N) | &radic; |
-| shell | N<sup>1.3</sup> |  |  | &Chi; |
-| heap | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | &Chi; |
-| merge | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | &radic; |
-| quick | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | N<sup>2</sup> | &Chi; |
+<!-- Github did not support <style></style> -->
+<!-- th was same as td except that it hilight with black -->
+<table style="width:98%;border-collapse:collapse;border-top:2px solid #333;border-bottom:2px solid #333;border-left-style:none;">
+    <tr style="border-bottom:2px solid #333;">
+        <th>Sort Method</th>
+        <th>Average</th>
+        <th>Best</th>
+        <th>Worst</th>
+        <th>Stable</th>
+    </tr>
+    <tr>
+        <td>bubble</th>
+        <td>N<sup>2</sup</td>
+        <td>O(N)</td>
+        <td>N<sup>2</sup></td>
+        <td>&radic;</td>
+    </tr>
+    <tr>
+        <td>insert</th>
+        <td>N<sup>2</sup</td>
+        <td>O(N)</td>
+        <td>N<sup>2</sup></td>
+        <td>&radic;</td>
+    </tr>
+    <tr>
+        <td>bucket</th>
+        <td>O(N)</td>
+        <td>O(N)</td>
+        <td>O(N)</td>
+        <td>&Chi;</td>
+    </tr>
+    <tr>
+        <td>radix</th>
+        <td>O(N)</td>
+        <td>O(N)</td>
+        <td>O(N)</td>
+        <td>&radic;</td>
+    </tr>
+    <tr>
+        <td>shell</th>
+        <td>N<sup>1.3</sup></td>
+        <td colspan=2>---</td>
+        <td>&radic;</td>
+    </tr>
+    <tr>
+        <td>heap</th>
+        <td>Nlog<sub>2</sub><sup>N</sup></td>
+        <td>Nlog<sub>2</sub><sup>N</sup></td>
+        <td>Nlog<sub>2</sub><sup>N</sup></td>
+        <td>&radic;</td>
+    </tr>
+    <tr>
+        <td>merge</th>
+        <td>Nlog<sub>2</sub><sup>N</sup></td>
+        <td>Nlog<sub>2</sub><sup>N</sup></td>
+        <td>Nlog<sub>2</sub><sup>N</sup></td>
+        <td>&radic;</td>
+    </tr>
+    <tr>
+        <td>quick</th>
+        <td>Nlog<sub>2</sub><sup>N</sup></td>
+        <td>Nlog<sub>2</sub><sup>N</sup></td>
+        <td>N<sup>2<sup></td>
+        <td>&radic;</td>
+    </tr>
+</table>
 
 #### _Demonstrate_
 ![](./gif/sortdemo.gif)
 
 ### _Concept of KMP_
 #### _next array_
-_You may know well about the `next` array from this figure_
+_you may know well about the `next` array from this figure_
 
 ![](./gif/next.png)
 
@@ -92,7 +157,9 @@ Index = 14
 ```
 
 ### _Red-Black Tree && Consistent Hash_
-_refer [Red-Black Tree](./rbtree/Red\ Black.md) && [Consistent Hash](./conhash/Consistent\ Hash.md)_
+_refer [Red-Black Tree](./rbtree/Red\ Black.md)_
+
+_refer [Consistent Hash](./conhash/Consistent\ Hash.md)_
 
 ## License
 The [MIT](./LICENSE.txt) License (MIT)
