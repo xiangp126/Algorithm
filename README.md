@@ -66,29 +66,7 @@ source env.sh
 | quick | Nlog<sub>2</sub><sup>N</sup> | Nlog<sub>2</sub><sup>N</sup> | N<sup>2</sup> | &Chi; |
 
 #### _Demonstrate_
-```bash
-./bin/sortdemo
-
-||=>> Select Sort Algorithm @
-[1]: Bubble Sort       [2]: Insert Sort       [3]: Quick  Sort
-[4]: Quick  Sort(Op)   [5]: Shell  Sort       [6]: Heap   Sort
-[7]: Merge  Sort       [8]: Bucket Sort       [9]: Radix  Sort
-[10]:Library Fun       [*]: Quit Selection
--------------------------- Original Array --------------------------
-49 -85 -98 -78 -44 30 -48 66 63 89 6 -58 66 83 91 76 -7 -72 88 -23
-Input Here: 3
--------------------------- Quick Sort --------------------------
--98 -85 -78 -72 -58 -48 -44 -23 -7 6 30 49 63 66 66 76 83 88 89 91
-
-||=>> Select Sort Algorithm @
-[1]: Bubble Sort       [2]: Insert Sort       [3]: Quick  Sort
-[4]: Quick  Sort(Op)   [5]: Shell  Sort       [6]: Heap   Sort
-[7]: Merge  Sort       [8]: Bucket Sort       [9]: Radix  Sort
-[10]:Library Fun       [*]: Quit Selection
--------------------------- Original Array --------------------------
-11 -91 40 -37 -84 31 44 -62 -11 -67 -33 -34 60 -81 77 40 -7 82 13 17
-Input Here:
-```
+![](./gif/sortdemo.gif)
 
 ### _Concept of KMP_
 #### _next array_
