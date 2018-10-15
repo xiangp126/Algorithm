@@ -91,5 +91,8 @@ pattern = BCDABDE
 Index = 14
 ```
 
+### _Red-Black Tree && Consistent Hash_
+_refer [Red-Black Tree](./rbtree/Red\ Black.md) && [Consistent Hash](./conhash/Consistent\ Hash.md)_
+
 ## License
 The [MIT](./LICENSE.txt) License (MIT)
