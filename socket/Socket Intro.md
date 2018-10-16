@@ -2,11 +2,11 @@
 _Just Introduction, more on referred pages_
 
 ### Contents
-- [what is the meaning of _backlog_ in _listen_ ?](#listenbacklog)
-- [what is the meaning of `TIME_WAIT`?](#timewait)
-- [say hwo to use `SO_REUSEADDR` and `SO_REUSEPORT`](#soreuseaddr)
-- [different of the return sockfd between `socket` and `accept`](#sockfd)
-- [**blocking** function and **non-blocking** function](#blocking)
+- [What is the meaning of _backlog_ in `listen` ?](#listenbacklog)
+- [What is the meaning of `TIME_WAIT`?](#timewait)
+- [Say hwo to use `SO_REUSEADDR` and `SO_REUSEPORT`](#soreuseaddr)
+- [Different of the return sockfd between `socket` and `accept`](#sockfd)
+- [**Blocking** function and **Non-Blocking** function](#blocking)
 - [How Linux handle Network packets](#linuxnetpackets)
 
 <a id=listenbacklog></a>
@@ -56,7 +56,7 @@ int listen(int sockfd, int backlog)
 <a id=timewait></a>
 ### TIME_WAIT
 - _TCP state transition graph_
-<div align=center><img src="../res/tcp_state.jpg"/ width=700></div>
+<div align=center><img src="../res/tcp_state.jpg"/ width=600></div>
 
 > `Unix Network Programming` **Chapter 2.7** _TIME\_WAIT state_
 <http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch02lev1sec7.html><br>
@@ -69,9 +69,12 @@ int listen(int sockfd, int backlog)
 <a id=soreuseaddr></a>
 ### `SO_REUSEADDR` && `SO_REUSEPORT`
 
-> <https://stackoverflow.com/questions/14388706/socket-options-so-reuseaddr-and-so-reuseport-how-do-they-differ-do-they-mean-t><br>
+> `Unix Network Programming` **Chapter 7.5** _Generic Socket Options_<br>
+search `SO_REUSEADDR and SO_REUSEPORT Socket Options`<br>
+<http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch07lev1sec5.html>
+<https://stackoverflow.com/questions/14388706/socket-options-so-reuseaddr-and-so-reuseport-how-do-they-differ-do-they-mean-t><br>
 allow bind to the same _IP address_ or same _IP port_<br>
- _**call `setsockopt` before `bind`, syntax like this**_
+ _**call `setsockopt` to set the `SO_REUSEADDR` socket option before calling `bind` in all TCP servers**_
 
 ```c
 176  int usbip_net_set_reuseaddr(int sockfd)
@@ -180,7 +183,27 @@ _then come to `sock_setsockopt` when `level` == `SOL_SOCKET`_
 ```
 
 <a id=sockfd></a>
-### Socket Fd Difference
+### Listening socket && connected socket
+
+- accept
+
+> `accept` is called by a TCP server to return the next completed connection from the front of the _**completed connection queue**_ (Figure 4.7). If the completed connection queue is empty, the process is put to sleep (assuming the default of a blocking socket).
+
+```c
+#include <sys/socket.h>
+
+int accept (int sockfd, struct sockaddr *cliaddr, socklen_t *addrlen);
+```
+
+1. If `accept` is successful, its return value is a **brand-new descriptor** automatically created by the kernel.
+2. This new descriptor refers to the TCP connection with the client.
+
+> When discussing `accept`, we call the first argument to accept _**the listening socket**_ (the descriptor created by socket and then used as the first argument to both `bind` and `listen`), and we call the return value from `accept` _**the connected socket**_.
+
+#### _It is important to differentiate between these two sockets_
+  
+1. A given server normally creates only one _**listening socket**_, which then exists for the lifetime of the server.<br>
+2. The kernel creates one _**connected socket**_ for each client connection that is accepted (i.e., for which the TCP `three-way handshake` completes). When the server is finished serving a given client, the _**connected socket**_ is closed.
 
 ### Blcoking Function
 
