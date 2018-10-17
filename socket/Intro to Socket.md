@@ -1,5 +1,7 @@
-## Socket Intro
-_Just Introduction, more on referred pages_
+## Intro to Socket
+_[Unix Network Programming](http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/)_
+
+~~Just Introduction, more on referred pages_~~
 
 ### Contents
 - [What is the meaning of _backlog_ in `listen` ?](#listenbacklog)
@@ -8,15 +10,15 @@ _Just Introduction, more on referred pages_
 - [Difference between the return value of `socket` and `accept`](#sockfd)
 - [Which function is Blocking ?](#blocking)
 - [How to set socket to **Non-Blocking**](#nonblocking)
+- [How to close a socket gracefully](#close)
 - [TCP Sequence Number Transfer Graph](#tcpseq)
 - [How Linux handle Network packets](#linuxnetpackets)
 
 <a id=listenbacklog></a>
-### Listen - _backlog_
-- _listen_
+### What is the meaning of _backlog_ in `listen`
+> [**Section 4.5** _listen Function_](http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch04lev1sec5.html)
 
-> `Unix Network Programming` **Chapter 4.5** _Listen Function_
-<http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch04lev1sec5.html>
+- _listen_
 
 ```c
 int listen(int sockfd, int backlog)
@@ -57,12 +59,12 @@ int listen(int sockfd, int backlog)
 
 <a id=timewait></a>
 ### TIME_WAIT
+
+> [**Section 2.7** _TIME\_WAIT state_](http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch02lev1sec7.html)<br>
+<http://blog.51cto.com/yaocoder/1338567>
+
 - _TCP state transition graph_
 <div align=center><img src="../res/tcp_state.jpg"/ width=600></div>
-
-> `Unix Network Programming` **Chapter 2.7** _TIME\_WAIT state_
-<http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch02lev1sec7.html><br>
-<http://blog.51cto.com/yaocoder/1338567>
 
 - There are two reasons for the `TIME_WAIT` state:
     - To implement TCP's full-duplex connection termination reliably
@@ -71,9 +73,8 @@ int listen(int sockfd, int backlog)
 <a id=soreuseaddr></a>
 ### `SO_REUSEADDR` && `SO_REUSEPORT`
 
-> `Unix Network Programming` **Chapter 7.5** _Generic Socket Options_<br>
+> [**Section 7.5** _Generic Socket Options_](http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch07lev1sec5.html)<br>
 search `SO_REUSEADDR and SO_REUSEPORT Socket Options`<br>
-<http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch07lev1sec5.html>
 <https://stackoverflow.com/questions/14388706/socket-options-so-reuseaddr-and-so-reuseport-how-do-they-differ-do-they-mean-t><br>
 allow bind to the same _IP address_ or same _IP port_<br>
  _**call `setsockopt` to set the `SO_REUSEADDR` socket option before calling `bind` in all TCP servers**_
@@ -186,6 +187,8 @@ _then come to `sock_setsockopt` when `level` == `SOL_SOCKET`_
 
 <a id=sockfd></a>
 ### Listening socket && connected socket
+
+[**Section 4.6** _accept Function_](http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch04lev1sec6.html)
 
 - accept
 
@@ -419,3 +422,22 @@ _final go to_
 <a id=tcpseq></a>
 ### TCP Sequence Number Transfer Graph
 <div align=center><img src="../res/tcp_seq.png"/ width=480></div>
+
+<a id=close></a>
+### How to close a Socket Gracefully
+> [**Section 4.5** _close Function_](http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch04lev1sec9.html)
+
+_The normal Unix close function is also used to close a socket and terminate a TCP connection_
+
+```c
+#include <unistd.h>
+
+int close (int sockfd);
+```
+
+1. The default action of `close` with a TCP socket is to mark the socket as closed and return to the process immediately.
+2. The socket descriptor is no longer usable by the process: It cannot be used as an argument to read or write. But, TCP will try to send any data that is already queued to be sent to the other end, and after this occurs, the normal TCP connection termination sequence takes place.
+3. when the parent process in our **concurrent server** closes the _**connected socket**_, this just decrements the reference count for the descriptor.
+4. Since the reference count was still greater than 0, this call to `close` did not initiate **TCP's four-packet connection termination sequence**. This is the behavior we want with our concurrent server with the connected socket that is shared between the parent and child.
+
+> If we really want to send a `FIN` on a TCP connection, the [**Section 6.6** _shutdown function_](http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch06lev1sec6.html#ch06lev1sec6) can be used instead of close. We will describe the motivation for this in Section 6.5.
