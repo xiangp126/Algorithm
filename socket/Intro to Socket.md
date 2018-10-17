@@ -437,7 +437,7 @@ int close (int sockfd);
 
 1. The default action of `close` with a TCP socket is to mark the socket as closed and return to the process immediately.
 2. The socket descriptor is no longer usable by the process: It cannot be used as an argument to read or write. But, TCP will try to send any data that is already queued to be sent to the other end, and after this occurs, the normal TCP connection termination sequence takes place.
-3. when the parent process in our **concurrent server** closes the _**connected socket**_, this just decrements the reference count for the descriptor.
+3. [**Section 4.8** _Concurrent Servers_](http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch04lev1sec8.html#ch04lev1sec8) mentioned that when the parent process in our **concurrent server** closes the _**connected socket**_, this just decrements the reference count for the descriptor.
 4. Since the reference count was still greater than 0, this call to `close` did not initiate **TCP's four-packet connection termination sequence**. This is the behavior we want with our concurrent server with the connected socket that is shared between the parent and child.
 
 > If we really want to send a `FIN` on a TCP connection, the [**Section 6.6** _shutdown function_](http://www.masterraghu.com/subjects/np/introduction/unix_network_programming_v1.3/ch06lev1sec6.html#ch06lev1sec6) can be used instead of close. We will describe the motivation for this in Section 6.5.
