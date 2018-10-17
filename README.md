@@ -1,6 +1,6 @@
 ## Illustrate
-- This projects aims to implement and utilize basic **data structure and algorithm**
-- Thoughts come from the _Web_ and _classical books_
+- This projects aims to implement and utilize basic _**Data Structure and Algorithm**_
+- Some Thoughts come from the Web and classical books with modification
 
 ## Note
 _Need set env variables before execute binary (`Mac` need not do this)_
