@@ -22,14 +22,13 @@ Explanation: Buy on day 2 (price = 1) and sell on day 3 (price = 5), profit = 5-
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        int maxProfit = 0;
-        int sub = 0;
+        int sum = 0;
         for (int i = 1; i < prices.size(); ++i) {
-            if (prices[i] > prices[i - 1]) {
-                maxProfit += prices[i] - prices[i - 1];
+            if (prices[i] >= prices[i - 1]) {
+                sum += prices[i] - prices[i - 1];
             }
         }
-        return maxProfit;
+        return sum;
     }
 };
 ```

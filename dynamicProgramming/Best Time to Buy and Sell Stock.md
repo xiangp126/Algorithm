@@ -25,6 +25,7 @@ public:
     int maxProfit(vector<int>& prices) {
         const int N = prices.size();
         if (N == 0) return 0;
+        // record min value of prices till index i
         int minVal = prices[0];
         int maxProfit = 0;
         for (int i = 1; i < N; ++i) {
