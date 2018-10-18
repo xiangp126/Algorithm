@@ -44,9 +44,9 @@ ldd lib/libsort.so
 ## Gallery
 
 > _`kmp` & `sort` need c++11 support_<br>
-_`consistent hash` uses `rbtree` which is a standalone source_
+_`consistent hash` uses `rbtree` which is a standalone source_<br>
 
-### _build_
+### _build for all_
 ```bash
 # cd Algorithm
 make -j
@@ -79,7 +79,10 @@ _you may know well about the `next` array from this figure_
 
 #### _Demonstrate_
 ```bash
-./bin/kmpdemo
+cd kmp/
+make -j
+
+../bin/kmpdemo
 basic kmp:
 str = BBCABCDABABCDABCDABDET
 pattern = BCDABDE
@@ -93,11 +96,23 @@ pattern = BCDABDE
 Index = 14
 ```
 
-### _Red-Black Tree
-_go to [Red-Black Tree](./rbtree) for detail_
+### _Red-Black Tree_
+_[Red-Black Tree](./rbtree) for detail_
 
 ###  _Consistent Hash_
-_go to [Consistent Hash](./conhash) for detail_
+_[Consistent Hash](./conhash) for detail_
+
+### _Multi Thread Programming_
+_[Multi Thread Programming](./mThread) for detail_
+
+#### _Demonstrate_
+```bash
+cd mthread/
+make -j
+
+../bin/mthread_demo
+A B C D A B C D A B C D A B C D A B C D A B C D A B C D A B C D A B C D A B C D
+```
 
 ## License
 The [MIT](./LICENSE.txt) License (MIT)
