@@ -5,3 +5,4 @@ lib/
 *.dSYM/
 core*
 main.cpp
+main

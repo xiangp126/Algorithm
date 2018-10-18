@@ -46,6 +46,7 @@ ldd lib/libsort.so
 > _`kmp` & `sort` need c++11 support_<br>
 _`consistent hash` uses `rbtree` which is a standalone source_
 
+### _build_
 ```bash
 # cd Algorithm
 make -j
@@ -56,6 +57,7 @@ source env.sh
 _you can also compile each demo separately, take `sort` as example_
 
 ```bash
+# under Algorithm/
 cd sort/
 make -j
 
@@ -64,7 +66,8 @@ make -j
 
 ### _Concept of Sort_
 #### Complexity of Time
-![](./res/sort_table.png)
+<div align=center><img src="./res/sort_table.png"/ width=85%></div>
+
 #### _Demonstrate_
 ![](./res/sortdemo.gif)
 
@@ -90,8 +93,11 @@ pattern = BCDABDE
 Index = 14
 ```
 
-### _Red-Black Tree && Consistent Hash_
-_go to [Red-Black Tree](./rbtree) && [Consistent Hash](./conhash) for detail_
+### _Red-Black Tree
+_go to [Red-Black Tree](./rbtree) for detail_
+
+###  _Consistent Hash_
+_go to [Consistent Hash](./conhash) for detail_
 
 ## License
 The [MIT](./LICENSE.txt) License (MIT)
