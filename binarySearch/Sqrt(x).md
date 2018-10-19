@@ -20,6 +20,11 @@ Explanation: The square root of 8 is 2.82842..., and since
              the decimal part is truncated, 2 is returned.
 ```
 
+### Concept
+1. `int` plus overflow when calculate `mid`
+2. `int` divide overflow when comparing
+
+
 ### Code
 
 _care for overflow_

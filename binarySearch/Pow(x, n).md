@@ -22,6 +22,12 @@ Output: 0.25000
 Explanation: 2-2 = 1/22 = 1/4 = 0.25
 ```
 
+### Concept
+1. input `base` x should not be Zero
+2. if `n` was negative
+3. `n` may be odd or even
+4. `double` or `int` ?
+
 ### Code
 ```c
 class Solution {
@@ -42,7 +48,7 @@ public:
         if (n == 1) {
             return x;
         }
-        // type of val should be double
+        // type of cache should be double
         double cache = Pow(x, n / 2);
         // judge if n was odd or even
         if (n & 0x1) {
