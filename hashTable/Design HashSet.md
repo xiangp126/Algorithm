@@ -49,7 +49,6 @@ public:
     }
 
     void add(int key) {
-        // fix me
         if (key >= getSize()) {
             return;
         }

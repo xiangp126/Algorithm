@@ -54,7 +54,6 @@ public:
 
     /** value will always be non-negative. */
     void put(int key, int value) {
-        // fix me
         if (key >= getSize()) {
             return;
         }
