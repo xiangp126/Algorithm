@@ -20,26 +20,32 @@ Explanation: The square root of 8 is 2.82842..., and since
              the decimal part is truncated, 2 is returned.
 ```
 
-
 ### Code
+
+_care for overflow_
+
 ```c
 class Solution {
 public:
-    int removeDuplicates(vector<int>& nums) {
-        int i = 0;
-        int k = 0;
-        const int N = nums.size();
-        if (N == 0)
-            return 0;
-        // main loop
-        while (k < N) {
-            if (nums[k] != nums[i]) {
-                nums[++i] = nums[k];
+    int mySqrt(int x) {
+        int left = 1;
+        int right = x;
+        int mid = 0;
+        while (left <= right) {
+            // care for overflow
+            mid = left + (right - left) / 2;
+            // mid * mid directly may overflow
+            if (mid < x / mid) {
+                left = mid + 1;
+            } else {
+                if (mid > x / mid) {
+                    right = mid - 1;
+                } else {
+                    return mid;
+                }
             }
-            ++k;
         }
-        // cout << "New Length = " << i + 1 << endl;
-        return i + 1;
+        return right;
     }
 };
 ```
