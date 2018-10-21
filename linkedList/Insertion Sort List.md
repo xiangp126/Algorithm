@@ -31,19 +31,20 @@ Output: -1->0->3->4->5
 class Solution {
 public:
     ListNode *insertionSortList(ListNode *head) {
-        ListNode *newHead = new ListNode(INT_MIN);
+        ListNode dummy(INT_MIN);
+        ListNode *cur = head;
+        ListNode *ptr = &dummy;
         while(head) {
-            ListNode *cur = head;
-            ListNode *p = newHead;
+            cur = head;
+            ptr = &dummy;
             head = head->next;
-            while(p->next && p->next->val<=cur->val)
-                p = p->next;
-            cur->next = p->next;
-            p->next = cur;
+            while(ptr->next != NULL && ptr->next->val <= cur->val) {
+                ptr = ptr->next;                
+            }
+            cur->next = ptr->next;
+            ptr->next = cur;
         }
-
-        head = newHead->next;
-        delete newHead;
+        head = dummy.next;
         return head;
     }
 };
