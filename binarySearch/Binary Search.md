@@ -21,8 +21,8 @@ Output: -1
 Explanation: 2 does not exist in nums so return -1
 ```
 
+### Code - _Template Routine_
 
-### Code
 ```c
 class Solution {
 public:
