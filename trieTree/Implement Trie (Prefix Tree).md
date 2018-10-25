@@ -22,14 +22,114 @@ trie.insert("app");
 trie.search("app");     // returns true
 ```
 
-### Simplest Trie Node
+### Contents
 
-> only suit for `a-z`
+* [TrieNode - HashMap](#hashmap)
+* [TrieNode - 26 children Easy to understand first](#26)
+
+<a id=hashmap></a>
+### TrieNode - _HashMap_
+
+_illustrate for string `able`_
+
+<div align=center><img src="./res/solu2.jpg"/ width=100%></div>
+
+```c
+class TrieNode {
+public:
+    char label;
+    bool isEndWord;
+    unordered_map<char, TrieNode *> child;
+    TrieNode (char ch = '.') {
+        label = ch;
+        isEndWord = false;
+    }
+};
+```
+
+### Code - _HashMap_
+
+```c
+class TrieNode {
+public:
+    char label;
+    bool isEndWord;
+    unordered_map<char, TrieNode *> child;
+    TrieNode (char ch = '.') {
+        label = ch;
+        isEndWord = false;
+    }
+};
+
+class Trie {
+public:
+    /** Initialize your data structure here. */
+    Trie() {
+        root = new TrieNode();
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        TrieNode *ptr = root;
+        for (auto ch : word) {
+            // insert new Entry into HashMap if not exist
+            if (ptr->child.find(ch) == ptr->child.end()) {
+                // <ch, TrieNode *>
+                ptr->child[ch] = new TrieNode(ch);
+            }
+            ptr = ptr->child[ch];
+        }
+        ptr->isEndWord = true;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        TrieNode *ptr = root;
+        for (auto ch : word) {
+            if (ptr->child.find(ch) != ptr->child.end()) {
+                ptr = ptr->child[ch];
+            } else {
+                return false;
+            }
+        }
+        return ptr->isEndWord;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        TrieNode *ptr = root;
+        for (auto ch : prefix) {
+            if (ptr->child.find(ch) != ptr->child.end()) {
+                ptr = ptr->child[ch];
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+private:
+    TrieNode *root;
+};
+
+/**
+ * Your Trie object will be instantiated and called as such:
+ * Trie obj = new Trie();
+ * obj.insert(word);
+ * bool param_2 = obj.search(word);
+ * bool param_3 = obj.startsWith(prefix);
+ */
+```
+
+<a id=26></a>
+### TrieNode - _26 children_
+
+_illustrate for string `apple`_
 
 <div align=center><img src="./res/solu1.jpg"/ width=65%></div>
 
 ```c
-// every node has 26 children
+// every node has 26 children, only suit for a-z
 class TrieNode {
 public:
     TrieNode *child[26];
@@ -43,7 +143,7 @@ public:
 };
 ```
 
-### Code - _Simplest Trie Node_
+### Code - _26 children Trie Node_
 
 _simple but easy to understand_
 
