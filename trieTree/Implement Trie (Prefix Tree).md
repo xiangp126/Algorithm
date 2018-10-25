@@ -23,7 +23,13 @@ trie.search("app");     // returns true
 ```
 
 ### Simplest Trie Node
+
+> only suit for `a-z`
+
+<div align=center><img src="./res/solu1.jpg"/ width=65%></div>
+
 ```c
+// every node has 26 children
 class TrieNode {
 public:
     TrieNode *child[26];
@@ -46,8 +52,8 @@ class TrieNode {
 public:
     TrieNode *child[26];
     bool isEndWord;
-    // init Trie Node
-    TrieNode() {
+    // init Trie Node, default paramater
+    TrieNode(bool active = false) {
         isEndWord = false;
         for (auto &ch : child) {
             ch = NULL;
@@ -69,8 +75,7 @@ public:
         // walk through word
         for (auto ch : word) {
             if (ptr->child[ch - 'a'] == NULL) {
-                TrieNode *node = new TrieNode();
-                ptr->child[ch - 'a'] = node;
+                ptr->child[ch - 'a'] = new TrieNode(true);
             }
             ptr = ptr->child[ch - 'a'];
         }

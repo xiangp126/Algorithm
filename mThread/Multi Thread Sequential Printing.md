@@ -10,4 +10,4 @@ ABCD ABCD ABCD ABCD ABCD
 ```
 
 ### Code
-_see [demo.cpp](./demo.cpp)_
+_see [demo.cpp](mthread_demo.cpp)_

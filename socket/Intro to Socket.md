@@ -32,11 +32,11 @@ int listen(int sockfd, int backlog)
 
     To understand the `backlog` argument, we must realize that for a given listening socket, the kernel maintains two queues:
 
-<div align=center><img src="../res/listen_queue.png"/ width=650></div>
+<div align=center><img src="./res/listen_queue.png"/ width=650></div>
 
 1. An _**incomplete connection queue**_, which contains an entry for each `SYN` that has arrived from a client for which the server is awaiting completion of the `TCP three-way handshake`. These sockets are in `SYN_RCVD` state.
 2. A _**completed connection queue**_, which contains an entry for each client with whom the `TCP three-way handshake` has completed. These sockets are in the `ESTABLISHED` state.
-<div align=center><img src="../res/syn_exchange.png"/ width=650></div>
+<div align=center><img src="./res/syn_exchange.png"/ width=650></div>
 
 - wrap for socket
 
@@ -64,7 +64,7 @@ int listen(int sockfd, int backlog)
 <http://blog.51cto.com/yaocoder/1338567>
 
 - _TCP state transition graph_
-<div align=center><img src="../res/tcp_state.jpg"/ width=600></div>
+<div align=center><img src="./res/tcp_state.jpg"/ width=600></div>
 
 - There are two reasons for the `TIME_WAIT` state:
     - To implement TCP's full-duplex connection termination reliably
@@ -421,7 +421,7 @@ _final go to_
 
 <a id=tcpseq></a>
 ### TCP Sequence Number Transfer Graph
-<div align=center><img src="../res/tcp_seq.png"/ width=480></div>
+<div align=center><img src="./res/tcp_seq.png"/ width=480></div>
 
 <a id=close></a>
 ### How to close a Socket Gracefully
