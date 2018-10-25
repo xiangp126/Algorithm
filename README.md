@@ -6,7 +6,8 @@
 
 > `kmp` & `sort` need c++11 support<br>
 `consistent hash` uses `rbtree` which is a standalone source<br>
-`Multi Thread Programming` is a simple demo and summarization
+`Multi Thread Programming` is a simple demo and summarization<br>
+`Trie Tree` illustrate with `draw.io` to implement it
 
 ### build for all
 ```bash
