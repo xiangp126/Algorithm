@@ -29,7 +29,7 @@ make -j
 
 ### Concept of Sort
 #### Complexity of Time
-_Github did not support [style](./history/sort_table.md) `label` of `html`, so I had to use pic here_
+_Github did not support [style](./history/sort_table.md) label of `html`, so I had to use pic here_
 <div align=center><img src="./res/sort_table.png"/ width=85%></div>
 
 #### Demonstrate
@@ -77,6 +77,9 @@ make -j
 ../bin/mthread_demo
 A B C D A B C D A B C D A B C D A B C D A B C D A B C D A B C D A B C D A B C D
 ```
+
+### Trie Tree
+_[Trie Tree](./trieTree) for detail_
 
 ## Notice
 _Need set env variables before execute binary (`Mac` need not do this)_
