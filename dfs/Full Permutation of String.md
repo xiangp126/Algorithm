@@ -16,7 +16,10 @@ Output: abc,acb,bac,bca,cab,cba
 
 ### Code - _Set_
 
+> if not know removig duplicates, try Input `aaa`
+
 _use set to remove duplicates and sort remaining_
+<div align=center><img src="./res/permu_set.jpg"/ width=650></div>
 
 ```c
 class Solution {
