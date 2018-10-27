@@ -14,8 +14,35 @@ Output: abc,acb,bac,bca,cab,cba
 
 ```
 
+### Code - _Set_
 
-### Code
+_use set to remove duplicates and sort remaining_
+
 ```c
-// fix me
+class Solution {
+public:
+    vector<string> Permutation(string str) {
+        // use set to remove duplicate and sort
+        set<string> bottle;
+        if (str.size() == 0) {
+            return vector<string>();
+        }
+        dfs(str, 0, bottle);
+        return vector<string>(bottle.begin(), bottle.end());
+    }
+
+    void dfs(string str, int index, set<string> &bottle) {
+        if (index == str.size()) {
+            bottle.insert(str);
+            return;
+        }
+        // handle main
+        for (int i = index; i < str.size(); ++i) {
+            swap(str[index], str[i]);
+            dfs(str, index + 1, bottle);
+            // swap back for next new swap
+            swap(str[index], str[i]);
+        }
+    }
+};
 ```
