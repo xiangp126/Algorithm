@@ -16,7 +16,7 @@ Output: abc,acb,bac,bca,cab,cba
 
 ### Code - _Set_
 
-> if not know removig duplicates, try Input `aaa`
+> if not know removing duplicates, try Input `aaa`
 
 _use set to remove duplicates and sort remaining_
 <div align=center><img src="./res/permu_set.jpg"/ width=650></div>
@@ -25,7 +25,7 @@ _use set to remove duplicates and sort remaining_
 class Solution {
 public:
     vector<string> Permutation(string str) {
-        // use set to remove duplicate and sort
+        // use set to remove duplicates and sort
         set<string> bottle;
         if (str.size() == 0) {
             return vector<string>();
@@ -34,17 +34,24 @@ public:
         return vector<string>(bottle.begin(), bottle.end());
     }
 
-    void dfs(string str, int index, set<string> &bottle) {
-        if (index == str.size()) {
+    /*
+     * dfs
+     * @str: input string
+     * @start: start index of str
+     * @bottle: the set to store targeted string
+     * @return void
+     */
+    void dfs(string str, int start, set<string> &bottle) {
+        if (start == str.size()) {
             bottle.insert(str);
             return;
         }
         // handle main
-        for (int i = index; i < str.size(); ++i) {
-            swap(str[index], str[i]);
-            dfs(str, index + 1, bottle);
+        for (int i = start; i < str.size(); ++i) {
+            swap(str[start], str[i]);
+            dfs(str, start + 1, bottle);
             // swap back for next new swap
-            swap(str[index], str[i]);
+            swap(str[start], str[i]);
         }
     }
 };
