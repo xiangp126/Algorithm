@@ -5,9 +5,11 @@ void makeHeap(vector<int> &);
 void heapAdjust(vector<int> &, int, int);
 
 void heapSort(vector<int> &nums) {
-    // make Heap
     const int N = nums.size();
-    // index starts from 0
+    if (N <= 1) {
+        return;
+    }
+    // make Max-Heap, index starts from 0
     for (int i = (N - 1) / 2; i >= 0; --i) {
         heapAdjust(nums, i, N - 1);
     }
@@ -25,21 +27,25 @@ void heapSort(vector<int> &nums) {
  * heapAdjust: adjust Heap, originally percolate down routine
  *             construct Max-Peak Heap here
  * @nums:  input array
- * @start: start index of the array
- * @end:   end index of the array, included
+ * @left:  start index of the array
+ * @right: end index of the array, included
  * @return void
  */
-void heapAdjust(vector<int> &nums, int start, int end) {
-    int i = start;
+void heapAdjust(vector<int> &nums, int left, int right) {
+    // element count <= 1
+    if (left >= right) {
+        return;
+    }
+    int i = left;
     int child = 2 * i + 1;
     int sentinel = nums[i];
     // main loop
-    while (i < end && child <= end) {
-        // find out smallest child
-        if (child + 1 <= end && nums[child + 1] > nums[child]) {
+    while (i < right && child <= right) {
+        // find out the bigger child
+        if (child + 1 <= right && nums[child + 1] > nums[child]) {
             ++child;
         }
-        // move smaller child to root
+        // move bigger child to parent's position
         if (nums[child] > sentinel) {
             nums[i] = nums[child];
         } else {
@@ -49,6 +55,6 @@ void heapAdjust(vector<int> &nums, int start, int end) {
         i = child;
         child = 2 * i + 1;
     }
-    // inset right position
+    // insert into right position
     nums[i] = sentinel;
 }

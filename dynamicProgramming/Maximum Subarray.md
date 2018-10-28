@@ -20,14 +20,37 @@ public:
             return -1;
         }
         // handle main body
-        int maxSub = nums[0];
-        int sub = maxSub;
+        int sub = nums[0];
+        int maxSub = sub;
         for (int i = 1; i < N; ++i) {
-            if (sub < 0) {
-                sub = nums[i];
-            } else {
+            if (sub > 0) {
                 sub += nums[i];
+            } else {
+                // add from a new start
+                sub = nums[i];
             }
+            maxSub = max(maxSub, sub);
+        }
+        return maxSub;
+    }
+};
+```
+
+_or_
+
+```c
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        const int N = nums.size();
+        if (N <= 0) {
+            return -1;
+        }
+        // handle main body
+        int sub = nums[0];
+        int maxSub = sub;
+        for (int i = 1; i < N; ++i) {
+            sub = (sub > 0) ? sub + nums[i] : nums[i];
             maxSub = max(maxSub, sub);
         }
         return maxSub;

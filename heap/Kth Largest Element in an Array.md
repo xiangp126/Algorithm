@@ -38,33 +38,34 @@ public:
         return qSort(nums, 0, nums.size() - 1);
     }
 
-    void qSort(vector<int> &nums, int start, int end) {
-        if (start >= end) {
+    void qSort(vector<int> &nums, int left, int right) {
+        if (left >= right) {
             return;
         }
-        int pIndex = partition(nums, start, end);
-        qSort(nums, start, pIndex - 1);
-        qSort(nums, pIndex + 1, end);
+        int pIndex = partition(nums, left, right);
+        qSort(nums, left, pIndex - 1);
+        qSort(nums, pIndex + 1, right);
     }
     /*
-     * partition: partition array range [start, end] into three parts
-     *      [start, k - 1], k, [k + 1, end]
-     * @nums: input array
-     * @start: start index of array
-     * @end: end index of array
+     * partition: partition array range [left, right] into three parts
+     *      [left, k - 1], k, [k + 1, right]
+     * @nums:  input array
+     * @left:  start index of array
+     * @right: end index of array
      * @return final position of the pivot element
      */
-    int partition(vector<int> &nums, int start, int end) {
-        int pivot = nums[end];
-        int i = start;
+    int partition(vector<int> &nums, int left, int right) {
+        // choose last element as pivot
+        int pivot = nums[right];
+        int i = left;
         int k = i;
-        while (i < end) {
+        while (i < right) {
             if (nums[i] >= pivot) {
                 swap(nums[k++], nums[i]);
             }
             ++i;
         }
-        swap(nums[k], nums[end]);
+        swap(nums[k], nums[right]);
         return k;
     }
 };
@@ -86,40 +87,41 @@ public:
         return qSelect(nums, 0, nums.size() - 1, k);
     }
 
-    void qSelect(vector<int> &nums, int start, int end, int k) {
-        if (start >= end) {
+    void qSelect(vector<int> &nums, int left, int right, int k) {
+        if (left >= right) {
             return;
         }
-        int pIndex = partition(nums, start, end);
+        int pIndex = partition(nums, left, right);
         if (pIndex == k) {
             return;
         } else {
             if (pIndex > k) {
-                qSelect(nums, start, pIndex - 1, k);
+                qSelect(nums, left, pIndex - 1, k);
             } else {
-                qSelect(nums, pIndex + 1, end, k);
+                qSelect(nums, pIndex + 1, right, k);
             }
         }
     }
     /*
-     * partition: partition array range [start, end] into three parts
-     *      [start, k - 1], k, [k + 1, end]
-     * @nums: input array
-     * @start: start index of array
-     * @end: end index of array
+     * partition: partition array range [left, right] into three parts
+     *      [left, k - 1], k, [k + 1, right]
+     * @nums:  input array
+     * @left:  start index of array
+     * @right: end index of array
      * @return final position of the pivot element
      */
-    int partition(vector<int> &nums, int start, int end) {
-        int pivot = nums[end];
-        int i = start;
+    int partition(vector<int> &nums, int left, int right) {
+        // choose last element as pivot
+        int pivot = nums[right];
+        int i = left;
         int k = i;
-        while (i < end) {
+        while (i < right) {
             if (nums[i] >= pivot) {
                 swap(nums[k++], nums[i]);
             }
             ++i;
         }
-        swap(nums[k], nums[end]);
+        swap(nums[k], nums[right]);
         return k;
     }
 };
