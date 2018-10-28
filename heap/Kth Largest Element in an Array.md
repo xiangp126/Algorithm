@@ -17,10 +17,13 @@ Output: 3
 ```
 
 ### Contents
-- [Code - quick sort basic](#quicksortbasic)
-- [Code - quick select](#quickselect)
-- [Code - heap sort](#heapsort)
-- [Code - heap select](#heapselect)
+- Quck Sort Associate
+    - [Code - quick sort with self-designed sort](#quicksortbasic)
+    - [Code - quick select with self-designed sort](#quickselect)
+- Heap Sort Associate
+    - [Code - STL Heap](#stlheap)
+    - [Code - heap sort with self-designed heap](#heapsort)
+    - [Code - heap select with self-designed heap](#heapselect)
 
 <a id=quicksortbasic></a>
 ### Code - _quick sort (basic)_
@@ -123,6 +126,26 @@ public:
         }
         swap(nums[k], nums[right]);
         return k;
+    }
+};
+```
+
+<a id=stlheap></a>
+### Code - _STL Heap_
+```c
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        // make Max-Heap
+        priority_queue<int, vector<int>, less<int> > que;
+        for (auto val : nums) {
+            que.push(val);
+        }
+        // loop (k - 1) times
+        while (--k) {
+            que.pop();
+        }
+        return que.top();
     }
 };
 ```

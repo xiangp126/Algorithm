@@ -25,4 +25,4 @@ while (!que.empty()) {
 }
 ```
 
-_refer [Top K Frequent Elements](./Top\ K\ Frequent\ Elements.md) for mor info about priority\_queue_
+_refer `Top K Frequent Elements` for mor info about priority\_queue_
