@@ -21,12 +21,12 @@ Output: 3
     - [Code - quick sort with self-designed sort](#quicksortbasic)
     - [Code - quick select with self-designed sort](#quickselect)
 - Heap Sort Associate
-    - [Code - STL Heap](#stlheap)
+    - [Code - `STL` heap](#stlheap)
     - [Code - heap sort with self-designed heap](#heapsort)
     - [Code - heap select with self-designed heap](#heapselect)
 
 <a id=quicksortbasic></a>
-### Code - _quick sort (basic)_
+### Code - _Quick Sort (Basic)_
 _full sort from Largest to Smallest_
 
 ```c
@@ -75,7 +75,7 @@ public:
 ```
 
 <a id=quickselect></a>
-### Code - _quick select_
+### Code - _Quick Select_
 _from Largest to Smallest_
 
 ```c
@@ -151,7 +151,7 @@ public:
 ```
 
 <a id=heapsort></a>
-### Code - _heap sort_
+### Code - _Heap Sort_
 _full sort from Largest to Smallest_
 
 ```c
@@ -171,7 +171,6 @@ public:
         }
         // sort main body
         for (int i = N - 1; i > 0; --i) {
-            // printArray(nums);
             swap(nums[0], nums[i]);
             // Heap length minus 1
             heapAdjust(nums, 0, i - 1);
@@ -190,7 +189,8 @@ public:
         int i = start;
         int child = 2 * i + 1;
         int sentinel = nums[i];
-        // main loop
+        // main loop, judge can be changed to only
+        // while (child <= end) {}
         while (i < end && child <= end) {
             // find out smallest child
             if (child + 1 <= end && nums[child + 1] < nums[child]) {
@@ -209,19 +209,11 @@ public:
         // inset into right position
         nums[i] = sentinel;
     }
-
-    void printArray(vector<int> &nums) {
-        cout << "[ ";
-        for (auto num : nums) {
-             cout << num << " ";
-        }
-        cout << " ]" << endl;
-    }
 };
 ```
 
 <a id=heapselect></a>
-### Code - _heap select_
+### Code - _Heap Select_
 _from smallest to Largest_
 
 ```c
@@ -240,7 +232,6 @@ public:
         }
         // sort main body
         for (int i = N - 1; i >= N - k; --i) {
-            // printArray(nums);
             swap(nums[0], nums[i]);
             // Heap length minus 1
             heapAdjust(nums, 0, i - 1);
@@ -278,14 +269,6 @@ public:
         }
         // inset into right position
         nums[i] = sentinel;
-    }
-
-    void printArray(vector<int> &nums) {
-        cout << "[ ";
-        for (auto num : nums) {
-             cout << num << " ";
-        }
-        cout << " ]" << endl;
     }
 };
 ```

@@ -14,7 +14,7 @@ public:
     vector<int> GetLeastNumbers_Solution(vector<int> input, int k) {
         vector<int> ret;
         const int N = input.size();
-        if (k > N) {
+        if (k < 0 || k > N) {
             return ret;
         }
         // make Min-Heap using input
@@ -27,7 +27,7 @@ public:
             ret.push_back(que.top());
             que.pop();
         }
-        
+
         return ret;
     }
 };
@@ -38,7 +38,6 @@ public:
 _self designed heap_
 
 ```c
-// correct me, seems have bug
 class Solution {
 public:
     vector<int> GetLeastNumbers_Solution(vector<int> input, int k) {
@@ -51,26 +50,23 @@ public:
         for (int i = N / 2; i >= 0; --i) {
             heapAdjust(input, i, N - 1);
         }
-
         for (int i = N - 1; i > N - 1 - k; --i) {
-            // record top the minimum
             ret.push_back(input[0]);
-            input[0] = input[i - 1];
+            input[0] = input[i];
             heapAdjust(input, 0, i - 1);
         }
         return ret;
     }
-    
-    // make Min-Heap
+    // Min-Heap
     void heapAdjust(vector<int> &nums, int left, int right) {
-        // element number <= 1
         if (left >= right) {
             return;
         }
         int i = left;
         int child = 2 * i + 1;
         int sentinel = nums[i];
-        while (i < right && child <= right) {
+        // while (i < right && child <= child)
+        while (child <= right) {
             if (child + 1 <= right && nums[child + 1] < nums[child]) {
                 ++child;
             }

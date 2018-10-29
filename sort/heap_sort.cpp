@@ -39,7 +39,8 @@ void heapAdjust(vector<int> &nums, int left, int right) {
     int i = left;
     int child = 2 * i + 1;
     int sentinel = nums[i];
-    // main loop
+    // main loop, judge can be changed to only
+    // while (child <= end) {}
     while (i < right && child <= right) {
         // find out the bigger child
         if (child + 1 <= right && nums[child + 1] > nums[child]) {
