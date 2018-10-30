@@ -2,25 +2,25 @@
 ### Illustrate
 <https://leetcode.com/problems/binary-tree-inorder-traversal/>
 
-### Input
+### Example
 ```c
-[1,null,2,3]
+Input: [1,2,3,4,5,6,7]
 
-   1
-    \
-     2
-    /
-   3
+Output: [4,2,5,1,6,3,7]
 ```
 
-### Output
-```c
-[1,3,2]
-```
+### Demo for Stack
+#### Step1
+![](./res/inorder1.jpg)
 
-### Iteratively - Stack
-_According to definition of InOrder Traversal_
+#### Step2
 
+![](./res/inorder2.jpg)
+
+#### Step3
+![](./res/inorder3.jpg)
+
+### Code - _Stack_
 ```c
 /**
  * Definition for a binary tree node.
@@ -54,7 +54,9 @@ public:
 };
 ```
 
-### Recursive
+### Code - _Recursive_
+_According to definition of InOrder Traversal_
+
 ```c
 /**
  * Definition for a binary tree node.
