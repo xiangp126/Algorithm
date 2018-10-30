@@ -2,24 +2,19 @@
 ### Illustrate
 <https://leetcode.com/problems/binary-tree-preorder-traversal/>
 
-### Input
+### Example:
 ```c
-[2,1,3,null,4]
+Input: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
 
-   2
- /   \
-1     3
- \
-  4
+Output: [1,2,3]
 ```
 
-### Output
-```c
-[2,1,4,3]
-```
-
-### Iteratively - Stack
-_According to definition of PreOrder Traversal_
+### Iteratively - _Stack_
 
 ```c
 /**
@@ -56,6 +51,8 @@ public:
 ```
 
 ### Recursive
+_According to definition of PreOrder Traversal_
+
 ```c
 /**
  * Definition for a binary tree node.

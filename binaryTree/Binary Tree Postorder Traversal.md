@@ -2,34 +2,30 @@
 ### Illustrate
 <https://leetcode.com/problems/binary-tree-postorder-traversal/>
 
-### Input
+### Example
 ```c
-[2,1,3,null,4]
+Input: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
 
-   2
- /   \
-1     3
- \
-  4
-```
-
-### Output
-```c
-[4,1,3,2]
+Output: [3,2,1]
 ```
 
 ### Concept
-_According to definition of InOrder Traversal_
+_According to definition of PostOrder Traversal_
 
-`PostOrder` left -> right -> root
+**PostOrder** `left -> right -> root`, reverse as `root->right->left`
 
-`PreOrder`&nbsp;&nbsp;&nbsp;root -> left -> right
+**PreOrder**&nbsp;&nbsp;&nbsp;`root -> left -> right`
 
 ---
 take advantage of **preorderTraversal**
 
-> first push `right` node into stack, meanwhile insert val into `ret` from head not tail<br>
-or you could inverse `ret` in the end
+> traverse `root` firstly, then push `right` node into stack, then the left node<br>
+reverse `result vector` at last
 
 `root -> right -> left`
 
@@ -37,8 +33,7 @@ _reverse it yields_
 
 `left -> right -> root`
 
-### Iteratively - Stack
-
+### Iteratively - _Stack_
 
 ```c
 /**
@@ -58,25 +53,28 @@ public:
         TreeNode *ptr = root;
         while (!stk.empty() || ptr) {
             if (ptr != NULL) {
-                // insert value from the head, not tail
-                ret.insert(ret.begin(), ptr->val);
+                ret.push_back(ptr->val);
                 stk.push(ptr);
-                // first push right node
+                // push right node
                 ptr = ptr->right;
             } else {
                 // stk.top() only get top of stack, not pop it
                 ptr = stk.top();
                 stk.pop();
-                // last handle left node
+                // points to left child
                 ptr = ptr->left;
             }
         }
+        // reverse ret in the end
+        reverse(ret.begin(), ret.end());
         return ret;
     }
 };
 ```
 
 ### Recursive
+_According to definition of PostOrder Traversal_
+
 ```c
 /**
  * Definition for a binary tree node.
