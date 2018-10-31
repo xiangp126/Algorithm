@@ -15,14 +15,6 @@ Notes:
 - Depending on your language, queue may not be supported natively. You may simulate a queue by using a list or deque (double-ended queue), as long as you use only standard operations of a queue.
 - You may assume that all operations are valid (for example, no pop or top operations will be called on an empty stack).
 
-### _std::queue_
-- back
-- empty
-- front
-- pop
-- push
-- size
-
 ### Example
 ```c
 MyStack stack = new MyStack();
