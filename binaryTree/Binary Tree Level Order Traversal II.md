@@ -1,8 +1,8 @@
-## Binary Tree Level Order Traversal
+## Binary Tree Level Order Traversal II
 ### Illustrate
-<https://leetcode.com/problems/binary-tree-level-order-traversal>
+<https://leetcode.com/problems/binary-tree-level-order-traversal-ii>
 
-Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
+Given a binary tree, return the bottom-up level order traversal of its nodes' values. (ie, from left to right, level by level from leaf to root).
 
 ### Example
 ```c
@@ -12,15 +12,17 @@ Given binary tree [3,9,20,null,null,15,7],
   9  20
     /  \
    15   7
-return its level order traversal as:
+return its bottom-up level order traversal as:
 [
-  [3],
+  [15,7],
   [9,20],
-  [15,7]
+  [3]
 ]
 ```
 
 ### Code - _Queue_
+
+_reverse `ret` at last as `Binary Tree Level Order Traversal`_
 
 ```c
 /**
@@ -34,8 +36,8 @@ return its level order traversal as:
  */
 class Solution {
 public:
-    vector<vector<int>> levelOrder(TreeNode* root) {
-        vector<vector<int>> ret;
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        vector<vector<int> > ret;
         if (root == NULL) {
             return ret;
         }
@@ -67,6 +69,7 @@ public:
             }
             ret.push_back(path);
         }
+        reverse(ret.begin(), ret.end());
         return ret;
     }
 };
@@ -74,7 +77,7 @@ public:
 
 ### Code - _Recursive_
 
-_Time O(N)_
+_reverse `ret` at last as `Binary Tree Level Order Traversal`_
 
 ```c
 /**
@@ -88,9 +91,10 @@ _Time O(N)_
  */
 class Solution {
 public:
-    vector<vector<int>> levelOrder(TreeNode* root) {
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
         vector<vector<int> > ret;
         dfs(root, ret, 0);
+        reverse(ret.begin(), ret.end());
         return ret;
     }
     // level start from 0
