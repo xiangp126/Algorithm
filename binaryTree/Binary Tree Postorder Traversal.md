@@ -33,7 +33,7 @@ _reverse it yields_
 
 `left -> right -> root`
 
-### Iteratively - _Stack_
+### Code - _Stack_
 
 ```c
 /**
@@ -72,7 +72,7 @@ public:
 };
 ```
 
-### Recursive
+### Code - _Recursive_
 _According to definition of PostOrder Traversal_
 
 ```c

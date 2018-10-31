@@ -14,7 +14,7 @@ Input: [1,null,2,3]
 Output: [1,2,3]
 ```
 
-### Iteratively - _Stack_
+### Code - _Stack_
 
 ```c
 /**
@@ -50,7 +50,7 @@ public:
 };
 ```
 
-### Recursive
+### Code - _Recursive_
 _According to definition of PreOrder Traversal_
 
 ```c

@@ -8,7 +8,33 @@ For this problem, a height-balanced binary tree is defined as:
 
 a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
 
-### Code
+### Example
+```c
+Given the following tree [3,9,20,null,null,15,7]:
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+Return true.
+
+Given the following tree [1,2,2,3,3,null,null,4,4]:
+
+       1
+      / \
+     2   2
+    / \
+   3   3
+  / \
+ 4   4
+Return false.
+```
+
+### Code - _Recursive_
+
+_refer the routine calculating `Maximum Tree Depth`_
+
 ```c
 /**
  * Definition for a binary tree node.
@@ -22,25 +48,28 @@ a binary tree in which the depth of the two subtrees of every node never differ 
 class Solution {
 public:
     bool isBalanced(TreeNode* root) {
-        return depth(root) >= 0;
+        return calcDepth(root) >= 0;
     }
-    
-    // @return -1 if not balanced Tree
-    // @return Teee Depth under normal situation
-    int depth(TreeNode *root) {
-        // return situation
+
+    /*
+     * calcDepth: calculate Tree Depth and judge if balanced meanwhile
+     * @root: input tree
+     * @return Tree Depth under normal
+     * @return -1 if not balanced sub-tree
+     */
+    int calcDepth(TreeNode *root) {
         if (root == NULL) {
             return 0;
         }
-        int leftHeight  = depth(root->left);
-        int rightHeight = depth(root->right);
-        // judge
-        if (leftHeight == -1 || rightHeight == -1
-                || abs(leftHeight - rightHeight) > 1) {
+        int leftDepth  = calcDepth(root->left);
+        int rightDepth = calcDepth(root->right);
+        int maxDepth = max(leftDepth, rightDepth) + 1;
+        if (leftDepth < 0 || rightDepth < 0 ||
+                    abs(leftDepth - rightDepth) > 1) {
             return -1;
+        } else {
+            return maxDepth;
         }
-        // calculate
-        return max(leftHeight, rightHeight) + 1;
     }
 };
 ```
