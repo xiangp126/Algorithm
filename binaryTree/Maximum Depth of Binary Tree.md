@@ -20,6 +20,48 @@ Given binary tree [3,9,20,null,null,15,7],
 return its depth = 3.
 ```
 
+### Code - _Queue_
+
+_similar thought as `Binary Tree Level Order Traversal`_
+
+```c
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if (root == NULL) {
+            return 0;
+        }
+        int loop = 0;
+        queue<TreeNode *> que;
+        que.push(root);
+        while (!que.empty()) {
+            int size = que.size();
+            for (int i = 0; i < size; ++i) {
+                TreeNode *ptr = que.front();
+                que.pop();
+                if (ptr->left) {
+                    que.push(ptr->left);
+                }
+                if (ptr->right) {
+                    que.push(ptr->right);
+                }
+            }
+            ++loop;
+        }
+        return loop;
+    }
+};
+```
+
 ### Code - _Recursive_
 ```c
 /**
