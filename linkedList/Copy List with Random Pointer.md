@@ -49,7 +49,7 @@ public:
 };
 ```
 
-### Tip
+### Tips
 _another solution for handling `curr->random == NULL`_
 
 ```c

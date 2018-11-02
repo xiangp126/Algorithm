@@ -96,7 +96,7 @@ public:
                 return minDepth(root->left) + 1;
             } else {
                 // main branch
-                int leftDepth = minDepth(root->left);
+                int leftDepth  = minDepth(root->left);
                 int rightDepth = minDepth(root->right);
                 return min(leftDepth, rightDepth) + 1;
             }

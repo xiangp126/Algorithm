@@ -29,10 +29,6 @@ Explanation: The input is: [5,1,4,null,null,3,6]. The root node's value
              is 5 but its right child's value is 4.
 ```
 
-### Tip
-
-> use of `INT_MIN` && `INT_MAX` may fail at input `[2147483647]`, so use `LONG_MIN`, `LONG_MAX` instead
-
 ### Code
 
 ```c
@@ -53,19 +49,68 @@ public:
     }
 
      /*
-      * checkBST: check value of root, should be greater than lval
-      *           and less than rval
+      * checkBST: check value of root, should be greater than min
+      *           and less than max
       * @root: denotes the TreeNode
-      * @lval: left value,  root->val > lval
-      * @rval: right value, root->val < rval
+      * @min: left value,  root->val > min
+      * @max: right value, root->val < max
+      *
+      * Notice: both min and max was long, not int as root->val
       */
-    bool checkBST(TreeNode *root, long lval, long rval) {
+    bool checkBST(TreeNode *root, long min, long max) {
         if (root == NULL) {
             return true;
         }
-        return root->val > lval && root->val < rval &&
-               checkBST(root->left, lval, root->val) &&
-               checkBST(root->right, root->val, rval);
+        return root->val > min && root->val < max &&
+               checkBST(root->left, min, root->val) &&
+               checkBST(root->right, root->val, max);
     }
 };
+```
+
+### Debug
+**INT_MAX = 2<sup>31</sup> - 1 = 2147483647**
+
+> because type of `root->val` was `int`<br>
+so just use of `INT_MIN` && `INT_MAX` may fail at input `[2147483647]`<br>
+so change type of paramater of `checkBST` from `int` to `long` and pass `LONG_MIN`, `LONG_MAX` to it
+
+- Wrong Try
+
+```c
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        return checkBST(root, INT_MIN, INT_MAX);
+    }
+    bool checkBST(TreeNode *root, int min, int max) {
+        if (root == NULL) {
+            return true;
+        }
+        return root->val > min && root->val < max &&
+               checkBST(root->left, min, root->val) &&
+               checkBST(root->right, root->val, max);
+    }
+};
+```
+
+- Failed Situation
+
+```c
+Input: [2147483647]
+Output: false
+Expected: true
+```
+
+```c
+#define INT_MAX	2147483647
 ```
