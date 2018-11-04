@@ -44,7 +44,7 @@ public:
         vector<int> path;
         queue<TreeNode *> que;
         TreeNode *ptr = NULL;
-        // push root into que
+        // push root into queue
         que.push(root);
         while (!que.empty()) {
             /*
