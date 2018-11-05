@@ -1,14 +1,14 @@
-## Convert Sorted Array to Binary Search Tree
+## Convert Sorted List to Binary Search Tree
 ### Illustrate
-<https://leetcode.com/problems/convert-sorted-array-to-binary-search-tree>
+<https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree/>
 
-Given an array where elements are sorted in **ascending order**, convert it to a **height balanced** BST.
+Given a singly linked list where elements are sorted in **ascending order**, convert it to a **height balanced** BST.
 
 For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
 
 ### Example
 ```c
-Given the sorted array: [-10,-3,0,5,9],
+Given the sorted linked list: [-10,-3,0,5,9],
 
 One possible answer is: [0,-3,9,-10,null,5], which represents the following height balanced BST:
 
@@ -20,7 +20,18 @@ One possible answer is: [0,-3,9,-10,null,5], which represents the following heig
 ```
 
 ### Code
+
+_convert `list` to `vector` and refer **Convert Sorted Array to Binary Search Tree**_
+
 ```c
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -32,10 +43,15 @@ One possible answer is: [0,-3,9,-10,null,5], which represents the following heig
  */
 class Solution {
 public:
-    TreeNode* sortedArrayToBST(vector<int>& nums) {
+    TreeNode* sortedListToBST(ListNode* head) {
+        vector<int> nums;
+        while (head != NULL) {
+            nums.push_back(head->val);
+            head = head->next;
+        }
         return convert(nums, 0, nums.size() - 1);
     }
-    /*
+        /*
      * convert: build BST recursive
      * @nums: the ascended sorted nums
      * @left: index range [left, right]
