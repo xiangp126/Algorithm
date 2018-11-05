@@ -32,7 +32,7 @@ trie.search("app");     // returns true
 
 _illustrate for string `able`_
 
-<div align=center><img src="./res/solu2.jpg"/ width=100%></div>
+<div align=center><img src="./res/solu2.jpg" width=100%></div>
 
 ```c
 class TrieNode {
@@ -126,7 +126,7 @@ private:
 
 _illustrate for string `apple`_
 
-<div align=center><img src="./res/solu1.jpg"/ width=65%></div>
+<div align=center><img src="./res/solu1.jpg" width=65%></div>
 
 ```c
 // every node has 26 children, only suit for a-z

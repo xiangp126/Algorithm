@@ -19,7 +19,7 @@ Output: abc,acb,bac,bca,cab,cba
 > if not know removing duplicates, try Input `aaa`
 
 _use `set` to remove duplicates and sort the remainings_
-<div align=center><img src="./res/permu_set.jpg"/ width=650></div>
+<div align=center><img src="./res/permu_set.jpg" width=650></div>
 
 ```c
 class Solution {

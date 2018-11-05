@@ -30,7 +30,7 @@ make -j
 ### Concept of Sort
 #### Complexity of Time
 _Github did not support [style](./history/sort_table.md) label of `html`, so I had to use pic here_
-<div align=center><img src="./res/sort_table.png"/ width=85%></div>
+<div align=center><img src="./res/sort_table.png" width=85%></div>
 
 #### Demonstrate
 ![](./res/sortdemo.gif)

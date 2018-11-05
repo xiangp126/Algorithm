@@ -51,7 +51,8 @@ public:
         }
         return convert(nums, 0, nums.size() - 1);
     }
-        /*
+
+    /*
      * convert: build BST recursive
      * @nums: the ascended sorted nums
      * @left: index range [left, right]
