@@ -14,8 +14,8 @@ We should return its max depth, which is 3.
 
 Note:
 
-* The depth of the tree is at most 1000.
-* The total number of nodes is at most 5000.
+* The depth of the tree is at most `1000`.
+* The total number of nodes is at most `5000`.
 
 ### Code - _Queue_
 

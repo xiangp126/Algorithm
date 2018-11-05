@@ -44,7 +44,7 @@ public:
         }
         return (j == needle.size()) ? i - needle.size() : -1;
     }
-    
+
     void getNext(string &str, int *next) {
         const int N = str.size();
         next[0] = -1;
