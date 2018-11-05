@@ -6,7 +6,7 @@ Given an n-ary tree, return the postorder traversal of its nodes' values.
 
 For example, given a **3-ary** tree:
 
-<div align=left><img src=./res/3-ary.png width=75%></img></div>
+<div align=left><img src=./res/3-ary.png width=60%></img></div>
 
 Return its postorder traversal as:
 

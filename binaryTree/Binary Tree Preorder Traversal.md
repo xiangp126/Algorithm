@@ -14,7 +14,7 @@ Input: [1,null,2,3]
 Output: [1,2,3]
 ```
 
-### Code - _Stack in Contrast to Queue_
+### Code - _Stack, in Contrast to Queue_
 
 _in contrast to `Binary Tree Level Order Traversal`, using `stack` instead_
 

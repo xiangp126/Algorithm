@@ -6,7 +6,7 @@ Given an n-ary tree, return the level order traversal of its nodes' values. (ie,
 
 For example, given a **3-ary** tree:
 
-<div align=left><img src=./res/3-ary.png width=75%></img></div>
+<div align=left><img src=./res/3-ary.png width=60%></img></div>
 
 We should return its level order traversal:
 

@@ -8,7 +8,7 @@ The maximum depth is the number of nodes along the longest path from the root no
 
 For example, given a **3-ary** tree:
 
-<div align=left><img src=./res/3-ary.png width=75%></img></div>
+<div align=left><img src=./res/3-ary.png width=60%></img></div>
 
 We should return its max depth, which is 3.
 

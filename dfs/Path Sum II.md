@@ -28,7 +28,7 @@ Return:
 
 ### Code
 
-_Standard Template for DFS_
+_standard Template for `DFS`_
 
 ```c
 /**
@@ -45,10 +45,10 @@ public:
     vector<vector<int>> pathSum(TreeNode* root, int sum) {
         vector<vector<int> > ret;
         vector<int> path;
-        dfs(root, sum, path, ret);
+        dfs(root, path, ret, sum);
         return ret;
     }
-    
+
     /*
      * dfs: depth-first search to solve problem
      * @root: denotes the tree
@@ -57,25 +57,25 @@ public:
      * @ret: result vector, push path into
      * @return void
      */
-    void dfs(TreeNode *root, int gap, vector<int> &path,
-                                      vector<vector<int> > &ret) {
-        // quit condition
+    void dfs(TreeNode *root, vector<int> &path, vector<vector<int> > &ret,
+                                                int gap) {
         if (root == NULL) {
             return;
         }
+        // insert valude
         path.push_back(root->val);
-        
+
         // reach Leaf
         if (root->left == NULL && root->right == NULL) {
-            // match gap
+            // match condition
             if (root->val == gap) {
                 ret.push_back(path);
             }
         }
-        
-        dfs(root->left,  gap - root->val, path, ret);
-        dfs(root->right, gap - root->val, path, ret);
-        
+
+        dfs(root->left,  path, ret, gap - root->val);
+        dfs(root->right, path, ret, gap - root->val);
+
         // pop back
         path.pop_back();
     }
