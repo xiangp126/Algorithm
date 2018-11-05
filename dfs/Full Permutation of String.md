@@ -14,12 +14,12 @@ Output: abc,acb,bac,bca,cab,cba
 
 ```
 
-### Code - _Set_
+### Code
 
 > if not know removing duplicates, try Input `aaa`
 
 _use `set` to remove duplicates and sort the remainings_
-<div align=center><img src="./res/permu_set.jpg" width=650></div>
+<div align=left><img src="./res/permu_set.jpg" width=650></div>
 
 ```c
 class Solution {
@@ -30,7 +30,7 @@ public:
         if (str.size() == 0) {
             return vector<string>();
         }
-        // init start = 0
+        // start = 0
         dfs(str, 0, bottle);
         return vector<string>(bottle.begin(), bottle.end());
     }
