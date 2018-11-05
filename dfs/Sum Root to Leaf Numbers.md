@@ -36,13 +36,47 @@ The root-to-leaf path 4->0 represents the number 40.
 Therefore, sum = 495 + 491 + 40 = 1026.
 ```
 
-### Code
+### Code - _Simple_
 ```c
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int sumNumbers(TreeNode* root) {
+        return dfs(root, 0);
+    }
 
+    /*
+     * dfs: calc Sum Root to Leaf Numbers
+     * @root: the tree
+     * @sum: the sum from root till here
+     * @return the result
+     */
+    int dfs(TreeNode *root, int lastSum) {
+        if (root == NULL) {
+            return 0;
+        }
+        // reach leaf
+        if (root->left == NULL && root->right == NULL) {
+            return lastSum * 10 + root->val;
+        }
+
+        int left  = dfs(root->left,  lastSum * 10 + root->val);
+        int right = dfs(root->right, lastSum * 10 + root->val);
+        return left + right;
+    }
+};
 ```
 
 
-### Code - _Solution 2_
+### Code - _Standard_
 
 ```c
 /**
@@ -72,6 +106,7 @@ public:
         }
         return sum;
     }
+    // store each path into ret
     void dfs(TreeNode *root, vector<int> &path, vector<vector<int>> &ret) {
         if (root == NULL) {
             return;
