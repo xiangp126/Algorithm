@@ -23,13 +23,11 @@ trie.search("app");     // returns true
 ```
 
 ### Contents
-
 * [TrieNode - HashMap](#hashmap)
 * [TrieNode - 26 children Easy to understand first](#26)
 
 <a id=hashmap></a>
-### TrieNode - _HashMap_
-
+### Solution - HashMap
 _illustrate for string `able`_
 
 <div align=center><img src="./res/solu2.jpg" width=100%></div>
@@ -47,7 +45,7 @@ public:
 };
 ```
 
-### Code - _HashMap_
+### Code
 
 ```c
 class TrieNode {
@@ -67,7 +65,7 @@ public:
     Trie() {
         root = new TrieNode();
     }
-    
+
     /** Inserts a word into the trie. */
     void insert(string word) {
         TrieNode *ptr = root;
@@ -81,7 +79,7 @@ public:
         }
         ptr->isEndWord = true;
     }
-    
+
     /** Returns if the word is in the trie. */
     bool search(string word) {
         TrieNode *ptr = root;
@@ -94,7 +92,7 @@ public:
         }
         return ptr->isEndWord;
     }
-    
+
     /** Returns if there is any word in the trie that starts with the given prefix. */
     bool startsWith(string prefix) {
         TrieNode *ptr = root;
@@ -107,7 +105,7 @@ public:
         }
         return true;
     }
-    
+
 private:
     TrieNode *root;
 };
@@ -121,12 +119,12 @@ private:
  */
 ```
 
+--
 <a id=26></a>
-### TrieNode - _26 children_
-
+### Solution - Easy 26
 _illustrate for string `apple`_
 
-<div align=center><img src="./res/solu1.jpg" width=65%></div>
+<div align=center><img src="./res/solu1.jpg" width=62%></div>
 
 ```c
 // every node has 26 children, only suit for a-z
@@ -143,8 +141,7 @@ public:
 };
 ```
 
-### Code - _26 children Trie Node_
-
+#### Code
 _simple but easy to understand_
 
 ```c
@@ -223,4 +220,17 @@ private:
  * bool param_2 = obj.search(word);
  * bool param_3 = obj.startsWith(prefix);
  */
+```
+
+#### Key Point
+- another pointer to root in every function `TrieNode *ptr = root;`
+
+- initialize`child` of `TrieNode`
+
+> auto **&ch** : child, notice **&** before `ch`
+
+```c
+for (auto &ch : child) {
+    ch = NULL;
+}
 ```
