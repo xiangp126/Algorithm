@@ -28,7 +28,8 @@ return its minimum depth = 2
 
 ### Code - _Queue_
 
-_similar thought as `Binary Tree Level Order Traversal`_
+- similar thought as `Binary Tree Level Order Traversal`
+- one line change with `Maximum Depth of Binary Tree`
 
 ```c
 /**
@@ -54,15 +55,15 @@ public:
             for (int i = 0; i < size; ++i) {
                 TreeNode *ptr = que.front();
                 que.pop();
+                // found one leaf and return immediately
+                if (ptr->left == NULL && ptr->right == NULL) {
+                    return loop + 1;
+                }
                 if (ptr->left) {
                     que.push(ptr->left);
                 }
                 if (ptr->right) {
                     que.push(ptr->right);
-                }
-                // found one leaf and return immediately
-                if (ptr->left == NULL && ptr->right == NULL) {
-                    return loop + 1;
                 }
             }
             ++loop;
@@ -73,6 +74,13 @@ public:
 ```
 
 ### Code - _Recursive_
+
+3 Cases:
+
+- only has `left` child, then calc the **right** depth
+- only has `right` child, then calc the **left** depth
+- both has `left` and `right` child, then calc the **minimum** depth
+
 ```c
 /**
  * Definition for a binary tree node.
@@ -95,7 +103,7 @@ public:
             if (root->right == NULL) {
                 return minDepth(root->left) + 1;
             } else {
-                // main branch
+                // has both left & right child
                 int leftDepth  = minDepth(root->left);
                 int rightDepth = minDepth(root->right);
                 return min(leftDepth, rightDepth) + 1;

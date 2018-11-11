@@ -51,7 +51,7 @@ public:
             for (int i = 0; i < size; ++i) {
                 Node *ptr = que.front();
                 que.pop();
-                // push each child into que
+                // push each child into queue
                 for (int j = 0; j < ptr->children.size(); ++j) {
                     if (ptr->children[j] != NULL) {
                         que.push(ptr->children[j]);
