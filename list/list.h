@@ -10,34 +10,42 @@
 /*
  * list_head_t double-linked circular list
  * list was embeded into the structure itself
- * @type: the structure
- * @list: member of the @type
- * @head: head entry of the list
+ * @type: the type of the structure @head points to
+ * @list: embeded member of the @type
+ * @head: the start entry of this double-linked circular list
  *
- *                node-1                   node-2
- *                +-------------+         +-------------+
- *                |             |         |             |
- *                +-------------+         +-------------+
- *                |             |         |             |
- *                +-------------+         +-------------+
- *   head ------> | list_head_t | ------> | list_head_t | ------> ...
- *        <-----  | list        | <-----  | list        | <-----  ...
- *                +-------------+         +-------------+
- *                | ...         |         | ...         |
- *                +-------------+         +-------------+
+ * struct dpip_obj {
+ *     struct list_head_s list;
+ *     char *name;
+ *     void *param;
+ *     int (*parse)(struct dpip_obj *obj, struct dpip_conf *conf);
+ *     int (*check)(const struct dpip_obj *obj, dpip_cmd_t cmd);
+ * };
  *
+ *                                  node-2                 node-3
+ *  head -> +-------------+         +-------------+         +-------------+
+ *          |             |         |             |         |             |
+ *          +-------------+         +-------------+         +-------------+
+ *          |             |         |             |         |             |
+ *          +-------------+         +-------------+         +-------------+
+ *          |             | ------> |             | ------> |             |
+ *          |    list     | <-----  |     list    | <-----  |     list    |
+ *          +-------------+         +-------------+         +-------------+
+ *          | ...         |         | ...         |         | ...         |
+ *          +-------------+         +-------------+         +-------------+
  *
- *              node-m                   node-n
- *              +-------------+         +-------------+
- *              |             |         |             |
- *              +-------------+         +-------------+
- *              |             |         |             |
- *              +-------------+         +-------------+
- *      ------> | list_head_t | ------> | list_head_t | ------> head
- *      <-----  | list        | <-----  | list        | <----- (circular list)
- *              +-------------+         +-------------+
- *              | ...         |         | ...         |
- *              +-------------+         +-------------+
+ *           node-2                  node-3                  head
+ *           +-------------+         +-------------+         +-------------+
+ *           |             |         |             |         |             |
+ *           +-------------+         +-------------+         +-------------+
+ *           |             |         |             |         |             |
+ *           +-------------+         +-------------+         +-------------+
+ *   ------> |             | ------> |             | ....... |             |
+ *   <-----  |     list    | <-----  |     list    | <-----> |     list    |
+ *           +-------------+         +-------------+         +-------------+
+ *           | ...         |         | ...         |         | ...         |
+ *           +-------------+         +-------------+         +-------------+
+ *
  *
  */
 typedef struct list_head_s list_head_t;
@@ -67,7 +75,7 @@ struct list_head_s {
 #ifndef container_of
 #define container_of(ptr, type, member) ({ \
     const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
-    (type *)( (char *)__mptr - offsetof(type,member) );})
+    (type *)( (char *)__mptr - offsetof(type, member) );})
 #endif
 
 #define LIST_POISON1  ((void *) 0x00100100)
@@ -176,10 +184,11 @@ static inline int list_empty(const list_head_t *head) {
 }
 
 /*
- * list_entry - get the struct for this entry
- * @ptr: pointer to one @member
- * @type: type of the struct that @member was embeded in
- * @menber: the name of the member within the struct
+ * list_entry - cast a member of a structure out to the containing structure
+ *            - just as container_of
+ * @ptr:	the pointer to the member.
+ * @type:	the type of the container struct @member was embedded in.
+ * @member:	the name of the member within the struct.
  */
 #define list_entry(ptr, type, member) container_of(ptr, type, member)
 
@@ -193,7 +202,7 @@ static inline int list_empty(const list_head_t *head) {
     list_entry((head)->next, type, member)
 
 /*
- * list_for_each_entry interate over list of given type
+ * list_for_each_entry iterate over list of given type
  * @pos: the type * to use as a loop counter
  * @head: head of the list
  * @member: the name of the member within the list structure
