@@ -1,7 +1,5 @@
 ## List
-
 ### Contents
-- [File Path of Linux](#filepath)
 - [Data Structure](#datastructure)
 - [INIT\_LIST\_HEAD](#initlisthead)
 - [list\_add](#listadd)
@@ -9,19 +7,16 @@
 - [Memory Model](#memorymodel)
 - [offsetof](#offsetof)
 - [container\_of](#containerof)
-
-<a id=filepath></a>
-### Path
-```bash
-/linux-3.11/include/linux/list.h
-/linux-3.11/include/linux/types.h
-```
+- [list\_entry](#listentry)
+- [list\_for\_each\_entry](#listforeachentry)
 
 <a id=datastructure></a>
 ### Data Structure
+_classical definition of simple **circular linked-list**_
+
 ```c
 struct list_head {
-	struct list_head *next, *prev;
+    struct list_head *next, *prev;
 };
 ```
 
@@ -42,15 +37,15 @@ struct list_head list;
 INIT_LIST_HEAD(head);
 ```
 
-<div align=center><img src="./res/list_init.jpg" width=28%></div>
+<div align=center><img src="./res/list_init.jpg" width=24%></div>
 
 > or you could define it as a function
 
 ```c
 static inline void INIT_LIST_HEAD(struct list_head *list)
 {
-	list->next = list;
-	list->prev = list;
+    list->next = list;
+    list->prev = list;
 }
 ```
 
@@ -65,7 +60,7 @@ static inline void list_add(list_head_t *newEntry, list_head_t *head) {
 }
 ```
 
-<div align=center><img src="./res/list_add.jpg" width=100%></div>
+<div align=center><img src="./res/list_add.jpg" width=90%></div>
 
 <a id=listaddtail></a>
 ### list\_add\_tail
@@ -78,7 +73,7 @@ static inline void list_add_tail(list_head_t *newEntry, list_head_t *head) {
 }
 ```
 
-<div align=center><img src="./res/list_add_tail.jpg" width=100%></div>
+<div align=center><img src="./res/list_add_tail.jpg" width=90%></div>
 
 <a id=memorymodel></a>
 ### Memory Model
@@ -98,7 +93,7 @@ struct list_head head;
 
 > each entry chanied like this
 
-<div align=center><img src="./res/list.jpg" width=100%></div>
+<div align=center><img src="./res/list.jpg" width=90%></div>
 
 <a id=offsetof></a>
 ### offsetof
@@ -115,24 +110,56 @@ struct list_head head;
 <a id=containerof></a>
 ### container_of
 ```c
-/* 
+/*
  * container_of - cast a member of a structure out to the containing structure
- * @ptr:	the pointer to the member.
- * @type:	the type of the container struct this is embedded in.
+ * @ptr:  the pointer to the member.
+ * @type: the type of the container struct this is embedded in.
  * @member:	the name of the member within the struct.
  *
  */
 #define container_of(ptr, type, member) ({ \
-	const typeof( ((type *)0)->member ) *__mptr = (ptr); \
-	(type *)( (char *)__mptr - offsetof(type,member) );})
+            const typeof( ((type *)0)->member ) *__mptr = (ptr); \
+            (type *)( (char *)__mptr - offsetof(type,member) );})
 ```
 
 _or short_
 
-```c 
+```c
 #define container_of(ptr, type, member) \
     (type *)((char *)(ptr) - (char *) &((type *)0)->member)
 ```
+
+<a id=listentry></a>
+### list\_entry
+```c
+/*
+ * list_entry - cast a member of a structure out to the containing structure
+ *            - just as container_of
+ * @ptr:	the pointer to the member.
+ * @type:	the type of the container struct @member was embedded in.
+ * @member:	the name of the member within the struct.
+ */
+#define list_entry(ptr, type, member) container_of(ptr, type, member)
+```
+
+<div align=center><img src="./res/list_entry.jpg" width=32%></div>
+
+<a id=listforeachentry></a>
+### list\_for\_each\_entry
+```c
+/*
+ * list_for_each_entry iterate over list of given type
+ * @pos:  the type * to use as a loop counter(temporary storage)
+ * @head: head of the list
+ * @member: the name of the member within the list structure
+ */
+#define list_for_each_entry(pos, head, member) \
+    for (pos = list_entry((head)->next, typeof(*pos), member); \
+                &pos->member != (head); \
+                pos = list_entry(pos->member.next, typeof(*pos), member))
+```
+
+<div align=center><img src="./res/list_for_each_entry.jpg" width=90%></div>
 
 ### LIST\_POISON
 ```c
