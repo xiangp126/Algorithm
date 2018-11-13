@@ -37,7 +37,7 @@ struct list_head list;
 INIT_LIST_HEAD(head);
 ```
 
-<div align=center><img src="./res/list_init.jpg" width=24%></div>
+<div align=center><img src="./res/list_init.jpg" width=20%></div>
 
 > or you could define it as a function
 
