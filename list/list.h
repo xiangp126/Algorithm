@@ -56,15 +56,16 @@ struct list_head_s {
 };
 
 #define LIST_HEAD_INIT(head) {&(head), &(head)}
-#define LIST_HEAD(head) \
-    list_head_t head = LIST_HEAD_INIT(head)
+#define LIST_HEAD(name) \
+    list_head_t name = LIST_HEAD_INIT(name)
 #define INIT_LIST_HEAD(head) do { \
     (head)->next = (head); \
     (head)->prev = (head); \
 } while(0)
 
 /*
- * note: priority of '->' is higher than get address '&' and type cast '()'
+ * calculate offset of a member in the structure
+ * priority of '->' is higher than get address '&' and type cast '()'
  */
 #ifndef offsetof
 #define offsetof(type, member) ((size_t) &((type *)0)->member)
@@ -81,6 +82,11 @@ struct list_head_s {
     (type *)((char *)(ptr) - (char *) &((type *)0)->member)
 #endif
 
+/*
+ * These are non-NULL pointers that will result in page faults
+ * under normal circumstances, used to verify that nobody uses
+ * non-initialized list entries.
+ */
 #define LIST_POISON1  ((void *) 0x00100100)
 #define LIST_POISON2  ((void *) 0x00200200)
 
