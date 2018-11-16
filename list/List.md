@@ -29,7 +29,7 @@ struct list_head {
 } while(0)
 ```
 
-_could be called by_
+_oen example as_
 
 ```c
 struct list_head list;
