@@ -1,7 +1,8 @@
 ## List from Linux Kernel
 ### Contents
-- [Data Structure](#datastructure)
+- [List Data Structure](#datastructure)
 - [INIT\_LIST\_HEAD](#initlisthead)
+- [Container Struct for Demo](#fordemo)
 - [list\_add](#listadd)
 - [list\_add\_tail](#listaddtail)
 - [Memory Model](#memorymodel)
@@ -29,7 +30,7 @@ struct list_head {
 } while(0)
 ```
 
-_oen example as_
+one example:
 
 ```c
 struct list_head list;
@@ -39,7 +40,7 @@ INIT_LIST_HEAD(head);
 
 <div align=center><img src="./res/list_init.jpg" width=20%></div>
 
-> or you could define it as a function
+or you could define it as a function
 
 ```c
 static inline void INIT_LIST_HEAD(struct list_head *list)
@@ -47,6 +48,22 @@ static inline void INIT_LIST_HEAD(struct list_head *list)
     list->next = list;
     list->prev = list;
 }
+```
+
+<a id=fordemo></a>
+### Container Struct for Demo
+_take `struct my_obj` for example, illustrate to how to use `list`_
+
+```c
+struct my_obj {
+    char *name;
+    void *param;
+    int (*parse)(struct my_obj *obj, struct my_conf *conf);
+    int (*check)(struct my_obj *obj, my_cmt_t cmd);
+    // list member here
+    struct list_head list;
+};
+struct list_head head;
 ```
 
 <a id=listadd></a>
@@ -77,21 +94,7 @@ static inline void list_add_tail(list_head_t *newEntry, list_head_t *head) {
 
 <a id=memorymodel></a>
 ### Memory Model
-_take `struct my_obj` for example, illustrate to how to use `list`_
-
-```c
-struct my_obj {
-    char *name;
-    void *param;
-    int (*parse)(struct my_obj *obj, struct my_conf *conf);
-    int (*check)(struct my_obj *obj, my_cmt_t cmd);
-    // list member here
-    struct list_head list;
-};
-struct list_head head;
-```
-
-> each entry chanied like this
+each entry chanied like this
 
 <div align=center><img src="./res/list.jpg" width=90%></div>
 
@@ -101,6 +104,7 @@ struct list_head head;
 /*
  * calculate offset of a member in the structure
  * priority of '->' is higher than get address '&' and type cast '()'
+ * & before ((type *)0) is a must, or end with segmemtation fault
  */
 #ifndef offsetof
 #define offsetof(type, member) ((size_t) &((type *)0)->member)
