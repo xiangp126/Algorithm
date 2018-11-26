@@ -3,6 +3,7 @@
 - [List Data Structure](#datastructure)
 - [INIT\_LIST\_HEAD](#initlisthead)
 - [Container Struct for Demo](#fordemo)
+- [__list\_add](#plistadd)
 - [list\_add](#listadd)
 - [list\_add\_tail](#listaddtail)
 - [Memory Model](#memorymodel)
@@ -10,12 +11,14 @@
 - [container\_of](#containerof)
 - [list\_entry](#listentry)
 - [list\_for\_each\_entry](#listforeachentry)
+- [A Simple Usage Example](#usageexample)
 
 <a id=datastructure></a>
 ### Data Structure
 _classical definition of simple **circular linked-list**_
 
 ```c
+typedef struct list_head list_head_t;
 struct list_head {
     struct list_head *next, *prev;
 };
@@ -23,6 +26,9 @@ struct list_head {
 
 <a id=initlisthead></a>
 ### INIT\_LIST\_HEAD
+
+_param `head` was pointer_
+
 ```c
 #define INIT_LIST_HEAD(head) do { \
     (head)->next = (head); \
@@ -30,12 +36,21 @@ struct list_head {
 } while(0)
 ```
 
+or
+
+```c
+static inline void INIT_LIST_HEAD(list_head_t *list) {
+    list->next = list;
+    list->prev = list;
+}
+```
+
 one example:
 
 ```c
-struct list_head list;
+struct list_head head;
 // use semicolon at the end just like call a function
-INIT_LIST_HEAD(head);
+INIT_LIST_HEAD(&head);
 ```
 
 <div align=center><img src="./res/list_init.jpg" width=20%></div>
@@ -52,7 +67,7 @@ static inline void INIT_LIST_HEAD(struct list_head *list)
 
 <a id=fordemo></a>
 ### Container Struct for Demo
-_take `struct my_obj` for example, illustrate to how to use `list`_
+take `struct my_obj` for example, illustrate to how to use `list`
 
 ```c
 struct my_obj {
@@ -63,13 +78,34 @@ struct my_obj {
     // list member here
     struct list_head list;
 };
-struct list_head head;
+```
+
+<a id=plistadd></a>
+### __list\_add
+```c
+/*
+ * __list_add insert new entry between two known consecutive entries
+ * @newEntry: the entry about to insert
+ * @prevEntry: previous entry after @newEntry inserted
+ * @nxtEntry:  next entry after @newEntry inserted
+ * @return void
+ *
+ * This is only for internal list manipulation where we know
+ * the prev/next entries alread!
+ */
+static inline void __list_add(list_head_t *newEntry, list_head_t *prevEntry,
+                              list_head_t *nxtEntry) {
+    nxtEntry->prev  = newEntry;
+    prevEntry->next = newEntry;
+    newEntry->prev = prevEntry;
+    newEntry->next = nxtEntry;
+}
 ```
 
 <a id=listadd></a>
 ### list\_add
 
-> _head insert, googd for implementing `stack`_
+> _head insert, good for implementing `stack`_
 
 ```c
 static inline void list_add(list_head_t *newEntry, list_head_t *head) {
@@ -82,7 +118,7 @@ static inline void list_add(list_head_t *newEntry, list_head_t *head) {
 <a id=listaddtail></a>
 ### list\_add\_tail
 
-> _tail insert, googd for implementing `queue`_
+> _tail insert, good for implementing `queue`_
 
 ```c
 static inline void list_add_tail(list_head_t *newEntry, list_head_t *head) {
@@ -174,4 +210,27 @@ _or short_
  */
 #define LIST_POISON1  ((void *) 0x00100100
 #define LIST_POISON2  ((void *) 0x00200200
+```
+
+<a id=usageexample></a>
+### A Simple Usage Example
+```c
+const int N = 3;
+// define & init list head
+struct list_head head;
+INIT_LIST_HEAD(&head);
+
+// add each node into list head
+struct my_obj myObj[N];
+for (int i = 0; i < N; ++i) {
+    list_add(&myObj[i].list, &head);
+}
+
+// traverse through list
+struct my_obj *pos;
+list_for_each_entry(pos, &head, list) {
+    if (strcmp(cur->name, "corsair") == 0) {
+        return pos;
+    }
+}
 ```
