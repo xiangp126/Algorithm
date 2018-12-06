@@ -119,7 +119,6 @@ private:
  */
 ```
 
---
 <a id=26></a>
 ### Solution - Easy 26
 _illustrate for string `apple`_
@@ -222,7 +221,7 @@ private:
  */
 ```
 
-#### Key Point
+#### Notice Point
 - another pointer to root in every function `TrieNode *ptr = root;`
 
 - initialize`child` of `TrieNode`
