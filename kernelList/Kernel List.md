@@ -1,8 +1,9 @@
 ## List from Linux Kernel
 ### Contents
+#### List
 - [List Data Structure](#datastructure)
 - [INIT\_LIST\_HEAD](#initlisthead)
-- [Container Struct for Demo](#fordemo)
+- [Entry Struct for Demo](#fordemo)
 - [__list\_add](#plistadd)
 - [list\_add](#listadd)
 - [list\_add\_tail](#listaddtail)
@@ -13,6 +14,8 @@
 - [list\_for\_each\_entry](#listforeachentry)
 - [A Simple Usage Example](#usageexample)
 
+#### HList
+
 <a id=datastructure></a>
 ### Data Structure
 _classical definition of simple **circular linked-list**_
@@ -20,29 +23,20 @@ _classical definition of simple **circular linked-list**_
 ```c
 typedef struct list_head list_head_t;
 struct list_head {
-    struct list_head *next, *prev;
+    struct list_head *next;
+    struct list_head *prev;
 };
 ```
 
 <a id=initlisthead></a>
 ### INIT\_LIST\_HEAD
-
-_param `head` was pointer_
+_the parameter `head` was pointer_
 
 ```c
 #define INIT_LIST_HEAD(head) do { \
     (head)->next = (head); \
     (head)->prev = (head); \
 } while(0)
-```
-
-or
-
-```c
-static inline void INIT_LIST_HEAD(list_head_t *list) {
-    list->next = list;
-    list->prev = list;
-}
 ```
 
 one example:
@@ -66,7 +60,7 @@ static inline void INIT_LIST_HEAD(struct list_head *list)
 ```
 
 <a id=fordemo></a>
-### Container Struct for Demo
+### Entry Struct for Demo
 take `struct my_obj` for example, illustrate to how to use `list`
 
 ```c
@@ -85,48 +79,78 @@ struct my_obj {
 ```c
 /*
  * __list_add insert new entry between two known consecutive entries
- * @newEntry: the entry about to insert
- * @prevEntry: previous entry after @newEntry inserted
- * @nxtEntry:  next entry after @newEntry inserted
+ * @__new: the entry about to insert
+ * @__prev: previous entry after @__new inserted
+ * @__next:  next entry after @__new inserted
  * @return void
  *
  * This is only for internal list manipulation where we know
- * the prev/next entries alread!
+ * the prev/next entries already!
  */
-static inline void __list_add(list_head_t *newEntry, list_head_t *prevEntry,
-                              list_head_t *nxtEntry) {
-    nxtEntry->prev  = newEntry;
-    prevEntry->next = newEntry;
-    newEntry->prev = prevEntry;
-    newEntry->next = nxtEntry;
+static inline void __list_add(list_head_t *__new, list_head_t *__prev,
+                              list_head_t *__next) {
+    __prev->next = __new;
+    __new->prev  = __prev;
+    __next->prev = __new;
+    __new->next  = __next;
 }
 ```
 
 <a id=listadd></a>
 ### list\_add
-
 > _head insert, good for implementing `stack`_
 
 ```c
-static inline void list_add(list_head_t *newEntry, list_head_t *head) {
-    __list_add(newEntry, head, head->next);
+static inline void list_add(list_head_t *__new, list_head_t *head) {
+    __list_add(__new, head, head->next);
 }
+
+// list_add(&my_obj->list, &list_head);
 ```
 
 <div align=center><img src="./res/list_add.jpg" width=90%></div>
 
 <a id=listaddtail></a>
 ### list\_add\_tail
-
 > _tail insert, good for implementing `queue`_
 
 ```c
-static inline void list_add_tail(list_head_t *newEntry, list_head_t *head) {
-    __list_add(newEntry, head->prev, head);
+static inline void list_add_tail(list_head_t *__new, list_head_t *head) {
+    __list_add(__new, head->prev, head);
 }
+
+// list_add(&my_obj->list, &list_head);
 ```
 
 <div align=center><img src="./res/list_add_tail.jpg" width=90%></div>
+
+### LIST\_POISON
+```c
+/*
+ * These are non-NULL pointers that will result in page faults
+ * under normal circumstances, used to verify that nobody uses
+ * non-initialized list entries.
+ */
+#define LIST_POISON1  ((void *) 0x00100100
+#define LIST_POISON2  ((void *) 0x00200200
+```
+
+### __list\_del
+```c
+/*
+ * Delete a list entry by making the prev/next entries
+ * point to each other.
+ *
+ * This is only for internal list manipulation where we know
+ * the prev/next entries already!
+ */
+static inline void __list_del(list_head_t *__prev, list_head_t *__next) {
+    __next->prev = __prev;
+    __prev->next = __next;
+}
+```
+
+
 
 <a id=memorymodel></a>
 ### Memory Model
@@ -136,15 +160,36 @@ each entry chanied like this
 
 <a id=offsetof></a>
 ### offsetof
+> priority of _Get Member_ `->` is **higher than** _Get Address_ `&` and _Type Cast_ `()`
+
+1. cast **0** to type *
+2. get the value of `member` of **type** (can not be executed alone, may cause _**segmemtation fault**_)
+3. get the address of this `member`
+4. cast this `got address` to size_t
+
+for start address of this **type** is **0**, so such `got address` of this `member` is it's offset plus **0**, whose type is pointer type of the `member` itself, which need cast to type `size_t`.
+
 ```c
 /*
  * calculate offset of a member in the structure
- * priority of '->' is higher than get address '&' and type cast '()'
- * & before ((type *)0) is a must, or end with segmemtation fault
  */
 #ifndef offsetof
 #define offsetof(type, member) ((size_t) &((type *)0)->member)
 #endif
+```
+
+little illustrate as:
+
+```c
+struct myoff {
+    int a;
+    int b;
+    int c;
+};
+
+((struct myoff *)0)->c            => Segmentation Fault (SIGSEGV)
+(((struct myoff *)0)->c)          = 8 (type: int *)
+(size_t) (((struct myoff *)0)->c) = 8 (type: size_t)
 ```
 
 <a id=containerof></a>
@@ -166,7 +211,14 @@ _or short_
 
 ```c
 #define container_of(ptr, type, member) \
-    (type *)((char *)(ptr) - (char *) &((type *)0)->member)
+    (type *)((char *)(ptr) - offsetof(type, member))
+```
+
+_or directly this_
+
+```c
+#define container_of(ptr, type, member) \
+    (type *)((char *)(ptr) - ((size_t) &((type *)0)->member))
 ```
 
 <a id=listentry></a>
@@ -195,21 +247,28 @@ _or short_
  */
 #define list_for_each_entry(pos, head, member) \
     for (pos = list_entry((head)->next, typeof(*pos), member); \
-                &pos->member != (head); \
-                pos = list_entry(pos->member.next, typeof(*pos), member))
+         &pos->member != (head); \
+         pos = list_entry(pos->member.next, typeof(*pos), member))
 ```
 
 <div align=center><img src="./res/list_for_each_entry.jpg" width=90%></div>
 
-### LIST\_POISON
+### list\_for\_each\_entry\_safe
+can be used for iterating to **free** the whole list
+
 ```c
 /*
- * These are non-NULL pointers that will result in page faults
- * under normal circumstances, used to verify that nobody uses
- * non-initialized list entries.
+ * list_for_each_entry_safe - iterate over list of given type safe against removal of list entry
+ * @pos:    the type * to use as a loop cursor.
+ * @n:      another type * to use as temporary storage
+ * @head:   the head for your list.
+ * @member: the name of the list_struct within the struct.
  */
-#define LIST_POISON1  ((void *) 0x00100100
-#define LIST_POISON2  ((void *) 0x00200200
+#define list_for_each_entry_safe(pos, n, head, member)          \
+    for (pos = list_entry((head)->next, typeof(*pos), member),  \
+         n = list_entry(pos->member.next, typeof(*pos), member); \
+         &pos->member != (head);                     \
+         pos = n, n = list_entry(n->member.next, typeof(*n), member))
 ```
 
 <a id=usageexample></a>
@@ -221,7 +280,7 @@ struct list_head head;
 INIT_LIST_HEAD(&head);
 
 // add each node into list head
-struct my_obj myObj[N];
+struct my_obj *myObj = (struct my_obj *)malloc(sizeof(struct my_obj) * N);
 for (int i = 0; i < N; ++i) {
     list_add(&myObj[i].list, &head);
 }
@@ -234,3 +293,6 @@ list_for_each_entry(pos, &head, list) {
     }
 }
 ```
+
+---
+###

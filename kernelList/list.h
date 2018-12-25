@@ -1,5 +1,5 @@
 /*
- * illustrated by hi.pxiang@gmail.com
+ * Illustrated by hi.pxiang@gmail.com
  * modified from linux kernel
  */
 #ifndef _LIST_H_
@@ -15,13 +15,13 @@
  * @head: the start entry of this double-linked circular list
  *
  * struct dpip_obj {
- *     struct list_head_s list;
+ *     struct list_head list;
  *     char *name;
  *     void *param;
  *     int (*parse)(struct dpip_obj *obj, struct dpip_conf *conf);
  *     int (*check)(const struct dpip_obj *obj, dpip_cmd_t cmd);
  * };
- * struct list_head_s head;
+ * struct list_head head;
  *
  *                                  node-1                 node-2
  *                                  +-------------+         +-------------+
@@ -49,10 +49,10 @@
  *
  *
  */
-typedef struct list_head_s list_head_t;
-struct list_head_s {
-    list_head_t *prev;
+typedef struct list_head list_head_t;
+struct list_head {
     list_head_t *next;
+    list_head_t *prev;
 };
 
 #define LIST_HEAD_INIT(head) {&(head), &(head)}
@@ -65,7 +65,6 @@ struct list_head_s {
 
 /*
  * calculate offset of a member in the structure
- * priority of '->' is higher than get address '&' and type cast '()'
  */
 #ifndef offsetof
 #define offsetof(type, member) ((size_t) &((type *)0)->member)
@@ -79,7 +78,7 @@ struct list_head_s {
  */
 #ifndef container_of
 #define container_of(ptr, type, member) \
-    (type *)((char *)(ptr) - (char *) &((type *)0)->member)
+    (type *)((char *)(ptr) - offsetof(type, member))
 #endif
 
 /*
@@ -96,25 +95,25 @@ extern "C" {
 
 /*
  * __list_add insert new entry between two known consecutive entries
- * @newEntry: the entry about to insert
- * @prevEntry: previous entry after @newEntry inserted
- * @nxtEntry:  next entry after @newEntry inserted
+ * @__new:  the entry about to insert
+ * @__prev: previous entry after @__new inserted
+ * @__next: next entry after @__new inserted
  * @return void
  *
  * This is only for internal list manipulation where we know
- * the prev/next entries alread!
+ * the prev/next entries already!
  */
-static inline void __list_add(list_head_t *newEntry, list_head_t *prevEntry,
-                              list_head_t *nxtEntry) {
-    nxtEntry->prev  = newEntry;
-    prevEntry->next = newEntry;
-    newEntry->prev = prevEntry;
-    newEntry->next = nxtEntry;
+static inline void __list_add(list_head_t *__new, list_head_t *__prev,
+                              list_head_t *__next) {
+    __prev->next = __new;
+    __new->prev  = __prev;
+    __next->prev = __new;
+    __new->next  = __next;
 }
 
 /*
- * list_add - add a new entry @newEntry into list @head
- * @new: new entry to be added
+ * list_add - add a new entry @__new into list @head
+ * @__new: new entry to be added
  * @head: list head to add it after
  *
  * Insert a new entry after the specified head.
@@ -132,13 +131,13 @@ static inline void __list_add(list_head_t *newEntry, list_head_t *prevEntry,
  *                                               ---------------------
  *
  */
-static inline void list_add(list_head_t *newEntry, list_head_t *head) {
-    __list_add(newEntry, head, head->next);
+static inline void list_add(list_head_t *__new, list_head_t *head) {
+    __list_add(__new, head, head->next);
 }
 
 /*
  * list_add_tail - add a new entry
- * @new: new entry to be added
+ * @__new: new entry to be added
  * @head: list head to add it before
  *
  * Insert a new entry before the specified head.
@@ -157,8 +156,8 @@ static inline void list_add(list_head_t *newEntry, list_head_t *head) {
  *                                                        -----
  *
  */
-static inline void list_add_tail(list_head_t *newEntry, list_head_t *head) {
-    __list_add(newEntry, head->prev, head);
+static inline void list_add_tail(list_head_t *__new, list_head_t *head) {
+    __list_add(__new, head->prev, head);
 }
 
 /*
@@ -168,47 +167,26 @@ static inline void list_add_tail(list_head_t *newEntry, list_head_t *head) {
  * This is only for internal list manipulation where we know
  * the prev/next entries already!
  */
-static inline void __list_del(list_head_t *prevEntry, list_head_t *nxtEntry) {
-    nxtEntry->prev  = prevEntry;
-    prevEntry->next = nxtEntry;
+static inline void __list_del(list_head_t *__prev, list_head_t *__next) {
+    __next->prev = __prev;
+    __prev->next = __next;
 }
 
 /*
  * list_del - deletes entry from list.
- * @entry: the element to delete from the list.
+ * @__del: the element to delete from the list.
  *
  * Note: list_empty() on entry does not return true after this, the entry is
  * in an undefined state.
  */
-static inline void __list_del_entry(list_head_t *entry) {
-    __list_del(entry->prev, entry->next);
+static inline void __list_del_entry(list_head_t *__del) {
+    __list_del(__del->prev, __del->next);
 }
 
-static inline void list_del(list_head_t *entry) {
-    __list_del(entry->prev, entry->next);
-    entry->next = LIST_POISON1;
-    entry->prev = LIST_POISON2;
-}
-
-/*
- * list_replace - replace old entry by new one
- * @oldEntry: the element to be replaced
- * @newEntry: the new element to insert
- *
- * If @oldEntry was empty, it will be overwritten.
- */
-static inline void list_replace(list_head_t *oldEntry,
-                                list_head_t *newEntry) {
-    newEntry->next = oldEntry->next;
-    newEntry->next->prev = newEntry;
-    newEntry->prev = oldEntry->prev;
-    newEntry->prev->next = newEntry;
-}
-
-static inline void list_replace_init(list_head_t *oldEntry,
-                                     list_head_t *newEntry) {
-    list_replace(oldEntry, newEntry);
-    INIT_LIST_HEAD(oldEntry);
+static inline void list_del(list_head_t *__del) {
+    __list_del(__del->prev, __del->next);
+    __del->next = LIST_POISON1;
+    __del->prev = LIST_POISON2;
 }
 
 /*
@@ -221,32 +199,12 @@ static inline void list_del_init(list_head_t *entry) {
 }
 
 /*
- * list_move - delete from one list and add as another's head
- * @list: the entry to move
- * @head: the head that will precede our entry
- */
-static inline void list_move(list_head_t *list, list_head_t *head) {
-    __list_del_entry(list);
-    list_add(list, head);
-}
-
-/*
- * list_move_tail - delete from one list and add as another's tail
- * @list: the entry to move
- * @head: the head that will follow our entry
- */
-static inline void list_move_tail(list_head_t *list, list_head_t *head) {
-    __list_del_entry(list);
-    list_add_tail(list, head);
-}
-
-/*
  * list_is_last - tests whether @list is the last entry in list @head
  * @list: the entry to test
  * @head: the head of the list
  */
 static inline int list_is_last(const list_head_t *list,
-            const list_head_t *head) {
+                               const list_head_t *head) {
     return list->next == head;
 }
 
@@ -275,6 +233,15 @@ static inline int list_empty(const list_head_t *head) {
  */
 #define list_first_entry(head, type, member) \
     list_entry((head)->next, type, member)
+
+/*
+ * list_last_entry - get the last entry from a list
+ * @head: head of the list
+ * @type: type of the struct that @member was embeded in
+ * @member: the name of the member within the struct
+ */
+#define list_last_entry(head, type, member) \
+    list_entry((head)->prev, type, member)
 
 /*
  * list_first_entry_or_null - get the first entry from a list
@@ -321,8 +288,21 @@ static inline int list_empty(const list_head_t *head) {
  */
 #define list_for_each_entry(pos, head, member) \
     for (pos = list_entry((head)->next, typeof(*pos), member); \
-                &pos->member != (head); \
-                pos = list_entry(pos->member.next, typeof(*pos), member))
+         &pos->member != (head); \
+         pos = list_entry(pos->member.next, typeof(*pos), member))
+
+/*
+ * list_for_each_entry_safe - iterate over list of given type safe against removal of list entry
+ * @pos:	the type * to use as a loop cursor.
+ * @n:		another type * to use as temporary storage
+ * @head:	the head for your list.
+ * @member:	the name of the list_struct within the struct.
+ */
+#define list_for_each_entry_safe(pos, n, head, member)			\
+    for (pos = list_entry((head)->next, typeof(*pos), member),	\
+         n = list_entry(pos->member.next, typeof(*pos), member);	\
+         &pos->member != (head); 					\
+         pos = n, n = list_entry(n->member.next, typeof(*n), member))
 
 /*
  * list_for_each_entry_reverse - iterate backwards over list of given type.
@@ -332,8 +312,8 @@ static inline int list_empty(const list_head_t *head) {
  */
 #define list_for_each_entry_reverse(pos, head, member)			\
     for (pos = list_entry((head)->prev, typeof(*pos), member);	\
-                &pos->member != (head); 	\
-                pos = list_entry(pos->member.prev, typeof(*pos), member))
+         &pos->member != (head); 	\
+         pos = list_entry(pos->member.prev, typeof(*pos), member))
 
 #ifdef __cplusplus
 }
