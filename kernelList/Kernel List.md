@@ -1,20 +1,22 @@
 ## List from Linux Kernel
-### Contents
-#### List
+### Contents of List
+- [Memory Model](#memorymodel)
 - [List Data Structure](#datastructure)
-- [INIT\_LIST\_HEAD](#initlisthead)
 - [Entry Struct for Demo](#fordemo)
+- [INIT\_LIST\_HEAD](#initlisthead)
 - [__list\_add](#plistadd)
 - [list\_add](#listadd)
 - [list\_add\_tail](#listaddtail)
-- [Memory Model](#memorymodel)
+- [__list\_del](#plistdel)
+- [list\_del](#listdel)
+- [LIST\_POISON](#poision)
 - [offsetof](#offsetof)
 - [container\_of](#containerof)
 - [list\_entry](#listentry)
 - [list\_for\_each\_entry](#listforeachentry)
-- [A Simple Usage Example](#usageexample)
+- [list\_for\_each\_entry\_safe](#listforeachentrysafe)
 
-#### HList
+### Contents of HList
 
 <a id=datastructure></a>
 ### Data Structure
@@ -25,6 +27,21 @@ typedef struct list_head list_head_t;
 struct list_head {
     struct list_head *next;
     struct list_head *prev;
+};
+```
+
+<a id=fordemo></a>
+### Entry Struct for Demo
+take `struct my_obj` for example, illustrate to how to use `list`
+
+```c
+struct my_obj {
+    char *name;
+    void *param;
+    int (*parse)(struct my_obj *obj, struct my_conf *conf);
+    int (*check)(struct my_obj *obj, my_cmt_t cmd);
+    // list member here
+    struct list_head list;
 };
 ```
 
@@ -57,21 +74,6 @@ static inline void INIT_LIST_HEAD(struct list_head *list)
     list->next = list;
     list->prev = list;
 }
-```
-
-<a id=fordemo></a>
-### Entry Struct for Demo
-take `struct my_obj` for example, illustrate to how to use `list`
-
-```c
-struct my_obj {
-    char *name;
-    void *param;
-    int (*parse)(struct my_obj *obj, struct my_conf *conf);
-    int (*check)(struct my_obj *obj, my_cmt_t cmd);
-    // list member here
-    struct list_head list;
-};
 ```
 
 <a id=plistadd></a>
@@ -124,17 +126,7 @@ static inline void list_add_tail(list_head_t *__new, list_head_t *head) {
 
 <div align=center><img src="./res/list_add_tail.jpg" width=90%></div>
 
-### LIST\_POISON
-```c
-/*
- * These are non-NULL pointers that will result in page faults
- * under normal circumstances, used to verify that nobody uses
- * non-initialized list entries.
- */
-#define LIST_POISON1  ((void *) 0x00100100
-#define LIST_POISON2  ((void *) 0x00200200
-```
-
+<a id=plistdel></a>
 ### __list\_del
 ```c
 /*
@@ -150,7 +142,35 @@ static inline void __list_del(list_head_t *__prev, list_head_t *__next) {
 }
 ```
 
+<a id=listdel></a>
+### list\_del
+```c
+static inline void list_del(list_head_t *__del) {
+    __list_del(__del->prev, __del->next);
+    __del->next = LIST_POISON1;
+    __del->prev = LIST_POISON2;
+}
 
+// list_del(&my_obj->list, &list_head);
+// free(my_obj);
+```
+
+<div align=center><img src="./res/list_del.jpg" width=90%></div>
+
+**Then `pos` should be freed by the caller himself**
+
+<a id=poison></a>
+### LIST\_POISON
+```c
+/*
+ * These are non-NULL pointers that will result in page faults
+ * under normal circumstances, used to verify that nobody uses
+ * non-initialized list entries.
+ */
+// two meaningless position
+#define LIST_POISON1  ((void *) 0x00100100
+#define LIST_POISON2  ((void *) 0x00200200
+```
 
 <a id=memorymodel></a>
 ### Memory Model
@@ -253,6 +273,7 @@ _or directly this_
 
 <div align=center><img src="./res/list_for_each_entry.jpg" width=90%></div>
 
+<a id=listforeachentrysafe></a>
 ### list\_for\_each\_entry\_safe
 can be used for iterating to **free** the whole list
 
@@ -269,29 +290,6 @@ can be used for iterating to **free** the whole list
          n = list_entry(pos->member.next, typeof(*pos), member); \
          &pos->member != (head);                     \
          pos = n, n = list_entry(n->member.next, typeof(*n), member))
-```
-
-<a id=usageexample></a>
-### A Simple Usage Example
-```c
-const int N = 3;
-// define & init list head
-struct list_head head;
-INIT_LIST_HEAD(&head);
-
-// add each node into list head
-struct my_obj *myObj = (struct my_obj *)malloc(sizeof(struct my_obj) * N);
-for (int i = 0; i < N; ++i) {
-    list_add(&myObj[i].list, &head);
-}
-
-// traverse through list
-struct my_obj *pos;
-list_for_each_entry(pos, &head, list) {
-    if (strcmp(cur->name, "corsair") == 0) {
-        return pos;
-    }
-}
 ```
 
 ---
