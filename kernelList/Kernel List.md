@@ -1,5 +1,5 @@
 ## List from Linux Kernel
-### Contents of List
+### Contents
 - [Memory Model](#memorymodel)
 - [List Data Structure](#datastructure)
 - [Entry Struct for Demo](#fordemo)
@@ -9,14 +9,12 @@
 - [list\_add\_tail](#listaddtail)
 - [__list\_del](#plistdel)
 - [list\_del](#listdel)
-- [LIST\_POISON](#poision)
+- [LIST\_POISON](#poison)
 - [offsetof](#offsetof)
 - [container\_of](#containerof)
 - [list\_entry](#listentry)
 - [list\_for\_each\_entry](#listforeachentry)
 - [list\_for\_each\_entry\_safe](#listforeachentrysafe)
-
-### Contents of HList
 
 <a id=datastructure></a>
 ### Data Structure
@@ -155,7 +153,7 @@ static inline void list_del(list_head_t *__del) {
 // free(my_obj);
 ```
 
-<div align=center><img src="./res/list_del.jpg" width=90%></div>
+<div align=center><img src="./res/list_del.jpg" width=80%></div>
 
 **Then `pos` should be freed by the caller himself**
 
@@ -291,6 +289,3 @@ can be used for iterating to **free** the whole list
          &pos->member != (head);                     \
          pos = n, n = list_entry(n->member.next, typeof(*n), member))
 ```
-
----
-###
