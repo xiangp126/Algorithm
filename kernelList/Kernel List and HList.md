@@ -24,6 +24,8 @@
 - [hlist\_add\_head](#hlistaddhead)
 - [__hlist\_del](#phlistdel)
 - [hlist\_del](#hlistdel)
+- [hlist\_for\_each\_entry](#hlistforeachentry)
+- [hlist\_for\_each\_entry\_safe](#hlistforeachentrysafe)
 
 <a id=listdata></a>
 ### Data Structure
@@ -282,7 +284,7 @@ _or directly this_
 
 <a id=listforeachentrysafe></a>
 ### list\_for\_each\_entry\_safe
-can be used for iterating to **free** the whole list
+can be used for iterating to **free** the whole list, and `n` was the same type as `pos`
 
 ```c
 /*
@@ -399,3 +401,36 @@ static inline void hlist_del(struct hlist_node *__del) {
 ```
 
 <div align=center><img src="./res/hlist_del.jpg" width=90%></div>
+
+<a id=hlistforeachentry></a>
+### hlist\_for\_each\_entry
+```c
+/*
+ * hlist_for_each_entry - iterate over list of given type
+ * @pos:    the type * to use as a loop cursor.
+ * @head:   the head for your list.
+ * @member: the name of the hlist_node within the struct.
+ */
+#define hlist_for_each_entry(pos, head, member)             \
+    for (pos = hlist_entry_safe((head)->first, typeof(*(pos)), member);\
+         pos;                           \
+         pos = hlist_entry_safe((pos)->member.next, typeof(*(pos)), member))
+```
+
+<a id=hlistforeachentrysafe></a>
+### hlist\_for\_each\_entry\_safe
+**Notice:** `n` was type as `pos->member.next`, not as that of `pos`, which is different with `list_for_each_entry_safe`
+
+```c
+/*
+ * hlist_for_each_entry_safe - iterate over list of given type safe against removal of list entry
+ * @pos:    the type * to use as a loop cursor.
+ * @n:      another &struct hlist_node to use as temporary storage
+ * @head:   the head for your list.
+ * @member: the name of the hlist_node within the struct.
+ */
+#define hlist_for_each_entry_safe(pos, n, head, member)         \
+    for (pos = hlist_entry_safe((head)->first, typeof(*pos), member);\
+         pos && ({ n = pos->member.next; 1; });         \
+         pos = hlist_entry_safe(n, typeof(*pos), member))
+```

@@ -3,6 +3,7 @@
 #include <time.h>
 #include "list.h"
 
+struct list_head head;
 const int N = 3;
 struct my_pair {
     int key;
@@ -10,39 +11,44 @@ struct my_pair {
     struct list_head list;
 };
 
-void dump_entry(struct my_pair *obj) {
-    printf("key %d value %d.\n", obj->key, obj->value);
+void dump_list(struct list_head *head) {
+    int i = 0;
+    struct my_pair *pos;
+    list_for_each_entry(pos, head, list) {
+        printf("[# %d]: key %d value %d.\n", i++, pos->key, pos->value);
+    }
 }
 
 int main(int argc, char *argv[])
 {
     int i;
-    struct my_pair *myPair;
+    struct my_pair *pair;
 
     srand(time(NULL));
 
     /* define and init head */
-    struct list_head head;
     INIT_LIST_HEAD(&head);
 
     /* init entry itself */
     for (i = 0; i < N; ++i) {
-        myPair = (struct my_pair *) malloc(sizeof(struct my_pair));
-        myPair->key = i;
-        myPair->value = rand();
+        pair = (struct my_pair *) malloc(sizeof(struct my_pair));
+        pair->key = rand();
+        pair->value = pair->key + 1;
         /* add each entry into list */
-        list_add_tail(&myPair->list, &head);
+        list_add_tail(&pair->list, &head);
     }
 
-    printf("Demo for list_for_each_entry\n");
-    struct my_pair *pos;
-    list_for_each_entry(pos, &head, list) {
-        dump_entry(pos);
-    }
+    /* add an extra for deleting later */
+    pair = (struct my_pair*) malloc(sizeof(struct my_pair));
+    pair->key = 88;
+    pair->value = pair->key + 1;
+    list_add_tail(&pair->list, &head);
 
-    struct my_pair *n;
-    int target = 1;
-    printf("\nDel second element\n");
+    dump_list(&head);
+
+    struct my_pair *pos, *n;
+    int target = 88;
+    printf("Del entry key = 88\n");
     list_for_each_entry_safe(pos, n, &head, list) {
         if (pos->key == target) {
             list_del(&pos->list);
@@ -50,10 +56,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf("\nAfter Del\n");
-    list_for_each_entry(pos, &head, list) {
-        dump_entry(pos);
-    }
+    dump_list(&head);
 
     return 0;
 }
