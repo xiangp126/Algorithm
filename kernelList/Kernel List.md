@@ -1,8 +1,8 @@
 ## List from Linux Kernel
-### Contents
-- [Memory Model](#memorymodel)
-- [List Data Structure](#datastructure)
-- [Entry Struct for Demo](#fordemo)
+### Contents of List
+- [Memory Model of `List`](#memorymodel)
+- [List Data Structure](#listdata)
+- [Entry Struct for Demo Usage of `list`](#listfordemo)
 - [INIT\_LIST\_HEAD](#initlisthead)
 - [__list\_add](#plistadd)
 - [list\_add](#listadd)
@@ -16,7 +16,16 @@
 - [list\_for\_each\_entry](#listforeachentry)
 - [list\_for\_each\_entry\_safe](#listforeachentrysafe)
 
-<a id=datastructure></a>
+### Contents of HList - Hash List
+- [Memory Model of `HList`](#memorymodelhlist)
+- [HList Data Structure](#hlistdata)
+- [Entry Struct for Demo Usage of `hlist`](#hlistfordemo)
+- [INIT\_HLIST\_HEAD](#inithlisthead)
+- [hlist\_add\_head](#hlistaddhead)
+- [__hlist\_del](#phlistdel)
+- [hlist\_del](#hlistdel)
+
+<a id=listdata></a>
 ### Data Structure
 _classical definition of simple **circular linked-list**_
 
@@ -28,8 +37,8 @@ struct list_head {
 };
 ```
 
-<a id=fordemo></a>
-### Entry Struct for Demo
+<a id=listfordemo></a>
+### Entry Struct for Demo Usage of `list`
 take `struct my_obj` for example, illustrate to how to use `list`
 
 ```c
@@ -289,3 +298,104 @@ can be used for iterating to **free** the whole list
          &pos->member != (head);                     \
          pos = n, n = list_entry(n->member.next, typeof(*n), member))
 ```
+
+---
+
+<a id=hlistdata></a>
+### HList Data Structure
+- **next** points to the next node
+- **pprev** points to the `next` of previous node, so `*pprev` points to current node.
+- for the **first one** node, it's `pprev` points to `first`,  so `*pprev` also points to current node.
+
+```c
+/* for kernel hash list */
+struct hlist_head {
+    struct hlist_node *first;
+};
+
+struct hlist_node {
+    struct hlist_node *next;
+    struct hlist_node **pprev;
+};
+```
+
+<a id=hlistfordemo></a>
+### Entry Struct for Demo Usage of `hlist`
+take `struct my_obj` for example, illustrate to how to use `hlist`
+
+```c
+struct my_obj {
+    char *name;
+    void *param;
+    int (*parse)(struct my_obj *obj, struct my_conf *conf);
+    int (*check)(struct my_obj *obj, my_cmt_t cmd);
+    // list member here
+    struct hlist_node hlist;
+};
+```
+
+<a id= memorymodelhlist></a>
+### Memory Model of `HList`
+using head insert method
+
+<div align=center><img src="./res/hlist.jpg" width=90%></div>
+
+<a id=inithlisthead></a>
+### INIT\_HLIST\_HEAD
+```c
+#define INIT_HLIST_HEAD(ptr) ((ptr)->first = NULL)
+```
+<div align=center><img src="./res/INIT_HLIST_HEAD.jpg" width=40%></div>
+
+<a id=hlistaddhead></a>
+### hlist\_add\_head
+
+Head Insert - as stack
+
+```c
+static inline void
+hlist_add_head(struct hlist_node *__new, struct hlist_head *head) {
+    struct hlist_node *first = head->first;
+    // head->first was initialized NULL
+    __new->next = first;
+
+    if (first) {
+        first->pprev = &__new->next;
+    }
+    head->first  = __new;
+    __new->pprev = &head->first;
+}
+```
+
+**add first one entry** - add `New 1`
+
+<div align=center><img src="./res/hlist_add_head_1.jpg" width=60%></div>
+
+**add another one entry** - add `New 2`
+
+<div align=center><img src="./res/hlist_add_head_2.jpg" width=70%></div>
+
+<a id=phlistdel></a>
+### __hlist\_del
+```c
+static inline void __hlist_del(struct hlist_node *__del) {
+    struct hlist_node *__next   = __del->next;
+    struct hlist_node **__pprev = __del->pprev;
+    *__pprev = __next;
+    if (__next) {
+        __next->pprev = __pprev;
+    }
+}
+```
+
+<a id=hlistdel></a>
+### hlist\_del
+```c
+static inline void hlist_del(struct hlist_node *__del) {
+    __hlist_del(__del);
+    __del->next  = LIST_POISON1;
+    __del->pprev = LIST_POISON2;
+}
+```
+
+<div align=center><img src="./res/hlist_del.jpg" width=90%></div>

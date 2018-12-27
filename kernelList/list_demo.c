@@ -7,7 +7,7 @@ const int N = 3;
 struct my_pair {
     int key;
     int value;
-    list_head_t list;
+    struct list_head list;
 };
 
 void dump_entry(struct my_pair *obj) {
@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     srand(time(NULL));
 
     /* define and init head */
-    list_head_t head;
+    struct list_head head;
     INIT_LIST_HEAD(&head);
 
     /* init entry itself */

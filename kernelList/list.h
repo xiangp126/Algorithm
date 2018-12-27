@@ -5,8 +5,6 @@
 #ifndef _LIST_H_
 #define _LIST_H_
 
-#include "config.h"
-
 /*
  * list_head_t double-linked circular list
  * list was embeded into the structure itself
@@ -50,6 +48,7 @@
  *
  */
 typedef struct list_head list_head_t;
+
 struct list_head {
     list_head_t *next;
     list_head_t *prev;
@@ -314,6 +313,83 @@ static inline int list_empty(const list_head_t *head) {
     for (pos = list_entry((head)->prev, typeof(*pos), member);	\
          &pos->member != (head); 	\
          pos = list_entry(pos->member.prev, typeof(*pos), member))
+
+typedef struct hlist_head hlist_head_t;
+typedef struct hlist_node hlist_node_t;
+
+struct hlist_head {
+    struct hlist_node *first;
+};
+
+struct hlist_node {
+    struct hlist_node *next;
+    struct hlist_node **pprev;
+};
+
+#define HLIST_HEAD_INIT { .first = NULL }
+#define HLIST_HEAD(name) struct hlist_head name = { .first = NULL }
+#define INIT_HLIST_HEAD(ptr) ((ptr)->first = NULL)
+static inline void INIT_HLIST_NODE(struct hlist_node *node) {
+    node->next  = NULL;
+    node->pprev = NULL;
+}
+
+static inline int hlist_empty(const struct hlist_node *node) {
+    return !node->pprev;
+}
+
+static inline void
+hlist_add_head(struct hlist_node *__new, struct hlist_head *head) {
+    struct hlist_node *first = head->first;
+    // head->first was initialized NULL
+    __new->next = first;
+
+    if (first) {
+        first->pprev = &__new->next;
+    }
+    head->first  = __new;
+    __new->pprev = &head->first;
+}
+
+static inline void __hlist_del(struct hlist_node *__del) {
+    struct hlist_node *__next   = __del->next;
+    struct hlist_node **__pprev = __del->pprev;
+    *__pprev = __next;
+    if (__next) {
+        __next->pprev = __pprev;
+    }
+}
+
+static inline void hlist_del(struct hlist_node *__del) {
+    __hlist_del(__del);
+    __del->next  = LIST_POISON1;
+    __del->pprev = LIST_POISON2;
+}
+
+#define hlist_entry(ptr, type, member) container_of(ptr, type, member)
+
+#define hlist_for_each(pos, head) \
+    for (pos = (head)->first; pos; pos = pos->next)
+
+#define hlist_for_each_safe(pos, n, head) \
+    for (pos = (head)->first; pos && ({ n = pos->next; 1; }); \
+         pos = n)
+
+#define hlist_entry_safe(ptr, type, member) \
+    ({ typeof(ptr) ____ptr = (ptr); \
+     ____ptr ? hlist_entry(____ptr, type, member) : NULL; \
+     })
+
+/*
+ * hlist_for_each_entry	- iterate over list of given type
+ * @pos:	the type * to use as a loop cursor.
+ * @head:	the head for your list.
+ * @member:	the name of the hlist_node within the struct.
+ */
+#define hlist_for_each_entry(pos, head, member)				\
+    for (pos = hlist_entry_safe((head)->first, typeof(*(pos)), member);\
+         pos;							\
+         pos = hlist_entry_safe((pos)->member.next, typeof(*(pos)), member))
 
 #ifdef __cplusplus
 }

@@ -4,9 +4,9 @@ CFLAGXX += -fPIC
 INCDIR := . -I ../inc
 BINDIR := ../bin
 LIBDIR := ../lib
-LIB := liblist.so
+LIB := libhlist.so
 
-TARGET = list_demo
+TARGET = hlist_demo
 
 all: $(TARGET)
 
