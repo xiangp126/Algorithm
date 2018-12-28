@@ -1,23 +1,26 @@
 ## Illustrate
 - This projects aims to implement and utilize basic _**Data Structure and Algorithm**_
-- Some Thoughts come from the Web and classical books with modification
+- The `economic basis` determines `superstructure`
 
 ## Gallery
-
-> `kmp` & `sort` need c++11 support<br>
-`consistent hash` uses `rbtree` which is a standalone source<br>
-`Multi Thread Programming` is a simple demo and summarization<br>
-`Trie Tree` illustrate with `draw.io` to implement it
+- `sort` implemented mostly used sort algorighms
+- `kmp` Knuth-Morris-Pratt, basic and improved methods
+- `conhash` implemented consistent hash, together with `rbtree`
+- `kernelList` do an illustration explanation for kernel list as well as an usage demo
+- `hashTable` gave an basic example using kernel hlist
+- `trieTree` is for Trie Tree
+- `mThread` is a summarization for Multi Thread Programming using kernel pthread
+- and many other solutions came up with me or modified from the web
 
 ### build for all
+_then all binaries will be under `./bin`_
+
 ```bash
 # cd Algorithm
 make -j
 source env.sh
-
-# then all binary were under ./bin
 ```
-_you can also compile each demo separately, take `sort` as example_
+_or you can also compile each demo separately, take `sort` as example_
 
 ```bash
 # under Algorithm/
@@ -27,7 +30,7 @@ make -j
 ../bin/sort_demo
 ```
 
-### Concept of Sort
+### [Concept of Sort](./sort)
 #### Complexity of Time
 _Github did not support [style](./history/sort_table.md) label of `html`, so I had to use pic here_
 <div align=center><img src="./res/sort_table.png" width=85%></div>
@@ -35,7 +38,7 @@ _Github did not support [style](./history/sort_table.md) label of `html`, so I h
 #### Demonstrate
 ![](./res/sortdemo.gif)
 
-### Concept of KMP
+### [Concept of KMP](./kmp)
 #### Next Array
 _you may know well about the `next` array from this figure_
 
@@ -60,14 +63,12 @@ pattern = BCDABDE
 Index = 14
 ```
 
-### Red-Black Tree
-_[Red-Black Tree](./rbtree) for detail_
-
-###  Consistent Hash
-_[Consistent Hash](./conhash) for detail_
-
+### [Red-Black Tree](./rbtree)
+### [Consistent Hash](./conhash)
+### [Kernel Hash List](./hashTable)
+### [Kernel List](./kernelList)
 ### Multi Thread Programming
-_[Multi Thread Programming](./mThread) for detail_
+[Multi Thread Programming](./mThread) for detail
 
 #### Demonstrate
 ```bash
@@ -79,21 +80,21 @@ A B C D A B C D A B C D A B C D A B C D A B C D A B C D A B C D A B C D A B C D
 ```
 
 ### Trie Tree
-_[Trie Tree](./trieTree) for detail_
+[Trie Tree](./trieTree) for detail
 
 ## Notice
-_Need set env variables before execute binary (`Mac` need not do this)_
+Need set env variables before execute binary (`Mac` need not do this)
 
 ```bash
 export LD_LIBRARY_PATH=./lib:$LD_LIBRARY_PATH
 ```
-_or just_
+or just
 
 ```bash
 source env.sh
 ```
 
-_Header directory [Inc](./inc) use soft link, making each template itself can be used as standalone_
+Header directory [Inc](./inc) use soft link, making each template itself can be used as standalone
 
 ```bash
 # example
@@ -106,7 +107,7 @@ rbtree.h@ -> ../rbtree/util_rbtree.h
 sort.h@ -> ../sort/sort.h
 ```
 
-_Each template will generate dynamic library, for shared use_
+Each template will generate dynamic library, for shared use
 
 ```bash
 # example

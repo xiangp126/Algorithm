@@ -6,7 +6,8 @@ LIBDIR = lib
 BINDIR = bin
 MAKE = make
 
-SUBDIRS = common kmp sort rbtree conhash
+SUBDIRS = common kmp sort rbtree conhash \
+		  hashTable kernelList
 
 all:
 	for i in $(SUBDIRS); do $(MAKE) -C $$i || exit 1; done

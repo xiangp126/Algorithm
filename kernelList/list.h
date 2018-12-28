@@ -338,6 +338,10 @@ static inline int hlist_empty(const struct hlist_node *node) {
     return !node->pprev;
 }
 
+static inline int hlist_unhashed(const struct hlist_node *node) {
+    return !node->pprev;
+}
+
 static inline void
 hlist_add_head(struct hlist_node *__new, struct hlist_head *head) {
     struct hlist_node *first = head->first;
