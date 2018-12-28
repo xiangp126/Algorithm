@@ -67,20 +67,8 @@ Index = 14
 ### [Consistent Hash](./conhash)
 ### [Kernel Hash List](./hashTable)
 ### [Kernel List](./kernelList)
-### Multi Thread Programming
-[Multi Thread Programming](./mThread) for detail
-
-#### Demonstrate
-```bash
-cd mthread/
-make -j
-
-../bin/mthread_demo
-A B C D A B C D A B C D A B C D A B C D A B C D A B C D A B C D A B C D A B C D
-```
-
-### Trie Tree
-[Trie Tree](./trieTree) for detail
+### [Multi Thread Programming](./mThread)
+### [Trie Tree](./trieTree)
 
 ## Notice
 Need set env variables before execute binary (`Mac` need not do this)
