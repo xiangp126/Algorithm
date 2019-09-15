@@ -35,29 +35,61 @@ Note:
 We do not know how the threads will be scheduled in the operating system, even though the numbers in the input seems to imply the ordering. The input format you see is mainly to ensure our tests' comprehensiveness.
 
 ### Code
-```c
+```c++
 class Foo {
 public:
     Foo() {
-        
+        pLock = PTHREAD_MUTEX_INITIALIZER;
+        pCond = PTHREAD_COND_INITIALIZER;
+        flag = 0;
     }
 
     void first(function<void()> printFirst) {
-        
+        pthread_mutex_lock(&pLock);
+        while ((flag % TOTAL) != FIRST) {
+            pthread_cond_wait(&pCond, &pLock);
+        }
+
         // printFirst() outputs "first". Do not change or remove this line.
         printFirst();
+        ++flag;
+
+        pthread_mutex_unlock(&pLock);
+        pthread_cond_broadcast(&pCond);
     }
 
     void second(function<void()> printSecond) {
-        
+        pthread_mutex_lock(&pLock);
+        while ((flag % TOTAL) != SECOND) {
+            pthread_cond_wait(&pCond, &pLock);
+        }
+
         // printSecond() outputs "second". Do not change or remove this line.
         printSecond();
+        ++flag;
+
+        pthread_mutex_unlock(&pLock);
+        pthread_cond_broadcast(&pCond);
     }
 
     void third(function<void()> printThird) {
-        
+        pthread_mutex_lock(&pLock);
+        while ((flag % TOTAL) != THIRD) {
+            pthread_cond_wait(&pCond, &pLock);
+        }
+
         // printThird() outputs "third". Do not change or remove this line.
         printThird();
+        ++flag;
+
+        pthread_mutex_unlock(&pLock);
+        pthread_cond_broadcast(&pCond);
     }
+
+private:
+    pthread_mutex_t pLock;
+    pthread_cond_t  pCond;
+    enum {FIRST = 0, SECOND, THIRD, TOTAL};
+    int flag;
 };
 ```
