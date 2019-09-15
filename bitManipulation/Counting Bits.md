@@ -17,7 +17,9 @@ remove the last *1*
 ```
 
 ### Code
-```c
+C++
+
+```c++
 class Solution {
 public:
     vector<int> countBits(int num) {
@@ -27,7 +29,7 @@ public:
         }
         return ret;
     }
-    
+
     int countBit(int val) {
         int cnt = 0;
         while (val) {
@@ -37,4 +39,27 @@ public:
         return cnt;
     }
 };
+```
+
+Java
+
+```java
+class Solution {
+    public int[] countBits(int num) {
+        int[] ret = new int[num + 1];
+        for (int i = 0; i <= num; ++i) {
+            ret[i] = countBit(i);
+        }
+        return ret;
+    }
+
+    public int countBit(int val) {
+        int cnt = 0;
+        while (val != 0) {
+            val &= val - 1;
+            ++cnt;
+        }
+        return cnt;
+    }
+}
 ```

@@ -17,7 +17,10 @@ remove the last *1*
 ```
 
 ### Code
-```c
+
+C++
+
+```c++
 class Solution {
 public:
     int hammingWeight(uint32_t n) {
@@ -29,4 +32,20 @@ public:
         return cnt;
     }
 };
+```
+
+Java
+
+```java
+public class Solution {
+    // you need to treat n as an unsigned value
+    public int hammingWeight(int n) {
+        int cnt = 0;
+        while (n != 0) {
+            n &= n - 1;
+            ++cnt;
+        }
+        return cnt;
+    }
+}
 ```
