@@ -35,12 +35,14 @@ Output: 99
 % 3
 -------------
    0001 0110   yields 22
-          
-(1 + 1 + 1) % 3 = 0       
+
+(1 + 1 + 1) % 3 = 0
 ```
 
 ### Code
-```c
+C++
+
+```c++
 class Solution {
 public:
     int singleNumber(vector<int>& nums) {
@@ -62,4 +64,27 @@ public:
         return ret;
     }
 };
+```
+
+Java
+
+Similarly, there is is no **sizeof()** operator in Java. All primitive values have a predefined size, e.g. int is 4 bytes, char is 2 byte, short is 2 byte, long and float is 8 byte, and so on.
+
+```java
+class Solution {
+    public int singleNumber(int[] nums) {
+        int ret = 0;
+        int[] mark = new int[32];
+        for (int i = 0; i < nums.length; ++i) {
+            for (int j = 0; j < 32; ++j) {
+                mark[j] += (nums[i] >> j) & 0x01;
+            }
+        }
+
+        for (int i = 0; i < 32; ++i) {
+            ret |= (mark[i] % 3) << i;
+        }
+        return ret;
+    }
+}
 ```

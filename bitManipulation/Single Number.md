@@ -19,14 +19,16 @@ Output: 4
 ```
 ### Core Concept
 
-```bash
+```
 a ^ a = 0
 a ^ 0 = a
 a ^ b = b ^ a
 ```
 
 ### Code
-```c
+C++
+
+```c++
 class Solution {
 public:
     int singleNumber(vector<int>& nums) {
@@ -37,4 +39,18 @@ public:
         return ret;
     }
 };
+```
+
+Java
+
+```java
+class Solution {
+    public int singleNumber(int[] nums) {
+        int ret = 0;
+        for (int i = 0; i < nums.length; ++i) {
+            ret ^= nums[i];
+        }
+        return ret;
+    }
+}
 ```

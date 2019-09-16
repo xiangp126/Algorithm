@@ -18,7 +18,7 @@ Your algorithm should run in linear runtime complexity. Could you implement it u
 
 ### Core Concept
 > Number stored in computer was it's `complement code`, which was itself for positive ones.<br>
-> `Complement code` was for right plus between positive number and negative one
+> `Complement code` was used to sum correctly between positive number and negative one
 
 数字 | 原码 | 反码 | 补码
 --- | --- | --- | ---
@@ -37,24 +37,29 @@ Your algorithm should run in linear runtime complexity. Could you implement it u
 
 > num &= -num
 
-Get the least significant bit that was set
+#### How to get the least significant bit?
 
 ```
 24 & (-24)
         0001 1000
-(+)     1110 1000
+(&)     1110 1000
     -------------
-        0000 1000 (8D)      
+        0000 1000 (8D)
 ```
 
-> Derivation Formula
+_Derivation Formula_
+
+UK  /ˌder.ɪˈveɪ.ʃən/&nbsp;&nbsp;&nbsp;&nbsp;US  /ˌder.əˈveɪ.ʃən/
 
 ```bash
 a ^ b = c
 a ^ c = a ^ (a ^ b) = (a ^ a) ^ b = 0 ^ b = b
 ```
+
 ### Code
-```c
+C++
+
+```c++
 class Solution {
 public:
     vector<int> singleNumber(vector<int>& nums) {
@@ -63,10 +68,10 @@ public:
         for (int num : nums) {
             tsum ^= num;
         }
-        // tsum = a ^ b, assume a, b is wanted
-        
-        // get the least significant bit that was set
-        // assume k = 0x0000 0010
+        // tsum = a ^ b, of which a, b is the wanted number
+
+        // Get the least significant bit that was set!
+        // assume k was 0x0000 0010
         int k = tsum & -tsum;
         for (int num : nums) {
             if (num & k) {
@@ -77,4 +82,27 @@ public:
         return ret;
     }
 };
+```
+
+Java
+
+```java
+class Solution {
+    public int[] singleNumber(int[] nums) {
+        int[] ret = new int[2];
+        int tsum = 0;
+        for (int i = 0; i < nums.length; ++i) {
+            tsum ^= nums[i];
+        }
+
+        int k = tsum & -tsum;
+        for (int i = 0; i < nums.length; ++i) {
+            if ((nums[i] & k) != 0) {
+                ret[0] ^= nums[i];
+            }
+        }
+        ret[1] = ret[0] ^ tsum;
+        return ret;
+    }
+}
 ```
