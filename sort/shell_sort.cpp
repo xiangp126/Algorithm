@@ -2,7 +2,8 @@
 
 void shellSort(vector<int> &nums) {
     int N = nums.size();
-    int i, j, step = N / 2.2;
+    int i, j;
+    int step = N / 2.2;
     // step decrease to 1
     for (; step > 0; step /= 2) {
         for (i = step; i < N; ++i) {
