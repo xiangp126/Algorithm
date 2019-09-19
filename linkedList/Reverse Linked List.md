@@ -11,7 +11,9 @@ Output: 5->4->3->2->1->NULL
 ```
 
 ### Code
-```c
+C++
+
+```c++
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -24,17 +26,41 @@ class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
         ListNode dummy(-1);
-        ListNode *ptr = &dummy;
-        ListNode *curr = head;
-        ListNode *pTmp = NULL;
-        while (curr != NULL) {
-            // reserve curr->next
-            pTmp = curr->next;
-            curr->next = ptr->next;
-            ptr->next  = curr;
-            curr = pTmp;
+        ListNode *ptr = head, *pTmp = NULL;
+        while (ptr != NULL) {
+            pTmp = ptr->next;
+            ptr->next = dummy.next;
+            dummy.next = ptr;
+            ptr = pTmp;
         }
         return dummy.next;
     }
 };
+```
+
+Java
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode dummy = new ListNode(-1);
+        ListNode ptr = head;
+        ListNode pTmp = null;
+        while (ptr != null) {
+            pTmp = ptr.next;
+            ptr.next = dummy.next;
+            dummy.next = ptr;
+            ptr = pTmp;
+        }
+        return dummy.next;
+    }
+}
 ```
