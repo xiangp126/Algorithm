@@ -8,8 +8,12 @@ void bubbleSort(vector<int> &);
 void insertSort(vector<int> &);
 void shellSort(vector<int> &);
 
-void percolateDown(vector<int> &, int, int);
 void heapSort(vector<int> &);
+void percolateDown(vector<int> &, int, int);
+
+void mergeSort(vector<int> &);
+void mSort(vector<int> &, vector<int> &, int, int);
+void mergeTwoSortedArray(vector<int> &, vector<int> &, int, int);
 
 int main(int argc, char *argv[])
 {
@@ -21,10 +25,51 @@ int main(int argc, char *argv[])
     // bubbleSort(nums);
     // insertSort(nums);
     // shellSort(nums);
-    heapSort(nums);
+    // heapSort(nums);
+    mergeSort(nums);
+
     showVec(nums);
 
     return 0;
+}
+
+void mergeSort(vector<int> &nums) {
+    const int N = nums.size();
+    vector<int> cell(N, 0);
+    mSort(nums, cell, 0, N - 1);
+}
+
+void mSort(vector<int> &nums, vector<int> &cell, int left, int right) {
+    if (left >= right) {
+        return;
+    }
+
+    int mid = left + (right - left) / 2;
+    mSort(nums, cell, left, mid);
+    mSort(nums, cell, mid + 1, right);
+    mergeTwoSortedArray(nums, cell, left, right);
+}
+
+void mergeTwoSortedArray(vector<int> &nums, vector<int> &cell, int left, int right) {
+    int mid = left + (right - left) / 2;
+    int ia = left;
+    int ib = mid + 1;
+    int ic = ia;
+
+    while (ia <= mid && ib <= right) {
+        cell[ic++] = nums[ia] <= nums[ib] ? nums[ia++] : nums[ib++];
+    }
+
+    while (ia <= mid) {
+        cell[ic++] = nums[ia++];
+    }
+    while (ib <= right) {
+        cell[ic++] = nums[ib++];
+    }
+
+    for (ic = left; ic <= right; ++ic) {
+        nums[ic] = cell[ic];
+    }
 }
 
 void heapSort(vector<int> &nums) {
