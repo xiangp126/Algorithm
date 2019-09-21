@@ -8,42 +8,46 @@ void radixSort(vector<int> &nums) {
         minNum = std::min(minNum, val);
         maxNum = std::max(maxNum, val);
     }
-    int plusOn = minNum < 0 ? abs(minNum) : 0;
+    int addOn = minNum < 0 ? abs(minNum) : 0;
 
-    // all items added to positive
+    // all items added to be positive
     for (auto &val : nums) {
-        val += plusOn;
+        val += addOn;
     }
-    // find loop count
-    int maxNumPlus = maxNum + plusOn;
-    int loopCnt = 0;
-    while (maxNumPlus) {
-        ++loopCnt;
-        maxNumPlus /= 10;
+
+    // find out max digits
+    int maxDigits = 0;
+    maxNum += addOn;
+    while (maxNum) {
+        ++maxDigits;
+        maxNum /= 10;
     }
 #if 0
-    cout << "loopCnt = " << loopCnt << endl;
+    cout << "maxDigits = " << maxDigits << endl;
 #endif
-    vector<int> buckets[10];
+    vector<vector<int> > buckets(10, vector<int>());
     int divisor = 1;
     int bktIndex = 0;
-    for (int i = 0; i < loopCnt; ++i) {
+    int k = 0;
+    while (maxDigits--) {
         for (auto val : nums) {
             bktIndex = (val / divisor) % 10;
             buckets[bktIndex].push_back(val);
         }
-        // bug point: empty a vector
-        nums.erase(nums.begin(), nums.end());
-        for (int k = 0; k < 10; ++k) {
-            for (auto val : buckets[k]) {
-                nums.push_back(val);
+
+        k = 0;
+        for (int i = 0; i < 10; ++i) {
+            for (auto val : buckets[i]) {
+                nums[k++] = val;
             }
-            buckets[k].erase(buckets[k].begin(), buckets[k].end());
+            // bug point: how to empty a vector?
+            buckets[i].clear();
         }
+
         divisor *= 10;
     }
 
     for (auto &val : nums) {
-        val -= plusOn;
+        val -= addOn;
     }
 }

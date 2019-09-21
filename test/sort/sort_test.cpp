@@ -4,8 +4,11 @@
 using namespace std;
 void showVec(vector<int> &);
 void swap(int &, int &);
+
 void bubbleSort(vector<int> &);
+
 void insertSort(vector<int> &);
+
 void shellSort(vector<int> &);
 
 void heapSort(vector<int> &);
@@ -23,11 +26,15 @@ void quickSortOptimized(vector<int> &);
 void qSortOptimized(vector<int> &, int, int);
 pair<int, int> partitionOptimized(vector<int> &, int, int);
 
+void countSort(vector<int> &nums);
+
+void radixSort(vector<int> &nums);
+
 int main(int argc, char *argv[])
 {
     // array to be tested
-    vector<int> nums = {6, 8, 15, 17, 4, 99, 9, 5, 8,
-        33, 45, 22, 11, 19, 14};
+    vector<int> nums = {6, 8, 15, 17, -6, 4, 99, 9, 5, 8,
+        33, 45, 22, 11, -2, 19, 14};
     showVec(nums);
 
     // bubbleSort(nums);
@@ -36,11 +43,101 @@ int main(int argc, char *argv[])
     // heapSort(nums);
     // mergeSort(nums);
     // quickSort(nums);
-    quickSortOptimized(nums);
+    // quickSortOptimized(nums);
+    // countSort(nums);
+    radixSort(nums);
 
     showVec(nums);
 
     return 0;
+}
+
+void radixSort(vector<int> &nums) {
+    const int N = nums.size();
+    vector<vector<int> > buckets(10, vector<int>());
+
+    int minVal = nums[0];
+    int maxVal = nums[0];
+    for (auto val : nums) {
+        minVal = std::min(minVal, val);
+        maxVal = std::max(maxVal, val);
+    }
+
+    int addOn = minVal < 0 ? -minVal : 0;
+
+    int val = 0, k = 0;
+    int divisor = 1;
+
+    for (auto &val : nums) {
+        val += addOn;
+    }
+
+    int maxDigits = 0;
+    maxVal += addOn;
+    while (maxVal) {
+        maxVal /= 10;
+        ++maxDigits;
+    }
+
+    while (maxDigits--) {
+        for (auto val : nums) {
+            buckets[(val / divisor) % 10].push_back(val);
+        }
+
+        k = 0;
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < buckets[i].size(); ++j) {
+                nums[k++] = buckets[i][j];
+            }
+
+            buckets[i].clear();
+        }
+        divisor *= 10;
+    }
+
+    for (auto &val : nums) {
+        val -= addOn;
+    }
+}
+
+void countSort(vector<int> &nums) {
+    const int N = nums.size();
+    int small = nums[0];
+    int large = nums[0];
+    for (auto val : nums) {
+        if (val < small) {
+            small = val;
+        }
+        if (val > large) {
+            large = val;
+        }
+    }
+
+    int inc = 0;
+    if (small < 0) {
+        inc = -small;
+    }
+
+    vector<int> buckets(large - small + 1, 0);
+    for (auto val : nums) {
+        ++buckets[val + inc];
+    }
+
+    int j = 0;
+    int k = 0;
+    int val = 0;
+    for (int i = 0; i < large - small + 1; ++i) {
+        val = buckets[i];
+        if (val) {
+            while (val--) {
+                nums[j++] = i - inc;
+            }
+        }
+    }
+
+    if (j != N) {
+        cout << "j(" << j << ") !=" << "k(" << k << ")" << endl;
+    }
 }
 
 void quickSortOptimized(vector<int> &nums) {

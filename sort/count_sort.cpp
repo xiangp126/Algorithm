@@ -10,13 +10,13 @@ void countSort(vector<int> &nums) {
         maxNum = std::max(maxNum, nums[i]);
         minNum = std::min(minNum, nums[i]);
     }
-    int plusOn = minNum < 0 ? abs(minNum) : 0;
-    int bucketLen = maxNum + plusOn + 1;
+    int addOn = minNum < 0 ? abs(minNum) : 0;
+    int bucketLen = maxNum + addOn + 1;
     int buckets[bucketLen];
     // bug point: memset size
     memset(buckets, 0, bucketLen * sizeof(int));
     for (i = 0; i < N; ++i) {
-        ++buckets[nums[i] + plusOn];
+        ++buckets[nums[i] + addOn];
     }
 
     int k = 0, rptCnt = 0;
@@ -25,10 +25,12 @@ void countSort(vector<int> &nums) {
             continue;
         }
         for (rptCnt = 0; rptCnt < buckets[i]; ++rptCnt) {
-            nums[k++] = i - plusOn;
-            // if (k >= N) {
-            //     cout << "k = " << k << endl;
-            // }
+            nums[k++] = i - addOn;
+#if 0
+            if (k >= N) {
+                cout << "k = " << k << endl;
+            }
+#endif
         }
     }
 }
