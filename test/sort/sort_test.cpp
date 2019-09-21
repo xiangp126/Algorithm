@@ -15,6 +15,14 @@ void mergeSort(vector<int> &);
 void mSort(vector<int> &, vector<int> &, int, int);
 void mergeTwoSortedArray(vector<int> &, vector<int> &, int, int);
 
+void quickSort(vector<int> &);
+void qSort(vector<int> &, int, int);
+int partition(vector<int> &, int, int);
+
+void quickSortOptimized(vector<int> &);
+void qSortOptimized(vector<int> &, int, int);
+pair<int, int> partitionOptimized(vector<int> &, int, int);
+
 int main(int argc, char *argv[])
 {
     // array to be tested
@@ -26,11 +34,84 @@ int main(int argc, char *argv[])
     // insertSort(nums);
     // shellSort(nums);
     // heapSort(nums);
-    mergeSort(nums);
+    // mergeSort(nums);
+    // quickSort(nums);
+    quickSortOptimized(nums);
 
     showVec(nums);
 
     return 0;
+}
+
+void quickSortOptimized(vector<int> &nums) {
+    const int N = nums.size();
+    qSortOptimized(nums, 0, N - 1);
+}
+
+void qSortOptimized(vector<int> &nums, int left, int right) {
+    if (left >= right) {
+        return;
+    }
+    pair<int, int> indexPair = partitionOptimized(nums, left, right);
+    qSortOptimized(nums, left, indexPair.first - 1);
+    qSortOptimized(nums, indexPair.second + 1, right);
+}
+
+pair<int, int> partitionOptimized(vector<int> &nums, int left, int right) {
+    int pivot = nums[right];
+    int i = left;
+    int k = i;
+    int rear = right - 1;
+
+    while (i <= rear) {
+        if (nums[i] < pivot) {
+            swap(nums[i++], nums[k++]);
+        } else {
+            if (nums[i] == pivot) {
+                swap(nums[i], nums[rear--]);
+                continue;
+            } else {
+                ++i;
+            }
+        }
+    }
+    int dupCnt = right - rear;
+    int cnt = 0;
+    while (cnt < dupCnt) {
+        swap(nums[k + cnt], nums[rear + 1 + cnt]);
+        ++cnt;
+    }
+    return pair<int, int>(k, k + dupCnt - 1);
+}
+
+void quickSort(vector<int> &nums) {
+    const int N = nums.size();
+    qSort(nums, 0, N - 1);
+}
+
+void qSort(vector<int> &nums, int left, int right) {
+    if (left >= right) {
+        return;
+    }
+
+    int k = partition(nums, left, right);
+    qSort(nums, left, k - 1);
+    qSort(nums, k + 1, right);
+}
+
+int partition(vector<int> &nums, int left, int right) {
+    int i = left;
+    int k = i;
+    int pivot = nums[right];
+    while (i <= right - 1) {
+        if (nums[i] <= pivot) {
+            swap(nums[i++], nums[k++]);
+        } else {
+            ++i;
+        }
+    }
+    swap(nums[k], nums[right]);
+    return k;
 }
 
 void mergeSort(vector<int> &nums) {

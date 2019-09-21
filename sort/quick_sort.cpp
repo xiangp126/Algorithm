@@ -26,15 +26,16 @@ void qSort(vector<int> &nums, int left, int right) {
  * @return final position of the pivot element
  */
 int partition(vector<int> &nums, int left, int right) {
-    // qsort ensure left < right @here
+    // 'qSort' ensure left < right @here
     int pivot = nums[right];
     int i = left;
     int k = i;
-    while (i < right) {
+    while (i <= right - 1) {
         if (nums[i] <= pivot) {
-            swap(nums[k++], nums[i]);
+            swap(nums[i++], nums[k++]);
+        } else {
+            ++i;
         }
-        ++i;
     }
     swap(nums[k], nums[right]);
     return k;
