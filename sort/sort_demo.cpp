@@ -17,7 +17,7 @@ const char *sortTypeMsg[] = {
     " Shell  Sort ",
     " Heap   Sort ",
     " Merge  Sort ",
-    " Bucket Sort ",
+    " Count  Sort ",
     " Radix  Sort ",
     " Library Fun "
 };
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
                 mergeSort(nums);
                 break;
             case 8:
-                bucketSort(nums);
+                countSort(nums);
                 break;
             case 9:
                 radixSort(nums);
@@ -105,7 +105,7 @@ void usage()
         "[5]: Shell  Sort       "
         "[6]: Heap   Sort     \n"
         "[7]: Merge  Sort       "
-        "[8]: Bucket Sort       "
+        "[8]: Count  Sort       "
         "[9]: Radix  Sort     \n"
         "[10]:Library Fun       "
         "[*]: Quit            \n";

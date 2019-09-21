@@ -1,7 +1,7 @@
 #include "common.h"
 #include "sort.h"
 
-void bucketSort(vector<int> &nums) {
+void countSort(vector<int> &nums) {
     int maxNum = 0;
     int minNum = 0;
     int i, N = nums.size();

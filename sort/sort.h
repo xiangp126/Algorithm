@@ -30,7 +30,7 @@ void shellSort(vector<int> &);
 void quickSort(vector<int> &);
 void quickSortOptimized(vector<int> &);
 void heapSort(vector<int> &);
-void bucketSort(vector<int> &);
+void countSort(vector<int> &);
 void radixSort(vector<int> &);
 void mergeSort(vector<int> &);
 
