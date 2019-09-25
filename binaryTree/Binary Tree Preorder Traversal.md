@@ -14,11 +14,15 @@ Input: [1,null,2,3]
 Output: [1,2,3]
 ```
 
-### Code - _Stack, in Contrast to Queue_
+### Code - _using Stack Solution One_
 
-_in contrast to `Binary Tree Level Order Traversal`, using `stack` instead_
+it's only one-line change from `inorderTraversal`, very easy
 
-```c
+- sign between two criteria within the `while` is `||`
+- `stk.top()` only gets the top elem of the stack, but not del it
+- `stk.pop()` only dels the top elem of the stack, but not return its value
+
+```c++
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -32,23 +36,26 @@ class Solution {
 public:
     vector<int> preorderTraversal(TreeNode* root) {
         vector<int> ret;
-        if (root == NULL) {
+        if (!root) {
             return ret;
         }
-        stack<TreeNode *> stk;
-        stk.push(root);
-        while(!stk.empty()) {
-            TreeNode *ptr = stk.top();
-            // traverse data
-            ret.push_back(ptr->val);
-            stk.pop();
 
-            // first put right child into stack
-            if (ptr->right != NULL) {
-                stk.push(ptr->right);
-            }
-            if (ptr->left != NULL) {
-                stk.push(ptr->left);
+        stack<TreeNode *> stk;
+        TreeNode *node = root;
+
+        while (node || !stk.empty()) {
+            if (node) {
+                // traverse 'node'
+                ret.push_back(node->val);
+
+                stk.push(node);
+                node = node->left;
+            } else {
+                // pop of stack
+                node = stk.top();
+                stk.pop();
+
+                node = node->right;
             }
         }
         return ret;
@@ -56,10 +63,54 @@ public:
 };
 ```
 
-### Code - _Recursive_
-_according to definition of `PreOrder Traversal`_
+### Code - _using Stack Solution Two_
 
-```c
+_in contrast to [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/), using `stack` instead of `Queue`_
+
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int> ret;
+        if (!root) {
+            return ret;
+        }
+
+        stack<TreeNode *> stk;
+        TreeNode *node = root;
+        stk.push(root);
+
+        while (!stk.empty()) {
+            // traverse 'node'
+            node = stk.top();
+            ret.push_back(node->val);
+            stk.pop();
+
+            if (node->right) {
+                stk.push(node->right);
+            }
+            if (node->left) {
+                stk.push(node->left);
+            }
+        }
+        return ret;
+    }
+};
+```
+
+### Code - _Recursive the Simplest_
+_according to the definition of `PreOrder Traversal`_ [trəˈvərs(ə)l]
+
+```c++
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -84,45 +135,6 @@ public:
         ret.push_back(root->val);
         preOrder(root->left, ret);
         preOrder(root->right, ret);
-    }
-};
-```
-
-### Code - _Stack Solution 2_
-
-_now deprecated_
-
-```c
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Solution {
-public:
-    vector<int> preorderTraversal(TreeNode* root) {
-        vector<int> ret;
-        stack<TreeNode *> stk;
-        TreeNode *ptr = root;
-        // "|| ptr" only useful for first loop when stk was empty
-        while (!stk.empty() || ptr) {
-            if (ptr != NULL) {
-                // only one-line change with inorderTraversal
-                ret.push_back(ptr->val);
-                stk.push(ptr);
-                ptr = ptr->left;
-            } else {
-                // stk.top() only get top of stack, not pop it
-                ptr = stk.top();
-                stk.pop();
-                ptr = ptr->right;
-            }
-        }
-        return ret;
     }
 };
 ```

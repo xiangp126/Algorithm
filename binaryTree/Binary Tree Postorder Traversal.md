@@ -15,7 +15,7 @@ Output: [3,2,1]
 ```
 
 ### Concept
-_according to definition of `PostOrder Traversal`_
+_according to the definition of `PostOrder Traversal`_
 
 **PostOrder** `left -> right -> root`, reverse as `root->right->left`
 
@@ -33,11 +33,10 @@ _reverse it yields_
 
 `left -> right -> root`
 
-### Code - _Stack, in Contrast to Queue_
+### Code - _using Stack Solution Solution One_
+C++
 
-_in contrast to `Binary Tree Level Order Traversal`, using `stack` instead_
-
-```c
+```c++
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -51,32 +50,78 @@ class Solution {
 public:
     vector<int> postorderTraversal(TreeNode* root) {
         vector<int> ret;
-        if (root == NULL) {
+        if (!root) {
             return ret;
         }
         stack<TreeNode *> stk;
-        stk.push(root);
-        while (!stk.empty()) {
-            TreeNode *ptr = stk.top();
-            // traverse data
-            ret.push_back(ptr->val);
-            stk.pop();
+        TreeNode *node = root;
 
-            // push each child into stack
-            if (ptr->left != NULL) {
-                stk.push(ptr->left);
-            }
-            if (ptr->right != NULL) {
-                stk.push(ptr->right);
+        while (node || !stk.empty()) {
+            if (node) {
+                // traverse 'node'
+                ret.push_back(node->val);
+
+                stk.push(node);
+                node = node->right;
+            } else {
+                node = stk.top();
+                stk.pop();
+
+                node = node->left;
             }
         }
-        reverse(ret.begin(), ret.end());
+        std::reverse(ret.begin(), ret.end());
         return ret;
     }
 };
 ```
 
-### Code - _Recursive_
+### Code - _using Stack Solution Two_
+
+_in contrast to [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/), using `stack` instead of `Queue`_
+
+```c++
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> ret;
+        if (!root) {
+            return ret;
+        }
+        stack<TreeNode *> stk;
+        TreeNode *node = root;
+        stk.push(node);
+
+        while (!stk.empty()) {
+            node = stk.top();
+            stk.pop();
+
+            // traverse 'node'
+            ret.push_back(node->val);
+
+            if (node->left) {
+                stk.push(node->left);
+            }
+            if (node->right) {
+                stk.push(node->right);
+            }
+        }
+        std::reverse(ret.begin(), ret.end());
+        return ret;
+    }
+};
+```
+
+### Code - _Recursive the Simplest_
 _according to definition of `PostOrder Traversal`_
 
 ```c
@@ -104,47 +149,6 @@ public:
         postOrder(root->left, ret);
         postOrder(root->right, ret);
         ret.push_back(root->val);
-    }
-};
-```
-
-### Code - _Stack Solution 2_
-
-_now deprecated_
-
-```c
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
-class Solution {
-public:
-    vector<int> postorderTraversal(TreeNode* root) {
-        vector<int> ret;
-        stack<TreeNode *> stk;
-        TreeNode *ptr = root;
-        while (!stk.empty() || ptr) {
-            if (ptr != NULL) {
-                ret.push_back(ptr->val);
-                stk.push(ptr);
-                // push right node
-                ptr = ptr->right;
-            } else {
-                // stk.top() only get top of stack, not pop it
-                ptr = stk.top();
-                stk.pop();
-                // points to left child
-                ptr = ptr->left;
-            }
-        }
-        // reverse ret in the end
-        reverse(ret.begin(), ret.end());
-        return ret;
     }
 };
 ```
