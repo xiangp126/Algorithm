@@ -19,8 +19,17 @@ One possible answer is: [0,-3,9,-10,null,5], which represents the following heig
  -10  5
 ```
 
-### Code
+### Testcase
+`height balanced BST` is not unique, so my solution is also passed.
+
 ```c
+Your Input: [-10,-3,0,5,9]
+Output: [0,-10,5,null,-3,null,9]
+Expected: [0,-3,9,-10,null,5]
+```
+
+### Code
+```c++
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -37,11 +46,11 @@ public:
     }
 
     /*
-     * convert: build BST recursive
-     * @nums: the ascended sorted nums
+     * convert: build BST recursively
+     * @nums: the ascended sorted array
      * @left: index range [left, right]
      * @right: right included
-     * @return the tree
+     * @return the root pointer of the (sub)tree
      */
     TreeNode* convert(vector<int> &nums, int left, int right) {
         if(left > right) {
