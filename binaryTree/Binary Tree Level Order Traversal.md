@@ -20,9 +20,14 @@ return its level order traversal as:
 ]
 ```
 
-### Code - _Queue_
+### Code - _using Queue_
 
-```c
+Bug Notice:
+
+- `que.size()` must be reserved before the loop, cos `que.size()` may vary when after `push/pop`
+- set `path` empty before next loop
+
+```c++
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -36,33 +41,30 @@ class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
         vector<vector<int>> ret;
-        if (root == NULL) {
+        if (!root) {
             return ret;
         }
-        vector<int> path;
+
+        TreeNode *node = root;
         queue<TreeNode *> que;
-        TreeNode *ptr = NULL;
-        // push root into queue
-        que.push(root);
+        que.push(node);
+
+        int qSize = 0;
+        vector<int> path;
+
         while (!que.empty()) {
-            /*
-             * Notice:
-             * 1. que.size() must be reserved before loop,
-             *    for que.size() may vary when push/pop
-             * 2. get an empty path when every loop into while
-             */
-            path.erase(path.begin(), path.end());
-            int size = que.size();
-            // loop size times, one level
-            for (int i = 0; i < size; ++i) {
-                ptr = que.front();
+            qSize = que.size();
+            path.clear();
+            for (int i = 0; i < qSize; ++i) {
+                node = que.front();
                 que.pop();
-                path.push_back(ptr->val);
-                if (ptr->left != NULL) {
-                    que.push(ptr->left);
+                path.push_back(node->val);
+
+                if (node->left) {
+                    que.push(node->left);
                 }
-                if (ptr->right != NULL) {
-                    que.push(ptr->right);
+                if (node->right) {
+                    que.push(node->right);
                 }
             }
             ret.push_back(path);
@@ -72,7 +74,7 @@ public:
 };
 ```
 
-### Code - _Recursive_
+### Code - _using dfs(Depth-First Search)_
 
 _Time O(N)_
 

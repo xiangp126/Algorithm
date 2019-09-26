@@ -20,11 +20,12 @@ return its zigzag level order traversal as:
 ]
 ```
 
-### Code - _Queue_
+### Code - _using Queue_
 
-_there is no `push_front` for vector, so use **`vector::insert`** instead_
+- there is no `push_front` for `vector`, so use **`vector::insert`** instead
+- use `flag` & `0x01` instead of positive/negative `1`
 
-```c
+```c++
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -38,42 +39,51 @@ class Solution {
 public:
     vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
         vector<vector<int>> ret;
-        if (root == NULL) {
+        if (!root) {
             return ret;
         }
         queue<TreeNode *> que;
-        que.push(root);
-        int loop = 1;
+        TreeNode *node = root;
+        que.push(node);
+
+        int qSize = 0;
+        int flag = 1;
+        vector<int> path;
+
         while (!que.empty()) {
-            vector<int> path;
-            int size = que.size();
-            for (int i = 0; i < size; ++i) {
-                TreeNode *ptr = que.front();
-                if (loop & 0x1) {
-                    path.push_back(ptr->val);
-                } else {
-                    // push from front
-                    path.insert(path.begin(), ptr->val);
-                }
+            qSize = que.size();
+            path.clear();
+
+            for (int i = 0; i < qSize; ++i) {
+                node = que.front();
                 que.pop();
-                if (ptr->left != NULL) {
-                    que.push(ptr->left);
+
+                path.push_back(node->val);
+
+                if (node->left) {
+                    que.push(node->left);
                 }
-                if (ptr->right != NULL) {
-                    que.push(ptr->right);
+                if (node->right) {
+                    que.push(node->right);
                 }
             }
-            ret.push_back(path);
-            ++loop;
+
+            if (flag & 0x01) {
+                ret.push_back(path);
+            } else {
+                std::reverse(path.begin(), path.end());
+                ret.push_back(path);
+            }
+            ++flag;
         }
         return ret;
     }
 };
 ```
 
-### Code - _Recursive_
+### Code - _using dfs(Depth-First Search)_
 
-_Time O(N)_
+_Time complexity O(N)_
 
 ```c
 /**
