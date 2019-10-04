@@ -35,7 +35,7 @@ Return false.
 
 _refer the routine calculating `Maximum Tree Depth`_
 
-```c
+```c++
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -52,10 +52,10 @@ public:
     }
 
     /*
-     * calcDepth: calculate Tree Depth and judge if balanced meanwhile
+     * calcDepth: calculate Tree Depth and meanwhile judge if it's balanced
      * @root: input tree
-     * @return Tree Depth under normal
-     * @return -1 if not balanced sub-tree
+     * @return Tree Depth under normal condition
+     * @return -1 if not balanced (sub)tree
      */
     int calcDepth(TreeNode *root) {
         if (root == NULL) {
@@ -63,12 +63,11 @@ public:
         }
         int leftDepth  = calcDepth(root->left);
         int rightDepth = calcDepth(root->right);
-        int maxDepth = max(leftDepth, rightDepth) + 1;
-        if (leftDepth < 0 || rightDepth < 0 ||
-                    abs(leftDepth - rightDepth) > 1) {
+        if (leftDepth < 0 || rightDepth < 0
+                          || abs(leftDepth - rightDepth) > 1) {
             return -1;
         } else {
-            return maxDepth;
+            return max(leftDepth, rightDepth) + 1;
         }
     }
 };
