@@ -49,13 +49,14 @@ public:
         queue<TreeNode *> que;
         que.push(node);
 
-        int qSize = 0;
         vector<int> path;
+        int qSize = 0;
+        int i = 0;
 
         while (!que.empty()) {
             qSize = que.size();
             path.clear();
-            for (int i = 0; i < qSize; ++i) {
+            for (i = 0; i < qSize; ++i) {
                 node = que.front();
                 que.pop();
                 path.push_back(node->val);

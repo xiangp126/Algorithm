@@ -47,14 +47,15 @@ public:
         que.push(node);
 
         int qSize = 0;
-        int flag = 1;
+        int flag = 0;
+        int i = 0;
         vector<int> path;
 
         while (!que.empty()) {
             qSize = que.size();
             path.clear();
 
-            for (int i = 0; i < qSize; ++i) {
+            for (i = 0; i < qSize; ++i) {
                 node = que.front();
                 que.pop();
 
@@ -69,12 +70,10 @@ public:
             }
 
             if (flag & 0x01) {
-                ret.push_back(path);
-            } else {
                 std::reverse(path.begin(), path.end());
-                ret.push_back(path);
             }
             ++flag;
+            ret.push_back(path);
         }
         return ret;
     }
