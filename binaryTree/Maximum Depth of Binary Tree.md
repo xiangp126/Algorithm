@@ -48,11 +48,12 @@ public:
 
         int maxDepth = 0;
         int qSize = 0;
+        int i = 0;
 
         while (!que.empty()) {
             qSize = que.size();
 
-            for (int i = 0; i < qSize; ++i) {
+            for (i = 0; i < qSize; ++i) {
                 node = que.front();
                 que.pop();
 

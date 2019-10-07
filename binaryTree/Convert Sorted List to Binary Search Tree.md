@@ -59,6 +59,7 @@ public:
         }
         ListNode *fast = head;
         ListNode *slow = head;
+        // bug point: tail not (always) NULL
         while (fast != tail && fast->next != tail) {
             slow = slow->next;
             fast = fast->next->next;
