@@ -1,17 +1,22 @@
-## 字符串的排列
+## Full Permutation of String
+- NowCoder - **May Have Duplicates**
+
 ### Illustrate
 <https://www.nowcoder.com/practice/fe6b651b66ae47d7acce78ffdd9a96c7?tpId=13&tqId=11180&tPage=2&rp=1&ru=%2Fta%2Fcoding-interviews&qru=%2Fta%2Fcoding-interviews%2Fquestion-ranking>
 
-输入一个字符串,按**字典序**打印出该字符串中字符的**所有排列**。
+Input a string, print **all** its permutations in **alphabet order**
 
-输入描述:
-输入一个字符串,长度不超过9(可能有字符重复), 字符只包括大小写字母。
+Note:
+
+The input string only contains upper and lower cases of characters and the whole length may not longer than 9(may has character duplicates).
 
 ### Example
 ```c
 Input: abc
 Output: abc,acb,bac,bca,cab,cba
 
+Input: aaa
+Output: aaa
 ```
 
 ### Code
@@ -25,7 +30,6 @@ _use `set` to remove duplicates and sort the remainings_
 class Solution {
 public:
     vector<string> Permutation(string str) {
-        // use set to remove duplicates and sort
         set<string> bottle;
         if (str.size() == 0) {
             return vector<string>();
@@ -53,6 +57,53 @@ public:
             dfs(str, start + 1, bottle);
             // swap back for next new swap
             swap(str[start], str[i]);
+        }
+    }
+};
+```
+
+---
+
+- LeetCode - **Have No Duplicates**
+
+<https://leetcode.com/problems/permutations/>
+
+Given a collection of **distinct** integers, return all possible permutations.
+
+### Example
+```c
+Input: [1,2,3]
+Output:
+[
+  [1,2,3],
+  [1,3,2],
+  [2,1,3],
+  [2,3,1],
+  [3,1,2],
+  [3,2,1]
+]
+```
+
+### Code
+```c++
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> ret;
+        dfs(nums, 0, ret);
+        return ret;
+    }
+
+    void dfs(vector<int> nums, int start, vector<vector<int> > &ret) {
+        if (start == nums.size()) {
+            ret.push_back(nums);
+            return;
+        }
+
+        for (int i = start; i < nums.size(); ++i) {
+            swap(nums[i], nums[start]);
+            dfs(nums, start + 1, ret);
+            swap(nums[i], nums[start]);
         }
     }
 };
