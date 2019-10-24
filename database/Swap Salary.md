@@ -40,17 +40,24 @@ After running your **update** statement, the above salary table should have the 
 ### SQL Code - using `CASE`
 ```sql
 # Write your MySQL query statement below
-update salary
-set sex = (case when sex = 'm' then 'f' else 'm' end);
+update salary set sex = (
+    case
+        when sex = 'm' then 'f'
+        else 'm'
+    end
+);
 ```
 
 or
 
 ```sql
 # Write your MySQL query statement below
-update salary
-set sex = (case when sex = 'm' then 'f' when sex = 'f' then 'm' end);
-
+update salary set sex = (
+    case
+        when sex = 'm' then 'f'
+        when sex = 'f' then 'm'
+    end
+);
 ```
 
 ### SQL Code - using `IF`
@@ -58,4 +65,8 @@ set sex = (case when sex = 'm' then 'f' when sex = 'f' then 'm' end);
 # Write your MySQL query statement below
 update salary
 set sex = if(sex = 'm', 'f', 'm');
+
+update salary set sex = (
+    if(sex = 'm', 'f', 'm')
+);
 ```
