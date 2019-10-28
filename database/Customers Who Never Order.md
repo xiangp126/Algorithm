@@ -54,9 +54,7 @@ Using the above tables as example, return the following:
 +-----------+
 ```
 
-### Full Output of Left (Outer) Join
-- Schema
-
+### Test - Left (Outer) Join
 ```sql
 select *
 from Customers as cus
@@ -64,15 +62,12 @@ from Customers as cus
   on cus.Id = ord.CustomerId;
 ```
 
-- Result
-
-```
-Id	Name	Id	CustomerId
-3	Sam	    1    3
-1	Joe	    2    1
-2	Henry	(null)	(null)
-4	Max   	(null)	(null)
-```
+Id|	Name|	Id|	CustomerId
+---|---|---|---
+3	|Sam	    |1    |3
+1	|Joe	    |2    |1
+2	|Henry	|(null)	|(null)
+4	|Max   	|(null)	|(null)
 
 ### SQL - Using `Left Join`
 ```sql
