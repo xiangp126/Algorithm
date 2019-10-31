@@ -34,7 +34,7 @@ Note:
 
 We do not know how the threads will be scheduled in the operating system, even though the numbers in the input seems to imply the ordering. The input format you see is mainly to ensure our tests' comprehensiveness.
 
-### Code
+### Code - C++
 ```c++
 class Foo {
 public:
@@ -92,4 +92,48 @@ private:
     enum {FIRST = 0, SECOND, THIRD, TOTAL};
     int flag;
 };
+```
+
+### Code - Java
+```java
+class Foo {
+
+    public Foo() {
+        N = 3;
+        flag = 0;
+    }
+
+    public synchronized void first(Runnable printFirst) throws InterruptedException {
+        while (flag % N != 0) {
+            wait();
+        }
+        // printFirst.run() outputs "first". Do not change or remove this line.
+        printFirst.run();
+        ++flag;
+        notifyAll();
+    }
+
+    public synchronized void second(Runnable printSecond) throws InterruptedException {
+        while (flag % N != 1) {
+            wait();
+        }
+        // printSecond.run() outputs "second". Do not change or remove this line.
+        printSecond.run();
+        ++flag;
+        notifyAll();
+    }
+
+    public synchronized void third(Runnable printThird) throws InterruptedException {
+        while (flag % N != 2) {
+            wait();
+        }
+        // printThird.run() outputs "third". Do not change or remove this line.
+        printThird.run();
+        ++flag;
+        notifyAll();
+    }
+
+    private int flag;
+    private int N;
+}
 ```
