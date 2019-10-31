@@ -33,66 +33,70 @@ Write a SQL query to get each sub sum of Salary of Employee table.
 | 2004 |   10000 |
 ```
 
-### SQL - Left Join
+### SQL - Inner Join just Warm Up
 ```sql
 select *
-from Employee as e1
-  left join Employee as e2
-  on e1.Year > e2.Year
-order by e1.Year
+from Employee as a
+  inner join Employee as b
+  on b.Year <= a.Year
+order by a.Year
 ```
 
 output is
 
 ```
-| Year | Salary |   Year | Salary |
-|------|--------|--------|--------|
-| 2001 |   1000 | (null) | (null) |
-| 2002 |   2000 |   2001 |   1000 |
-| 2003 |   3000 |   2001 |   1000 |
-| 2003 |   3000 |   2002 |   2000 |
-| 2004 |   4000 |   2001 |   1000 |
-| 2004 |   4000 |   2002 |   2000 |
-| 2004 |   4000 |   2003 |   3000 |
+| Year | Salary | Year | Salary |
+|------|--------|------|--------|
+| 2001 |   1000 | 2001 |   1000 |
+| 2002 |   2000 | 2001 |   1000 |
+| 2002 |   2000 | 2002 |   2000 |
+| 2003 |   3000 | 2001 |   1000 |
+| 2003 |   3000 | 2002 |   2000 |
+| 2003 |   3000 | 2003 |   3000 |
+| 2004 |   4000 | 2001 |   1000 |
+| 2004 |   4000 | 2002 |   2000 |
+| 2004 |   4000 | 2003 |   3000 |
+| 2004 |   4000 | 2004 |   4000 |
 ```
 
-### SQL - 90% Right
+### SQL - AC using inner Join
+- ~~MySQL `IFNULL()` Function~~
+
+~~Return the specified value IF the expression is NULL, otherwise return the expression:~~
+
 ```sql
-select e1.Year, sum(e2.Salary) + e1.Salary as Salary
-from Employee as e1
-  left join Employee as e2
-  on e1.Year > e2.Year
-group by e1.Year
-# order by e1.Year
+select a.Year, sum(b.Salary) as Salary
+from Employee as a
+  inner join Employee as b
+  on b.Year <= a.Year
+group by a.Year
 ```
 
 output is
 
-```
+```sql
 | Year | Salary |
 |------|--------|
-| 2001 | (null) |
+| 2001 |   1000 |
 | 2002 |   3000 |
 | 2003 |   6000 |
 | 2004 |  10000 |
 ```
 
-### SQL - AC
-- MySQL `IFNULL()` Function
-
-Return the specified value IF the expression is NULL, otherwise return the expression:
-
+### SQL - AC using Double Select
 ```sql
-select e1.Year, sum(ifnull(e2.Salary, 0)) + e1.Salary as Salary
+select Year,
+(
+  select sum(Salary)
+  from Employee as e2
+  where e2.Year <= e1.Year
+) as Salary
 from Employee as e1
-  left join Employee as e2
-  on e1.Year > e2.Year
-group by e1.Year
 ```
 
 output is
 
-```sql
+```
 | Year | Salary |
 |------|--------|
 | 2001 |   1000 |
