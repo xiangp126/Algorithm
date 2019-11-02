@@ -627,7 +627,7 @@ void rbtree_left_rotate(util_rbtree_t *rbtree, util_rbtree_node_t *node) {
 }
 
 /*
- * rbtree_left_rotate
+ * rbtree_right_rotate
  * @rbtree: the RB-Tree
  * @node: the node centered to rotate
  * make 'node' right child of other's

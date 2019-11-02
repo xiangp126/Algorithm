@@ -55,7 +55,7 @@ void *fun(void *arg) {
         ++tCnt;
         // unlock the mutex
         pthread_mutex_unlock(&pLock);
-        // notify other threads that were in queue
+        // notify other threads that were waited in queue
         pthread_cond_broadcast(&pCond);
     }
 
