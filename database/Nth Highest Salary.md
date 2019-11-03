@@ -57,6 +57,8 @@ END
 ```
 
 ### SQL - AC using `distinct`
+- **Attention**: Do not miss the semicolon at the end of `set N = N -1`
+
 ```sql
 CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
 BEGIN
