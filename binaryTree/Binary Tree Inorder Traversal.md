@@ -9,9 +9,9 @@ Input: [1,2,3,4,5,6,7]
 Output: [4,2,5,1,6,3,7]
 ```
 
-### Code - _Iterative Using Stack Solution One_
+### Code - _Iterative Using Stack with C++_
 
-- sign between two criteria within the `while` is `||`
+- operator between two criteria within the `while` is `||`
 - `stk.top()` only gets the top elem of the stack, but not del it
 - `stk.pop()` only dels the top elem of the stack, but not return its value
 
@@ -51,6 +51,46 @@ public:
         return ret;
     }
 };
+```
+
+### Code - _Iterative Using Stack with Java_
+[Java Stack Tutorial](https://docs.oracle.com/javase/7/docs/api/java/util/Stack.html)
+
+- remove
+
+E remove()
+Retrieves and removes the head of this queue. This method differs from poll only in that it throws an exception if this queue is empty.
+
+Returns:
+the head of this queue
+
+Throws:
+NoSuchElementException - if this queue is empty
+
+```java
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> ret = new ArrayList<>();
+        if (root == null) {
+            return ret;
+        }
+        Stack<TreeNode> stk = new Stack<>();
+        TreeNode node = root;
+
+        while ((node != null) || !stk.isEmpty()) {
+            if (node != null) {
+                stk.push(node);
+                node = node.left;
+            } else {
+                node = stk.pop();
+
+                ret.add(node.val);
+                node = node.right;
+            }
+        }
+        return ret;
+    }
+}
 ```
 
 ### Demo for Stack Solution One

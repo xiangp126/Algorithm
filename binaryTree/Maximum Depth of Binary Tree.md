@@ -20,7 +20,7 @@ Given binary tree [3,9,20,null,null,15,7],
 return its depth = 3.
 ```
 
-### Code - _using Queue_
+### Code - _using Queue with C++_
 
 - learn to calculate the depth of a tree
 - similar idea as `Binary Tree Level Order Traversal`
@@ -69,6 +69,66 @@ public:
         return maxDepth;
     }
 };
+```
+
+### Code - _using Queue with Java_
+[Java Queue Tutorial](https://docs.oracle.com/javase/7/docs/api/java/util/Queue.html)
+
+- remove
+
+E remove()
+Retrieves and removes the head of this queue. This method differs from poll only in that it throws an exception if this queue is empty.
+
+Returns:
+the head of this queue
+
+Throws:
+NoSuchElementException - if this queue is empty
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        Queue<TreeNode> que = new LinkedList<>();
+        int qSize = 0;
+        int depth = 0;
+
+        TreeNode node = root;
+        que.add(node);
+        int i = 0;
+
+        while (!que.isEmpty()) {
+            qSize = que.size();
+            for (i = 0; i < qSize; ++i) {
+                node = que.element();
+                que.remove();
+                // or just one line
+                // node = que.remove();
+
+                if (node.left != null) {
+                    que.add(node.left);
+                }
+                if (node.right != null) {
+                    que.add(node.right);
+                }
+            }
+            ++depth;
+        }
+        return depth;
+    }
+}
 ```
 
 ### Code - _Recursive_

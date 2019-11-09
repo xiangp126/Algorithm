@@ -33,7 +33,7 @@ _reverse it yields_
 
 `left -> right -> root`
 
-### Code - _using Stack Solution Solution One_
+### Code - _using Stack Solution Solution One with C++_
 C++
 
 ```c++
@@ -76,7 +76,7 @@ public:
 };
 ```
 
-### Code - _using Stack Solution Two_
+### Code - _using Stack Solution Two with C++_
 
 _in contrast to [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/), using `stack` instead of `Queue`_
 
@@ -119,6 +119,84 @@ public:
         return ret;
     }
 };
+```
+
+### Code - _using Stack Solution Solution One with Java_
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> ret = new ArrayList<>();
+        if (root == null) {
+            return ret;
+        }
+        Stack<TreeNode> stk = new Stack<>();
+        TreeNode node = root;
+        while ((node != null) || !stk.isEmpty()) {
+            if (node != null) {
+                ret.add(node.val);
+
+                stk.push(node);
+                node = node.right;
+            } else {
+                node = stk.pop();
+                node = node.left;
+            }
+        }
+        Collections.reverse(ret);
+        return ret;
+    }
+}
+```
+
+### Code - _using Stack Solution Two with Java_
+
+_in contrast to [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/), using `stack` instead of `Queue`_
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> ret = new ArrayList<>();
+        if (root == null) {
+            return ret;
+        }
+        Stack<TreeNode> stk = new Stack<>();
+        TreeNode node = root;
+        stk.push(node);
+        
+        while (!stk.isEmpty()) {
+            node = stk.pop();
+            ret.add(node.val);
+            
+            if (node.left != null) {
+                stk.push(node.left);
+            }
+            if (node.right != null) {
+                stk.push(node.right);
+            }
+        }
+        
+        Collections.reverse(ret);
+        return ret;
+    }
+}
 ```
 
 ### Code - _Recursive the Simplest_

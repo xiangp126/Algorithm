@@ -67,3 +67,13 @@ select (
         limit 1 offset 1
 ) as SecondHighestSalary;
 ```
+
+or
+
+```sql
+# Write your MySQL query statement below
+select ifnull(salary, 0) as SecondHighestSalary
+from employee
+order by salary desc
+limit 1 offset 1
+```

@@ -14,7 +14,7 @@ Input: [1,null,2,3]
 Output: [1,2,3]
 ```
 
-### Code - _using Stack Solution One_
+### Code - _using Stack Solution One with C++_
 
 it's only one-line change from `inorderTraversal`, very easy
 
@@ -63,7 +63,7 @@ public:
 };
 ```
 
-### Code - _using Stack Solution Two_
+### Code - _using Stack Solution Two with C++_
 
 _in contrast to [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/), using `stack` instead of `Queue`_
 
@@ -105,6 +105,81 @@ public:
         return ret;
     }
 };
+```
+
+### Code - _using Stack Solution One with Java_
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> ret = new ArrayList<>();
+        if (root == null) {
+            return ret;
+        }
+        Stack<TreeNode> stk = new Stack<>();
+        TreeNode node = root;
+        while ((node != null) || !stk.isEmpty()) {
+            if (node != null) {
+                ret.add(node.val);
+                stk.push(node);
+                node = node.left;
+            } else {
+                node = stk.pop();
+                node = node.right;
+            }
+        }
+        return ret;
+    }
+}
+```
+
+### Code - _using Stack Solution Two with Java_
+
+_in contrast to [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/), using `stack` instead of `Queue`_
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> ret = new ArrayList<>();
+        if (root == null) {
+            return ret;
+        }
+        Stack<TreeNode> stk = new Stack<>();
+        TreeNode node = root;
+        stk.push(node);
+        
+        while (!stk.isEmpty()) {
+            node = stk.pop();
+            ret.add(node.val);
+            
+            if (node.right != null) {
+                stk.push(node.right);
+            }
+            if (node.left != null) {
+                stk.push(node.left);
+            }
+        }
+        return ret;
+    }
+}
 ```
 
 ### Code - _Recursive the Simplest_
