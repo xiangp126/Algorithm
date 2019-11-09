@@ -26,12 +26,12 @@ Given binary tree [1, 2]
 return its minimum depth = 2
 ```
 
-### Code - _Queue_
+### Code - _using Queue with C++_
 
 - similar thought as `Binary Tree Level Order Traversal`
 - one line change with `Maximum Depth of Binary Tree`
 
-```c
+```c++
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -55,10 +55,12 @@ public:
             for (int i = 0; i < size; ++i) {
                 TreeNode *ptr = que.front();
                 que.pop();
-                // found one leaf and return immediately
+
+                // find one leaf and return immediately
                 if (ptr->left == NULL && ptr->right == NULL) {
                     return loop + 1;
                 }
+
                 if (ptr->left) {
                     que.push(ptr->left);
                 }
@@ -73,7 +75,60 @@ public:
 };
 ```
 
-### Code - _Recursive_
+### Code - _using Queue with Java_
+
+- similar thought as `Binary Tree Level Order Traversal`
+- one line change with `Maximum Depth of Binary Tree`
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        Queue<TreeNode> que = new LinkedList<>();
+        TreeNode node = root;
+        que.add(node);
+
+        int depth = 0;
+        int qSize = 0;
+        int i = 0;
+
+        while (!que.isEmpty()) {
+            qSize = que.size();
+
+            for (i = 0; i < qSize; ++i) {
+                node = que.remove();
+
+                // find one leaf
+                if ((node.left == null) && (node.right == null)) {
+                    return depth + 1;
+                }
+
+                if (node.left != null) {
+                    que.add(node.left);
+                }
+                if (node.right != null) {
+                    que.add(node.right);
+                }
+            }
+            ++depth;
+        }
+        return depth;
+    }
+}
+```
+
+### Code - _Recursive with C++_
 
 3 Cases:
 
@@ -81,7 +136,7 @@ public:
 - only has `right` child, then calc the **left** depth
 - both has `left` and `right` child, then calc the **minimum** depth
 
-```c
+```c++
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -97,18 +152,54 @@ public:
         if (root == NULL) {
             return 0;
         }
+
+        int leftDepth  = minDepth(root->left);
+        int rightDepth = minDepth(root->right);
+
         if (root->left == NULL) {
-            return minDepth(root->right) + 1;
+            return rightDepth + 1;
         } else {
             if (root->right == NULL) {
-                return minDepth(root->left) + 1;
+                return leftDepth + 1;
             } else {
                 // has both left & right child
-                int leftDepth  = minDepth(root->left);
-                int rightDepth = minDepth(root->right);
                 return min(leftDepth, rightDepth) + 1;
             }
         }
     }
 };
+```
+
+### Code - _Recursive with Java_
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        int leftHeight = minDepth(root.left);
+        int rightHeight = minDepth(root.right);
+
+        if (root.left == null) {
+            return leftHeight + 1;
+        } else {
+            if (root.right == null) {
+                return leftHeight + 1;
+            } else {
+                return Math.min(leftHeight, rightHeight) + 1;
+            }
+        }
+    }
+}
 ```

@@ -14,7 +14,7 @@ Return its postorder traversal as:
 [5,6,3,2,4,1]
 ```
 
-### Code - _Stack_
+### Code - _using Stack with C++_
 
 _refer to `N-ary Tree Preorder Traversal`_
 
@@ -59,6 +59,48 @@ public:
         return ret;
     }
 };
+```
+
+### Code - _using Stack with Java_
+
+```java
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> children;
+
+    public Node() {}
+
+    public Node(int _val,List<Node> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+class Solution {
+    public List<Integer> postorder(Node root) {
+        List<Integer> ret = new ArrayList<>();
+        if (root == null) {
+            return ret;
+        }
+        Stack<Node> stk = new Stack<>();
+        Node node = root;
+        stk.push(node);
+
+        while (!stk.isEmpty()) {
+            node = stk.pop();
+            ret.add(node.val);
+            for (Node child : node.children) {
+                if (child != null) {
+                    stk.push(child);
+                }
+            }
+        }
+        Collections.reverse(ret);
+        return ret;
+    }
+}
 ```
 
 ### Code - _Recursive_
