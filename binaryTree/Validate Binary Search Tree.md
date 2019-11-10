@@ -29,9 +29,9 @@ Explanation: The input is: [5,1,4,null,null,3,6]. The root node's value
              is 5 but its right child's value is 4.
 ```
 
-### Code
+### Code - _with C++_
 
-```c
+```c++
 /**
  * Definition for a binary tree node.
  * struct TreeNode {
@@ -66,6 +66,34 @@ public:
                checkBST(root->right, root->val, max);
     }
 };
+```
+
+### Code - _with Java_
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return myValid(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+
+    public boolean myValid(TreeNode root, long min, long max) {
+        if (root == null) {
+            return true;
+        }
+        return root.val > min && root.val < max
+                && myValid(root.left, min, root.val)
+                && myValid(root.right, root.val, max);
+    }
+}
 ```
 
 ### Debug
