@@ -2,7 +2,7 @@
 ### Illustrate
 <https://leetcode.com/problems/find-all-duplicates-in-an-array>
 
-Given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
+Given an array of integers, **1 ≤ a[i] ≤ n (n = size of array)**, some elements appear twice and others appear once.
 
 Find all the elements that appear **twice** in this array.
 
@@ -15,13 +15,11 @@ Could you do it without extra space and in O(n) runtime?
 [2,3]
 ```
 
-### Concept
-_we get the upper limit of the array_
+_Hint: we have the upper limit of the array_
 
-### Code - Basic
-_bit map_
+### Code - _Basic using Bit Map with C++_
 
-```c
+```c++
 class Solution {
 public:
     vector<int> findDuplicates(vector<int>& nums) {
@@ -40,12 +38,12 @@ public:
 };
 ```
 
-### Code - Update
+### Code - _In-Place Sulotion with C++_
 _in place, without extra space and in O(n) runtime_
 
 **_preferred_**
 
-```c
+```c++
 class Solution {
 public:
     vector<int> findDuplicates(vector<int>& nums) {
@@ -66,7 +64,7 @@ public:
 
 _or_
 
-```c
+```c++
 class Solution {
 public:
     vector<int> findDuplicates(vector<int>& nums) {
@@ -85,4 +83,24 @@ public:
         return ret;
     }
 };
+```
+
+### Code - _In-Place Sulotion with Java_
+
+```java
+class Solution {
+    public List<Integer> findDuplicates(int[] nums) {
+        List<Integer> ret = new ArrayList<>();
+        int realVal = 0;
+        for (int i = 0; i < nums.length; ++i) {
+            realVal = Math.abs(nums[i]);
+            if (nums[realVal - 1] < 0) {
+                ret.add(realVal);
+            } else {
+                nums[realVal - 1] = -nums[realVal - 1];
+            }
+        }
+        return ret;
+    }
+}
 ```
