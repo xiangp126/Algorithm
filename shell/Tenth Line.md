@@ -4,7 +4,7 @@
 
 Given a text file file.txt, print just the 10th line of the file.
 
-### Input- _file.txt_
+### Input - `file.txt`
 
 ```
 Line 1
@@ -24,9 +24,14 @@ Line 10
 Line 10
 ```
 
-### sed
-
-### Code
+### Code - _using sed_
 ```bash
 sed -n '10p' file.txt
+```
+
+### Code - _using awk_
+```bash
+cat file.txt | awk '{if (NR == 10) {print $0}}'
+# or shorter
+cat file.txt | awk 'NR == 10
 ```

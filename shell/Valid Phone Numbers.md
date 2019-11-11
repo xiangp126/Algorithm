@@ -1,6 +1,6 @@
-## Tenth Line
+## Valid Phone Numbers
 ### Illustrate
-<https://leetcode.com/problems/tenth-line>
+<https://leetcode.com/problems/valid-phone-numbers/>
 
 Given a text file file.txt that contains list of phone numbers (one per line), write a one liner bash script to print all valid phone numbers.
 
@@ -8,8 +8,7 @@ You may assume that a valid phone number must appear in one of the following two
 
 You may also assume each line in the text file must not contain leading or trailing white spaces.
 
-### Input- _phone.txt_
-
+### Input - `phone.txt`
 ```
 987-123-4567
 123 456 7890
