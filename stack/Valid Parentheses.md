@@ -42,19 +42,51 @@ Notice that unlike member `find_first_of`, whenever more than one character is b
 str.find("a") != string.npos
 ```
 
-### Code
-```c
+### Code - Solution 1
+- push the corresponding close bracket into the stack
+
+```cpp
 class Solution {
 public:
     bool isValid(string s) {
-        string leftPair("([{");
-        string rightPair(")]}");
+        string openBrackets = "([{";
+        string closeBrackets = ")]}";
+
+        stack<char> stk;
+
+        for(auto ch : s) {
+            // 'ch' is an open bracket, then push the corresponding
+            // close bracket into the stack
+            if (openBrackets.find(ch) != string::npos) {
+                stk.push(closeBrackets[openBrackets.find(ch)]);
+            } else {
+                // 'ch' is a close bracket, then compare it with the top element
+                // in the stack
+                if (!stk.empty() && ch == stk.top()) {
+                    stk.pop();
+                } else {
+                    return false;
+                }
+            }
+        }
+        return stk.empty();
+    }
+};
+```
+
+### Code - Solution 2
+```cpp
+class Solution {
+public:
+    bool isValid(string s) {
+        string openBrackets("([{");
+        string closeBrackets(")]}");
         stack<char> stk;
         for (auto ch : s) {
-            if (stk.empty() || leftPair.find(ch) != string::npos) {
+            if (stk.empty() || openBrackets.find(ch) != string::npos) {
                 stk.push(ch);
             } else {
-                if (stk.top() != leftPair[rightPair.find(ch)]) {
+                if (stk.top() != openBrackets[closeBrackets.find(ch)]) {
                     return false;
                 }
                 stk.pop();

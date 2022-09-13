@@ -18,18 +18,19 @@ Output:
 ```
 
 ### Code
-```c
+```c++
 class Solution {
 public:
     vector<int> findDisappearedNumbers(vector<int>& nums) {
-        vector<int> ret;
-        const int N = nums.size();
-        bool bitMap[N + 1] = {false};
-        for (auto num : nums) {
-            bitMap[num] = true;
+        int N = nums.size() + 1;
+        vector<bool> bitMap(N, true);
+        for (auto val : nums) {
+            bitMap[val] = false;
         }
-        for (int i = 1; i <= N; ++i) {
-            if (!bitMap[i]) {
+
+        vector<int> ret;
+        for (int i = 1; i < N; ++i) {
+            if (bitMap[i]) {
                 ret.push_back(i);
             }
         }
@@ -37,3 +38,5 @@ public:
     }
 };
 ```
+
+or use `Array` instead of `Vector` for `bitMap`

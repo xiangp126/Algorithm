@@ -2,10 +2,6 @@
 ### Illustrate
 <https://leetcode.com/problems/remove-duplicates-from-sorted-array>
 
-### Code - _with C++_
+### Code
 ```c++
-```
-
-### Code - _with Java_
-```java
 ```
