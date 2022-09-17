@@ -30,6 +30,7 @@ public:
             nums1[ic--] = (nums1[ia] >= nums2[ib]) ? nums1[ia--] : nums2[ib--];
         }
         // copy remaining elements from nums2 to nums1
+        // there's no need to remove elements if ia >= 0
         while (ib >= 0) {
             nums1[ic--] = nums2[ib--];
         }
