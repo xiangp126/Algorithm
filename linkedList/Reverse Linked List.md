@@ -10,8 +10,7 @@ Input: 1->2->3->4->5->NULL
 Output: 5->4->3->2->1->NULL
 ```
 
-### Code
-C++
+### Code - C++ #1 Recommended
 
 ```c++
 /**
@@ -25,6 +24,10 @@ C++
 class Solution {
 public:
     ListNode* reverseList(ListNode* head) {
+        /*
+         * Initial a new NULL list, and insert every node of List head
+         * into it using 'head insert' method.
+         * /
         ListNode dummy(-1);
         ListNode *ptr = head, *pTmp = NULL;
         while (ptr != NULL) {
@@ -38,7 +41,34 @@ public:
 };
 ```
 
-Java
+### Code - C++ #2
+```c++
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (!head) return NULL;
+
+        ListNode dummy;
+        ListNode *ptr = &dummy;
+        ptr->next = head;
+
+        ListNode *pTmp = NULL;
+        ListNode *pre = head, *curr = head->next;
+        while (curr) {
+            pTmp = ptr->next;
+
+            ptr->next = curr;
+            pre->next = curr->next;
+            curr->next = pTmp;
+
+            curr = pre->next;
+        }
+        return ptr->next;
+    }
+};
+```
+
+### Code - Java
 
 ```java
 /**
