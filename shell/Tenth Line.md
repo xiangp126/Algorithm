@@ -33,5 +33,7 @@ sed -n '10p' file.txt
 ```bash
 cat file.txt | awk '{if (NR == 10) {print $0}}'
 # or shorter
-cat file.txt | awk 'NR == 10
+cat file.txt | awk 'NR == 10'
+# or even shorter
+awk 'NR == 10' file.txt
 ```
