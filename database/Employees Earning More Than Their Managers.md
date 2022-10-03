@@ -61,27 +61,24 @@ id	|name	|salary |managerid|	id	|name|salary| managerid
 1|	Joe|	70000|	3|	3|	Sam|	60000|	0
 2|	Henry|	80000|	4|	4|	Max|	90000|	0
 
-### Test - left Join
+### Test - inner Join
 ```sql
 select *
 from Employee as a
-  left join Employee as b
-  on a.ManagerId = b.Id;
+left join Employee as b
+on a.ManagerId = b.Id;
 ```
 
 id	|name	|salary |managerid|	id	|name|salary| managerid
 ---|---|---|---|---|---|---|---
 1|	Joe	|70000	|3	|3	|Sam	|60000	|0
 2|	Henry|	80000	|4	|4	|Max	|90000	|0
-3|	Sam|	60000	|0	|(null)	|(null)	|(null)	|(null)
-4|	Max|	90000	|0	|(null)	|(null)	|(null)	|(null)
 
 ### SQL
 ```sql
 # Write your MySQL query statement below
-select a.Name as Employee
-from Employee as a
-  inner join Employee as b
-  on a.ManagerId = b.Id
-where a.salary > b.salary;
+select E1.Name as Employee
+from Employee as E1 inner join Employee as E2
+on E1.ManagerId = E2.Id
+where E1.Salary > E2.Salary;
 ```
