@@ -52,17 +52,17 @@ SELECT DATEDIFF("2017-06-25", "2017-06-15");
 ```sql
 datediff(wa.RecordDate, wb.RecordDate) = 1
 ```
-=>&nbsp;2015-01-03(wa) = 2015-01-02(wb) + 1
+=>&nbsp;2015-01-03(wa) - 2015-01-02(wb) = 1
 
-```saq
+```sql
 select *
 from Weather as wa
-    left join Weather as wb
-    on datediff(wa.RecordDate, wb.RecordDate) = 1
+left join Weather as wb
+on datediff(wa.RecordDate, wb.RecordDate) = 1
 order by wa.RecordDate;
 ```
 
-Id	|RecordDate|	Temperature|	Id|	RecordDate|	Temperature
+Id	|RecordDate|	Temperature|	Id|	RecordDate| Temperature
 ---|---|---|:---:|:---:|:---:
 1|	2015-01-01|	10|	(null)	|(null)|	(null)
 2|	2015-01-02|	25|	1|2015-01-01|	10
@@ -74,7 +74,7 @@ Id	|RecordDate|	Temperature|	Id|	RecordDate|	Temperature
 # Write your MySQL query statement below
 select wa.Id
 from Weather as wa
-    left join Weather as wb
-    on datediff(wa.RecordDate, wb.RecordDate) = 1
+left join Weather as wb
+on datediff(wa.RecordDate, wb.RecordDate) = 1
 where wa.Temperature > wb.Temperature;
 ```
