@@ -32,8 +32,28 @@ For example, given the above Employee table, the query should return 200 as the 
 +---------------------+
 ```
 
+### limit [Num] offset [Num]
+To limit the number of rows returned by a select statement, you use the LIMIT and OFFSET clauses.
+
+- The `LIMIT` row_count determines the number of rows (row_count) returned by the query.
+- The `OFFSET` offset clause skips the offset rows before beginning to return the rows.
+
+### MySQL IFNULL() Function
+
+- Syntax
+
+|IFNULL(expression, alt_value)|
+|---|
+
+- Parameter Values
+
+|Parameter|Description|
+|---|---|
+|expression|	Required. The expression to test whether is NULL
+|alt_value|	Required. The value to return if expression is NULL
+
 ### SQL - 5 / 7 test cases passed
-The OFFSET clause skips the offset rows before beginning to return the rows.
+The `OFFSET` clause skips the offset rows before beginning to return the rows.
 
 ```sql
 select salary as SecondHighestSalary
@@ -66,14 +86,4 @@ select (
         order by salary desc
         limit 1 offset 1
 ) as SecondHighestSalary;
-```
-
-or
-
-```sql
-# Write your MySQL query statement below
-select ifnull(salary, 0) as SecondHighestSalary
-from employee
-order by salary desc
-limit 1 offset 1
 ```
