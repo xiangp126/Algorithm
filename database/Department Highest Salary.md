@@ -101,9 +101,8 @@ Combine these two queries we get
 
 ```sql
 select dep.Name as Department,
-  emp.Name as Employee, Salary
-from Employee as emp,
-  Department as dep
+    emp.Name as Employee, Salary
+from Employee as emp, Department as dep
 where emp.DepartmentId = dep.Id
 and (emp.DepartmentId, Salary)
 in
@@ -127,18 +126,16 @@ output is
 ### SQL - AC
 ```sql
 select dep.Name as Department,
-  emp.Name as Employee, Salary
-from Employee as emp,
-  Department as dep
+    emp.Name as Employee, Salary
+from Employee as emp, Department as dep
 where emp.DepartmentId = dep.Id
-and (emp.DepartmentId, Salary)
-in
-(
-  select DepartmentId, max(Salary)
-  from Employee
-  group by DepartmentId
-)
-order by Department
+    and (emp.DepartmentId, Salary)
+    in (
+        select DepartmentId, max(Salary)
+        from Employee
+        group by DepartmentId
+    )
+order by Department;
 ```
 
 output is
@@ -155,16 +152,15 @@ or use `inner join` explicitly
 
 ```sql
 select dep.Name as Department,
-  emp.Name as Employee, Salary
+    emp.Name as Employee, Salary
 from Employee as emp
-  inner join Department as dep
+inner join Department as dep
 on emp.DepartmentId = dep.Id
 where (emp.DepartmentId, Salary)
-in
-(
-  select DepartmentId, max(Salary)
-  from Employee
-  group by DepartmentId
+in (
+    select DepartmentId, max(Salary)
+    from Employee
+    group by DepartmentId
 )
-order by Department
+order by Department;
 ```
