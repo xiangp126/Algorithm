@@ -77,4 +77,26 @@ yields:
  age 21 30
 ```
 
-Then update the code to the desired one.
+Then update the code to the final result:
+
+```bash
+awk '
+BEGIN {
+
+}
+{
+    for (i = 1; i <= NF; ++i) {
+        if (NR == 1) {
+            result[i] = $i
+        } else {
+            result[i] = result[i]" "$i
+        }
+    }
+}
+END {
+    for (i = 1; result[i] != ""; ++i) {
+        print result[i]
+    }
+}
+' file.txt
+```
