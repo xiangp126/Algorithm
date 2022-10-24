@@ -1,3 +1,4 @@
+.vscode/
 .ycm_extra_conf.py
 demo
 bin/
@@ -6,3 +7,4 @@ lib/
 core*
 main.cpp
 main
+shell/test
