@@ -63,8 +63,8 @@ public:
 };
 ```
 
-### Take Care
-when Input was `[4, 2]`, divide two array in `sortList` will loop
+### !!! Take Care !!! Notice !!!
+When the Input array is something like `[4, 2]`, dividing two arrays in the `sortList` function will end up with a loop. That is, one sub-array doesn't exist at all, and the length is `0`.
 
 ```c
 ListNode *fastPtr = head;
