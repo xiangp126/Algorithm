@@ -1,6 +1,5 @@
 ## Illustrate
 - This projects aims to implement and utilize basic _**Data Structure and Algorithm**_
-- The `economic basis` determines `superstructure`
 
 ## Gallery
 - `sort` implemented mostly used sort algorighms
