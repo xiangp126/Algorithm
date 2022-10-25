@@ -32,41 +32,38 @@ return its depth = 3.
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
     int maxDepth(TreeNode* root) {
-        if (!root) {
-            return 0;
-        }
+        if (root == NULL) return 0;
 
         queue<TreeNode *> que;
-        TreeNode *node = root;
-        que.push(node);
-
-        int maxDepth = 0;
-        int qSize = 0;
-        int i = 0;
+        TreeNode *pNode = root;
+        int depth = 0;
+        que.push(root);
 
         while (!que.empty()) {
-            qSize = que.size();
-
-            for (i = 0; i < qSize; ++i) {
-                node = que.front();
+            int qSize = que.size();
+            // Dump all the nodes in the same level
+            for (int i = 0; i < qSize; ++i) {
+                pNode = que.front();
                 que.pop();
 
-                if (node->left) {
-                    que.push(node->left);
+                if (pNode->left) {
+                    que.push(pNode->left);
                 }
-                if (node->right) {
-                    que.push(node->right);
+                if (pNode->right) {
+                    que.push(pNode->right);
                 }
             }
-            ++maxDepth;
+            ++depth;
         }
-        return maxDepth;
+        return depth;
     }
 };
 ```

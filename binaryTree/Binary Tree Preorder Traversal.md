@@ -63,7 +63,7 @@ public:
 };
 ```
 
-### Code - _using Stack Solution Two with C++_
+### Code - _using Stack Solution Two with C++ -- easiest thinking_
 
 _in contrast to [Binary Tree Level Order Traversal](https://leetcode.com/problems/binary-tree-level-order-traversal/), using `stack` instead of `Queue`_
 
@@ -165,11 +165,11 @@ class Solution {
         Stack<TreeNode> stk = new Stack<>();
         TreeNode node = root;
         stk.push(node);
-        
+
         while (!stk.isEmpty()) {
             node = stk.pop();
             ret.add(node.val);
-            
+
             if (node.right != null) {
                 stk.push(node.right);
             }

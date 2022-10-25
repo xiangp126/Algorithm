@@ -29,7 +29,7 @@ return its minimum depth = 2
 ### Code - _using Queue with C++_
 
 - similar thought as `Binary Tree Level Order Traversal`
-- one line change with `Maximum Depth of Binary Tree`
+- one line change from `Maximum Depth of Binary Tree`
 
 ```c++
 /**
@@ -38,39 +38,45 @@ return its minimum depth = 2
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
     int minDepth(TreeNode* root) {
-        int loop = 0;
-        if (root == NULL) {
-            return 0;
-        }
+        if (!root) return 0;
+
         queue<TreeNode *> que;
+        TreeNode *pNode = NULL;
+        int depth = 0;
         que.push(root);
+
         while (!que.empty()) {
-            int size = que.size();
-            for (int i = 0; i < size; ++i) {
-                TreeNode *ptr = que.front();
+            int qSize = que.size();
+            // Dump all the nodes in the same level
+            for (int i = 0; i < qSize; ++i) {
+                pNode = que.front();
                 que.pop();
 
-                // find one leaf and return immediately
-                if (ptr->left == NULL && ptr->right == NULL) {
-                    return loop + 1;
+                /* Find one leaf, and we reach the point of min depth.
+                 * Return immediately.
+                 */
+                if (pNode->left == NULL && pNode->right == NULL) {
+                    return depth + 1;
                 }
 
-                if (ptr->left) {
-                    que.push(ptr->left);
+                if (pNode->left) {
+                    que.push(pNode->left);
                 }
-                if (ptr->right) {
-                    que.push(ptr->right);
+                if (pNode->right) {
+                    que.push(pNode->right);
                 }
             }
-            ++loop;
+            ++depth;
         }
-        return loop;
+        return depth;
     }
 };
 ```
