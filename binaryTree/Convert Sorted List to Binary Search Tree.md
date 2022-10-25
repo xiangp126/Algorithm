@@ -78,7 +78,7 @@ you can also divide the `list` by adding a terminating `NULL` to the left part,
 in which case the `tail` of `buildTree` will always be `NULL`.
 
 ```c++
-TreeNode *pre = head;
+ListNode *pre = head;
 // TODO
 while (fast != tail && fast->next != tail) {
     // add this line
@@ -88,6 +88,61 @@ while (fast != tail && fast->next != tail) {
 }
 
 pre->next = NULL
+```
+
+and here is the complete code of `Tips` version:
+
+```c++
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        if (head == NULL) return NULL;
+        ListNode *fastPtr = head;
+        ListNode *slowPtr = head;
+        ListNode *preSlowPtr = head;
+
+        while (fastPtr != NULL && fastPtr->next != NULL) {
+            preSlowPtr = slowPtr;
+            slowPtr = slowPtr->next;
+            fastPtr = fastPtr->next->next;
+        }
+
+        TreeNode *node = new TreeNode(slowPtr->val);
+        // one exception. There's only one node in the linked list.
+        if (preSlowPtr == slowPtr) {
+            node->left = NULL;
+            node->right = NULL;
+            return node;
+        }
+
+        preSlowPtr->next = NULL;
+        node->left = sortedListToBST(head);
+        node->right = sortedListToBST(slowPtr->next);
+
+        return node;
+    }
+};
 ```
 
 ### Code - _Convert to Array_
