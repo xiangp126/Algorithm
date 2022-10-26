@@ -1,2 +1,2 @@
 ## Consistent Hash
-<https://scp.net.cn/?p=887>
+<https://zhuanlan.zhihu.com/p/78285304>
