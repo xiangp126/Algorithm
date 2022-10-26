@@ -66,9 +66,8 @@ public:
         if (leftDepth < 0 || rightDepth < 0
                           || abs(leftDepth - rightDepth) > 1) {
             return -1;
-        } else {
-            return max(leftDepth, rightDepth) + 1;
         }
+        return max(leftDepth, rightDepth) + 1;
     }
 };
 ```

@@ -70,7 +70,7 @@ public:
         }
         // tsum = a ^ b, of which a, b is the wanted number
 
-        // Get the least significant bit that was set!
+        // n & -n returns the rightmost 1 bit in n.
         // assume k was 0x0000 0010
         int k = tsum & -tsum;
         for (int num : nums) {
