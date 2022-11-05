@@ -2,7 +2,7 @@
 ### Illustrate
 <https://leetcode.com/problems/intersection-of-two-linked-lists/>
 
-### Code
+### Code - Original
 ```c++
 /**
  * Definition for singly-linked list.
@@ -60,6 +60,60 @@ public:
                 headA = headA->next;
                 headB = headB->next;
             }
+        }
+
+        return NULL;
+    }
+};
+```
+
+### Code - Optimized
+```c++
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode *p1 = headA;
+        ListNode *p2 = headB;
+
+        int lengthA = 0, lengthB = 0;
+        while (p1 != NULL) {
+            ++lengthA;
+            p1 = p1->next;
+        }
+        while (p2 != NULL) {
+            ++lengthB;
+            p2 = p2->next;
+        }
+
+        p1 = headA;
+        p2 = headB;
+        int step = abs(lengthA - lengthB);
+        if (lengthA >= lengthB) {
+            while (step) {
+                p1 = p1->next;
+                --step;
+            }
+        } else {
+            while (step) {
+                p2 = p2->next;
+                --step;
+            }
+        }
+        // either situation will use the same loop here
+        while (p1 != NULL && p2 != NULL) {
+            if (p1 == p2) {
+                return p1;
+            }
+            p1 = p1->next;
+            p2 = p2->next;
         }
 
         return NULL;
