@@ -41,8 +41,10 @@ public:
             // confirm that there's a cycle
             if (fastPtr == slowPtr) {
                 ListNode *slow2Ptr = head;
-                // determine where the cycle begins
+                // find where the cycle begins
                 while (slowPtr != NULL) {
+                    // Bug point: Input [1, 2], and the cycle begins at node 0
+                    // Should judge first, and then travel forward
                     if (slowPtr == slow2Ptr) {
                         return slowPtr;
                     }
