@@ -2,31 +2,31 @@
 ### Illustrate
 <https://leetcode.com/problems/contains-duplicate/>
 
-### Code - Optimized
+### Code - unordered_set
 ```c++
 class Solution {
 public:
     bool containsDuplicate(vector<int>& nums) {
-        unordered_set<int> ret;
+        unordered_set<int> uSet;
         for (auto num: nums) {
-            if (ret.find(num) != ret.end()) {
+            if (uSet.find(num) != uSet.end()) {
                 return true;
-            } else {
-                ret.insert(num);
             }
+            uSet.insert(num);
         }
         return false;
     }
 };
 ```
 
-### Code
-```c++
+or simply
+
+```cpp
 class Solution {
 public:
     bool containsDuplicate(vector<int>& nums) {
-        unordered_set<int> ret(nums.begin(), nums.end());
-        return ret.size() < nums.size();
+        unordered_set<int> uSet(nums.begin(), nums.end());
+        return nums.size() > uSet.size();
     }
 };
 ```
