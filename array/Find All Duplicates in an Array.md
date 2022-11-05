@@ -25,7 +25,11 @@ public:
     vector<int> findDuplicates(vector<int>& nums) {
         vector<int> ret;
         const int N = nums.size();
-        bool bitMap[N + 1] = {false};
+        // C compile error: "Variable-sized object may not be initialized"
+        bool bitMap[N + 1];
+        memset(bitMap, false, (N + 1) * sizeof(bool));
+        // or you can use
+        // vector<bool> bitMap(N + 1, false);
         for (auto num : nums) {
             if (bitMap[num]) {
                 ret.push_back(num);
