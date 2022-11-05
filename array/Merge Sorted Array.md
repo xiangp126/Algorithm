@@ -19,7 +19,7 @@ Output: [1,2,2,3,5,6]
 ```
 
 ### Code
-```c
+```c++
 class Solution {
 public:
     void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
@@ -29,8 +29,16 @@ public:
         while (ia >= 0 && ib >= 0) {
             nums1[ic--] = (nums1[ia] >= nums2[ib]) ? nums1[ia--] : nums2[ib--];
         }
+
         // copy remaining elements from nums2 to nums1
-        // there's no need to remove elements if ia >= 0
+        // there's no need to move elements if ia >= 0,
+        // since nums1 is already sorted.
+        #if 0
+            while (ia >= 0) {
+            nums1[ic--] = nums1[ia--];
+        }
+        #endif
+
         while (ib >= 0) {
             nums1[ic--] = nums2[ib--];
         }

@@ -30,20 +30,16 @@ It doesn't matter what values are set beyond the returned length.
 class Solution {
 public:
     int removeDuplicates(vector<int>& nums) {
-        const int N = nums.size();
-        if (N == 0) {
+        if (!nums.size()) {
             return 0;
         }
-
-        int i = 0;
         int k = 0;
-        while (i < N) {
-            if (nums[i] != nums[k]) {
-                nums[++k] = nums[i];
+        for (int i = 1; i < nums.size(); ++i) {
+            if (nums[i] == nums[k]) {
+                continue;
             }
-            ++i;
+            nums[++k] = nums[i];
         }
-        // cout << "New Length = " << k + 1 << endl;
         return k + 1;
     }
 };
