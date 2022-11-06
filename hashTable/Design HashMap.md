@@ -32,115 +32,114 @@ The number of operations will be in the range of [1, 10000].
 Please do not use the built-in HashMap library.
 ```
 
-### Code - Array
-_need not implement hash function_
+### Using Separate Chaining Technique to simulate a real Hashmap
+[Why is it best to use a prime number as a mod in a hashing function?](https://cs.stackexchange.com/questions/11029/why-is-it-best-to-use-a-prime-number-as-a-mod-in-a-hashing-function)<br>
+[good hash table primes](https://planetmath.org/goodhashtableprimes)<br>
+<https://github.com/Mohammed-Shoaib/Coding-Problems/blob/master/LeetCode/Solutions/LC0706.cpp>
 
-```c
+#### [find_if](https://en.cppreference.com/w/cpp/algorithm/find)
+The third version
+
+```cpp
+template<class InputIt, class UnaryPredicate>
+constexpr InputIt find_if(InputIt first, InputIt last, UnaryPredicate p)
+{
+    for (; first != last; ++first) {
+        if (p(*first)) {
+            return first;
+        }
+    }
+    return last;
+}
+```
+
+#### [Lambda Expression](https://en.cppreference.com/w/cpp/language/lambda)
+#### [C++ 中的 Lambda 表达式](https://learn.microsoft.com/zh-cn/cpp/cpp/lambda-expressions-in-cpp?view=msvc-170)
+Constructs a closure: an unnamed function object capable of capturing variables in scope.
+
+```cpp
+[&key](pair<int, int>& p) {
+    return p.first == key;
+});
+```
+
+This Lambda Expression will act as the `UnaryPredicate` passed into `find_if`.
+
+### Code
+
+```cpp
 class MyHashMap {
 public:
-    /** Initialize your data structure here. */
     MyHashMap() {
-        N = 1000001;
-        hashMap = new int[N];
-        // sizeof(hashMap) = 8
-        // cout << "sizeof(hashMap) = " << sizeof(hashMap) << endl;
-        // all initialized to -1
-        memset(hashMap, -1, N * sizeof(int));
+        // Choose a good prime as the bucket's number.
+        buckets = 12289;
+        hashMap = vector<list<pair<int, int>>>(buckets);
     }
 
-    ~MyHashMap() {
-        delete [] hashMap;
-    }
-
-    /** value will always be non-negative. */
     void put(int key, int value) {
-        if (key >= getSize()) {
-            return;
+        int kIndex = hash(key);
+        auto iter = search(key);
+        if (iter != hashMap[kIndex].end()) {
+            // Update the value as the description requires.
+            iter->second = value;
+        } else {
+            hashMap[kIndex].push_back(make_pair(key, value));
         }
-        hashMap[key] = value;
     }
 
-    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
     int get(int key) {
-        if (key >= getSize()) {
+        int kIndex = hash(key);
+        auto iter = search(key);
+        if (iter != hashMap[kIndex].end()) {
+            return iter->second;
+        } else {
             return -1;
         }
-        return hashMap[key];
     }
 
-    /** Removes the mapping of the specified value key if this map contains a mapping for the key */
     void remove(int key) {
-        if (key >= getSize()) {
-            return;
+        int kIndex = hash(key);
+        auto iter = search(key);
+        if (iter != hashMap[kIndex].end()) {
+            hashMap[kIndex].erase(iter);
         }
-        hashMap[key] = -1;
-    }
-
-    int getSize() {
-        return N;
     }
 
 private:
-    // index starts from 0
-    int *hashMap;
-    int N;
+    int buckets;
+    vector<list<pair<int, int>>> hashMap;
+
+    int hash(int key) {
+        return key % buckets;
+    }
+
+    list<pair<int, int>>::iterator search(int key) {
+        int kIndex = hash(key);
+        return find_if(hashMap[kIndex].begin(), hashMap[kIndex].end(), [&key](pair<int, int> &pair) {
+            return pair.first == key;
+        });
+    }
+
 };
 
 /**
  * Your MyHashMap object will be instantiated and called as such:
- * MyHashMap obj = new MyHashMap();
- * obj.put(key,value);
- * int param_2 = obj.get(key);
- * obj.remove(key);
+ * MyHashMap* obj = new MyHashMap();
+ * obj->put(key,value);
+ * int param_2 = obj->get(key);
+ * obj->remove(key);
  */
 ```
 
-### Code - Vector
-_need not implement hash function_
+or you can use an named variable to represent the lambda function to make it more clearly.
 
-```c
-class MyHashMap {
-public:
-    /** Initialize your data structure here. */
-    MyHashMap() {
-
+```cpp
+    list<pair<int, int>>::iterator search(int key) {
+        int kIndex = hash(key);
+        # Take care of the ; at the end of a Lamda Expression.
+        auto jFunc = [&key](pair<int, int> &pair) {
+            return pair.first == key;
+        };
+        return find_if(hashMap[kIndex].begin(), hashMap[kIndex].end(), jFunc);
     }
-
-    /** value will always be non-negative. */
-    void put(int key, int value) {
-        if (key >= hashMap.size()) {
-            for (int i = hashMap.size(); i <= key; ++i) {
-                hashMap.push_back(-1);
-            }
-        }
-        hashMap[key] = value;
-    }
-
-    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
-    int get(int key) {
-        if (key >= hashMap.size()) {
-            return -1;
-        }
-        return hashMap[key];
-    }
-
-    /** Removes the mapping of the specified value key if this map contains a mapping for the key */
-    void remove(int key) {
-        if (key >= hashMap.size()) {
-            return;
-        }
-        hashMap[key] = -1;
-    }
-
-private:
-    vector<int> hashMap;
-};
-
-/**
- * Your MyHashMap object will be instantiated and called as such:
- * MyHashMap obj = new MyHashMap();
- * obj.put(key,value);
- * int param_2 = obj.get(key);
- * obj.remove(key);
- */
 ```

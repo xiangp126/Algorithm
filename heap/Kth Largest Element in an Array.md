@@ -58,7 +58,7 @@ public:
      * @return final position of the pivot element
      */
     int partition(vector<int> &nums, int left, int right) {
-        // choose last element as pivot
+        // choose the last element as the pivot node.
         int pivot = nums[right];
         int i = left;
         int k = i;
@@ -82,15 +82,12 @@ _from Largest to Smallest_
 class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
-        quickSelect(nums, k - 1);
+        // Bug point: pass k -1 as the parameter, and return nums[k - 1].
+        quickSelect(nums, 0, nums.size() - 1, k - 1);
         return nums[k - 1];
     }
 
-    void quickSelect(vector<int> &nums, int k) {
-        return qSelect(nums, 0, nums.size() - 1, k);
-    }
-
-    void qSelect(vector<int> &nums, int left, int right, int k) {
+    void quickSelect(vector<int> &nums, int left, int right, int k) {
         if (left >= right) {
             return;
         }
@@ -99,12 +96,13 @@ public:
             return;
         } else {
             if (pIndex > k) {
-                qSelect(nums, left, pIndex - 1, k);
+                quickSelect(nums, left, pIndex - 1, k);
             } else {
-                qSelect(nums, pIndex + 1, right, k);
+                quickSelect(nums, pIndex + 1, right, k);
             }
         }
     }
+
     /*
      * partition: partition array range [left, right] into three parts
      *      [left, k - 1], k, [k + 1, right]
@@ -114,7 +112,7 @@ public:
      * @return final position of the pivot element
      */
     int partition(vector<int> &nums, int left, int right) {
-        // choose last element as pivot
+        // Choose the last element as the pivot node.
         int pivot = nums[right];
         int i = left;
         int k = i;
