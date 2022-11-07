@@ -54,6 +54,8 @@ public:
         int i = 0;
 
         while (!que.empty()) {
+            // Bug point: You must store the queue size
+            // cos que.size() may vary after each operation.
             qSize = que.size();
             path.clear();
             for (i = 0; i < qSize; ++i) {

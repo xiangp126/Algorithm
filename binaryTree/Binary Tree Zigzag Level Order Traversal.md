@@ -52,6 +52,8 @@ public:
         vector<int> path;
 
         while (!que.empty()) {
+            // Bug point: You must store the queue size
+            // cos que.size() may vary after each operation.
             qSize = que.size();
             path.clear();
 
