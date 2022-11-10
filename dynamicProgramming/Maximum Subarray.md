@@ -11,25 +11,22 @@ Output: 6
 Explanation: [4,-1,2,1] has the largest sum = 6.
 ```
 ### Code
-```c
+```cpp
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
-        const int N = nums.size();
-        if (N <= 0) {
-            return -1;
-        }
-        // handle main body
-        int sub = nums[0];
-        int maxSub = sub;
-        for (int i = 1; i < N; ++i) {
-            if (sub > 0) {
-                sub += nums[i];
+        if (!nums.size()) return 0;
+
+        int sum = nums[0];
+        int maxSub = sum;
+        for (int i = 1; i < nums.size(); ++i) {
+            if (sum >= 0) {
+                sum += nums[i];
             } else {
-                // add from a new start
-                sub = nums[i];
+                // begin a brand new start
+                sum = nums[i];
             }
-            maxSub = max(maxSub, sub);
+            maxSub = max(maxSub, sum);
         }
         return maxSub;
     }
@@ -38,7 +35,7 @@ public:
 
 _or_
 
-```c
+```cpp
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
@@ -46,11 +43,10 @@ public:
         if (N <= 0) {
             return -1;
         }
-        // handle main body
         int sub = nums[0];
         int maxSub = sub;
         for (int i = 1; i < N; ++i) {
-            sub = (sub > 0) ? sub + nums[i] : nums[i];
+            sub = (sub >= 0) ? sub + nums[i] : nums[i];
             maxSub = max(maxSub, sub);
         }
         return maxSub;
