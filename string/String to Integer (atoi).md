@@ -32,22 +32,20 @@ public:
         int i = 0;
         int ret = 0;
         int sign = 1;
-
         const int N = str.size();
+        
         // skip pre whitespaces
         while ((i < N) && (str[i] == ' ')) {
             ++i;
         }
-        // handle maybe sign symbol, default is '+'
-        if (str[i] == '+') {
-            ++i;
-        } else {
+        // check whether there is a symbol sign
+        if ((str[i] == '+') || (str[i] == '-')) {
             if (str[i] == '-') {
                 sign = -1;
-                ++i;
             }
+            ++i;
         }
-        // handle main body
+        // process the main body
         while (i < N) {
             if (str[i] < '0' || str[i] > '9') {
                 break;

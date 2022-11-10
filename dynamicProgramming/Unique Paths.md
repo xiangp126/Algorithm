@@ -3,13 +3,13 @@
 <https://leetcode.com/problems/unique-paths/>
 
 ### Code
-```c
+```cpp
 class Solution {
 public:
     int uniquePaths(int m, int n) {
         // input ensure m && n
         // paths: unique paths reaching (i, j)
-        int paths[m][n] = {0};
+        int paths[m][n];
         memset(paths, 0, sizeof(paths));
         
         // fill in the first column
