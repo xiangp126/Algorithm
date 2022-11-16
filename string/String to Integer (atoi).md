@@ -41,50 +41,54 @@ or
 ret >= INT_MIN / 10 - (x % 10) / 10 = INT_MIN / 10;
 ```
 
-### Code - AC
+### Code - AC (Strong Recommended)
 ```cpp
 class Solution {
 public:
-    int myAtoi(string str) {
-        long ret = 0;
-        bool isPositive = true;
+    int myAtoi(string s) {
         int i = 0;
-        const int N = str.size();
-
-        while (i < N && (str[i] == ' ')) {
+        int sign = 1;
+        int ret = 0;
+        int addOn = 0;
+        while (s[i] == ' ') {
             ++i;
         }
-        if (i < N && (str[i] == '-' || str[i] == '+')) {
-            if (str[i] == '-') {
-                isPositive = false;
+        if (s[i] == '-' || s[i] == '+') {
+            if (s[i] == '-') {
+                sign = -1;
             }
             ++i;
         }
-        while (i < N) {
-            if (str[i] >= '0' && str[i] <= '9') {
-                if (isPositive) {
-                    if ((ret * 10 + str[i] - '0') > INT_MAX) {
-                        return INT_MAX;
-                    } else {
-                        ret = ret * 10 + str[i] - '0';
-                        ++i;
-                    }
+
+        while (s[i] - '0' >= 0 && s[i] - '0' <= 9) {
+            addOn = s[i] - '0';
+            if (sign > 0) {
+                // check for overflow
+                if (ret < INT_MAX / 10 ||
+                    ((ret == INT_MAX / 10) && (addOn <= INT_MAX % 10))) {
+                    ret = ret * 10 + addOn;
                 } else {
-                    if (-1 * (ret * 10 + str[i] - '0') < INT_MIN) {
-                        return INT_MIN;
-                    } else {
-                        ret = ret * 10 + str[i] - '0';
-                        ++i;
-                    }
+                    return INT_MAX;
                 }
             } else {
-                break;
+                // check for underflow
+                if (ret > INT_MIN / 10 ||
+                    ((ret == INT_MIN / 10) && (-1 * addOn > INT_MIN % 10))) {
+                    ret = ret * 10 - addOn;
+                } else {
+                    return INT_MIN;
+                }
             }
+            ++i;
         }
-        return isPositive ? ret : -ret;
+        return ret;
     }
 };
 ```
+
+There's another lazy but easier solution to solve it. That is:
+Initialize ret as **long int**, which can skip all the checkpoints afterward
+about INT\_MAX or INT\_MIN.
 
 ### Code - Failed for updated cases
 ```cpp

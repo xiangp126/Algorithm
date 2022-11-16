@@ -38,23 +38,25 @@ Follow up: Could you solve it without converting the integer to a string?
 class Solution {
 public:
     bool isPalindrome(int x) {
-        if (x < 0) return false;
-        // 12321
+        if (x < 0) {
+            return false;
+        }
         int divisor = 1;
         int y = x;
         while (y / 10) {
-            y /= 10;
             divisor *= 10;
+            y /= 10;
         }
 
-        int left = 0, right = 0;
+        int leftView = 0;
+        int rightView = 0;
         while (x) {
-            left = x / divisor;
-            right = x % 10;
-            if (left != right) {
+            leftView = x / divisor;
+            rightView = x % 10;
+            if (leftView != rightView) {
                 return false;
             }
-            x = x % divisor / 10;
+            x = (x % divisor) / 10;
             divisor /= 100;
         }
         return true;

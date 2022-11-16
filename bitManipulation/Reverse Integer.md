@@ -2,6 +2,10 @@
 ### Illustrate
 <https://leetcode.com/problems/reverse-integer/>
 
+Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-231, 231 - 1], then return 0.
+
+**Assume the environment does not allow you to store 64-bit integers (signed or unsigned).**
+
 ### Debug - Overflow
 ```c
 Line 15: Char 28: runtime error: negation of -2147483648 cannot be represented in type 'int';
@@ -28,6 +32,50 @@ ret >= INT_MIN / 10 - (x % 10) / 10 = INT_MIN / 10;
 ```
 
 ### Code - AC
+```cpp
+class Solution {
+public:
+    int myAtoi(string s) {
+        int ret = 0;
+        int i = 0;
+        int sign = 1;
+        int addOn = 0;
+        while (s[i] == ' ') {
+            ++i;
+        }
+        if (s[i] == '-' || s[i] == '+') {
+            if (s[i] == '-') {
+                sign = -1;
+            }
+            ++i;
+        }
+        while ((s[i] - '0' >= 0) && (s[i] - '0' <= 9)) {
+            // addOn here doesn't carry the sign symbol.
+            addOn = s[i] - '0';
+            if (sign > 0) {
+                if (ret < INT_MAX / 10 ||
+                    ((ret == INT_MAX / 10) && (addOn <= INT_MAX % 10))) {
+                    ret = ret * 10 + addOn;
+                } else {
+                    return INT_MAX;
+                }
+            } else {
+                // because addOn here doesn't carry the sign symbol
+                if (ret > INT_MIN / 10 ||
+                    ((ret == INT_MIN / 10) && (-1 * addOn >= INT_MIN % 10))) {
+                    ret = ret * 10 - addOn;
+                } else {
+                    return INT_MIN;
+                }
+            }
+            ++i;
+        }
+        return ret;
+    }
+};
+```
+
+### Code - AC - Simplified
 ```cpp
 class Solution {
 public:

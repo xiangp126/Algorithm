@@ -5,7 +5,7 @@
 ### Concept
 **`num & (num - 1)`**
 
-remove the last *1*
+remove the last *1* bit
 
 ```
 10 & (10 - 1) =
