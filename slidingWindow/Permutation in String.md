@@ -50,3 +50,7 @@ public:
     }
 };
 ```
+
+#### Tip
+Because the input will always be lowercase letters, we could use
+char freq[26] in place of the hashmap.

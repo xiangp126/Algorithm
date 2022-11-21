@@ -71,26 +71,31 @@ This Lambda Expression will act as the `UnaryPredicate` passed into `find_if`.
 class MyHashMap {
 public:
     MyHashMap() {
-        // Choose a good prime as the bucket's number.
-        buckets = 12289;
-        hashMap = vector<list<pair<int, int>>>(buckets);
+        // Choose a good prime as the number of the buckets.
+        N = 12289;
+        // Bug Point: Initialize the hashtable.
+        hashtable.resize(N);
+    }
+
+    ~MyHashMap() {
+
     }
 
     void put(int key, int value) {
-        int kIndex = hash(key);
+        int keyHash = hash(key);
         auto iter = search(key);
-        if (iter != hashMap[kIndex].end()) {
+        if (iter != hashtable[keyHash].end()) {
             // Update the value as the description requires.
             iter->second = value;
         } else {
-            hashMap[kIndex].push_back(make_pair(key, value));
+            hashtable[keyHash].push_back(make_pair(key, value));
         }
     }
 
     int get(int key) {
-        int kIndex = hash(key);
+        int keyHash = hash(key);
         auto iter = search(key);
-        if (iter != hashMap[kIndex].end()) {
+        if (iter != hashtable[keyHash].end()) {
             return iter->second;
         } else {
             return -1;
@@ -98,28 +103,29 @@ public:
     }
 
     void remove(int key) {
-        int kIndex = hash(key);
+        int keyHash = hash(key);
         auto iter = search(key);
-        if (iter != hashMap[kIndex].end()) {
-            hashMap[kIndex].erase(iter);
+        if (iter != hashtable[keyHash].end()) {
+            hashtable[keyHash].erase(iter);
         }
     }
 
 private:
-    int buckets;
-    vector<list<pair<int, int>>> hashMap;
+    // number of buckets.
+    int N;
+    vector<list<pair<int, int> > > hashtable;
 
+    // A function defined in the body of a class declaration
+    // is implicitly an inline function.
     int hash(int key) {
-        return key % buckets;
+        return key % N;
     }
 
-    list<pair<int, int>>::iterator search(int key) {
-        int kIndex = hash(key);
-        return find_if(hashMap[kIndex].begin(), hashMap[kIndex].end(), [&key](pair<int, int> &pair) {
-            return pair.first == key;
-        });
+    list<pair<int, int> >::iterator search(int key) {
+        int keyHash = hash(key);
+        return find_if(hashtable[keyHash].begin(), hashtable[keyHash].end(),
+                       [&key](pair<int, int> &p) { return p.first == key; });
     }
-
 };
 
 /**
@@ -141,5 +147,21 @@ or you can use an named variable to represent the lambda function to make it mor
             return pair.first == key;
         };
         return find_if(hashMap[kIndex].begin(), hashMap[kIndex].end(), jFunc);
+    }
+```
+
+Or even you may use the following block of code to replace the Lambda expression.
+
+```cpp
+    list<pair<int, int> >::iterator search(int key) {
+        int keyHash = hash(key);
+        auto iter = hashtable[keyHash].begin();
+        while (iter != hashtable[keyHash].end()) {
+            if (iter->first == key) {
+                return iter;
+            }
+            ++iter;
+        }
+        return iter;
     }
 ```
