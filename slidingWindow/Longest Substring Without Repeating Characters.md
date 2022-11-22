@@ -5,6 +5,13 @@
 Given a string s, find the length of the longest substring without repeating characters.
 
 Refer [leetcode必备算法：聊聊滑动窗口](https://cloud.tencent.com/developer/article/1901001)
+
+### Synopsis of erase function of unordered_set
+```cpp
+    iterator  erase(iterator position);
+    iterator  erase(const_iterator position);
+    size_type erase(const key_type& k);
+```
 ### Code
 ```c++
 class Solution {
@@ -18,7 +25,8 @@ public:
             // Check whether we need to shrink the window
             if (windows.count(s[right])) {
                 while (windows.count(s[right])) {
-                    windows.erase(windows.find(s[left]));
+                    // windows.erase(windows.find(s[left]));
+                    windows.erase(s[left]);
                     ++left;
                 }
             }
