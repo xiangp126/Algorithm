@@ -84,7 +84,8 @@ Or use a cast, to cast an unsigned int to a signed int right before comparison.
     }
 ```
 
-### Debug - Take Care of The `Unsigned` Data
+### !! Beware of underflow of `unsigned` data. !!
+[Two's Complement](https://www.cs.cornell.edu/~tomf/notes/cps104/twoscomp.html)
 
 ```cpp
 #include <iostream>
@@ -105,6 +106,11 @@ int main() {
 # Output
 Unexpected! a - b > 1
 a - b = 4294967295
+
+# Analysis
+obase = 2
+4294967295
+11111111111111111111111111111111 (32 bits) => 2^32 - 1
 ```
 
 What we hope is -1 < 1. The calculation result is indeed the complement of -1.
@@ -114,7 +120,5 @@ However, let's not forget that this is the subtraction of two unsigned numbers. 
 The complement of -1 becomes the largest unsigned integer. As a result, the final comparison result is completely opposite to what we expected.
 
 ```cpp
-2^32 - 1 = 11111111111111111111111111111111
+2^32 - 1 = 11111111111111111111111111111111 (4294967295)
 ```
-
-[Two's Complement](https://www.cs.cornell.edu/~tomf/notes/cps104/twoscomp.html)
