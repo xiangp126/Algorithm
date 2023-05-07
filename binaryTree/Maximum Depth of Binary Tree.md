@@ -40,30 +40,34 @@ return its depth = 3.
 class Solution {
 public:
     int maxDepth(TreeNode* root) {
-        if (root == NULL) return 0;
-
-        queue<TreeNode *> que;
+        if (!root) {
+            return 0;
+        }
+        queue<TreeNode *> Qi;
         TreeNode *pNode = root;
-        int depth = 0;
-        que.push(root);
-
-        while (!que.empty()) {
-            int qSize = que.size();
-            // Dump all the nodes in the same level
+        int level = 0; // level of the tree
+        int qSize = 0; // size of the queue itself
+        Qi.push(pNode);
+        while (!Qi.empty()) {
+            /* 
+             * bug point: calculate the size of the queue before the for loop,
+             * since Qi.size() may vary during the for looping
+             */
+            qSize = Qi.size();
             for (int i = 0; i < qSize; ++i) {
-                pNode = que.front();
-                que.pop();
+                pNode = Qi.front();
+                Qi.pop();
 
-                if (pNode->left) {
-                    que.push(pNode->left);
+                if (pNode->left){
+                    Qi.push(pNode->left);
                 }
                 if (pNode->right) {
-                    que.push(pNode->right);
+                    Qi.push(pNode->right);
                 }
-            }
-            ++depth;
+            } 
+            ++level;
         }
-        return depth;
+        return level;
     }
 };
 ```

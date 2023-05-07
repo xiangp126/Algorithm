@@ -162,18 +162,30 @@ public:
         int leftDepth  = minDepth(root->left);
         int rightDepth = minDepth(root->right);
 
+        /*
+         * The original solution computes the minimum depth of the
+         * left and right subtrees and returns the minimum of these
+         * two values plus one. However, this solution does not consider
+         * the case where one of the subtrees is empty (i.e., NULL),
+         * which can lead to incorrect results.
+         */ 
         if (root->left == NULL) {
             return rightDepth + 1;
-        } else {
-            if (root->right == NULL) {
-                return leftDepth + 1;
-            } else {
-                // has both left & right child
-                return min(leftDepth, rightDepth) + 1;
-            }
+        } 
+        if (root->right == NULL) {
+            return leftDepth + 1;
         }
+        
+        return min(leftDepth, rightDepth) + 1;
     }
 };
+```
+
+or
+
+```cpp
+
+
 ```
 
 ### Code - _Recursive with Java_
