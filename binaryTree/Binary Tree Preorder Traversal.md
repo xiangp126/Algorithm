@@ -45,13 +45,13 @@ public:
 
         while (node || !stk.empty()) {
             if (node) {
-                // traverse 'node'
+                // traverse this 'node'.
                 ret.push_back(node->val);
 
                 stk.push(node);
                 node = node->left;
             } else {
-                // pop of stack
+                // pop top of the element of the stack.
                 node = stk.top();
                 stk.pop();
 
