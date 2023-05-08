@@ -25,6 +25,8 @@ Line 10
 ```
 
 ### Code - _using sed_
+The sed -n '10p' file.txt command prints the 10th line of the file named file.txt. The -n option tells sed not to print anything by default, and the 10p command tells sed to print the 10th line.
+
 ```bash
 sed -n '10p' file.txt
 ```
@@ -32,9 +34,9 @@ sed -n '10p' file.txt
 ### Code - _using awk_
 ```bash
 # The variable "$0" refers to the entire line that AWK reads in
-cat file.txt | awk '{if (NR == 10) {print $0}}'
+cat file.txt | awk '{if (NR == 10) print $0;}'
 # or shorter
-cat file.txt | awk 'NR == 10'
+awk '{if (NR == 10) print $0;}' file.txt
 # or even shorter
 awk 'NR == 10' file.txt
 ```

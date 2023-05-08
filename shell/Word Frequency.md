@@ -86,6 +86,17 @@ sunny 2
 day 1
 ```
 
+Here's a breakdown of each command:
+
+- `cat words.txt`: Outputs the contents of the `words.txt` file to standard output
+- `tr -s ' ' '\n'`: Translates all spaces in the input to newlines, `-s` option to compress consecutive delimiters to one
+- `sort`: Sorts the list of words in alphabetical order
+- `uniq -c`: Counts the frequency of each word in the sorted list
+- `awk '{print $2, $1}'`: Prints the second and first columns of the input, which correspond to the word and its count, respectively
+- `sort -k 2 -n`: Sorts the output by the second column (the count) in numerical order
+
+The result is a list of words and their counts, sorted by count in ascending order.
+
 #### sort
 ```
      -t char, --field-separator=char
