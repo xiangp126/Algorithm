@@ -5,45 +5,62 @@
 using std::pair;
 using std::make_pair;
 
+// Function declarations
 static void qSort(vector<int> &, int, int);
 static pair<int, int> partition(vector<int> &, int, int);
 
+// Wrapper function for optimized Quick Sort
 void quickSortOptimized(vector<int> &nums) {
-    int N = nums.size();
-    qSort(nums, 0, N - 1);
+    qSort(nums, 0, nums.size() - 1);
 }
 
+// Recursive function to implement optimized Quick Sort
 void qSort(vector<int> &nums, int left, int right) {
+    // Base case: If the array has more than one element
     if (left < right) {
-        pair<int, int> pivotIndex = partition(nums, left, right);
-        qSort(nums, left, pivotIndex.first - 1);
-        qSort(nums, pivotIndex.second + 1, right);
+        // Partition the array and get the pivot indices
+        auto pivot = partition(nums, left, right);
+
+        // Recursively sort the subarrays
+        qSort(nums, left, pivot.first - 1);   // Sort elements to the left of the pivot
+        qSort(nums, pivot.second + 1, right); // Sort elements to the right of the pivot
     }
 }
 
+// Partition function to rearrange the elements and return pivot indices
 pair<int, int> partition(vector<int> &nums, int left, int right) {
-    // qSort ensure left < right @here
-    int sentinel = nums[right];
-    int i = left, k = i;
-    int rend = right;
-    while (k < right) {
-        if (nums[k] < sentinel) {
+    // Base case: If the array has one or fewer elements
+    if (left >= right) {
+        // Return the indices as a pair (no partitioning needed)
+        return make_pair(left, right);
+    }
+
+    int pivot = nums[right];  // Choose the pivot element as the last element
+    int i = left;             // Index for iterating through the array
+    int k = left;             // Index of the smaller element
+    int equalCnt = 1;         // Counter for elements equal to the pivot
+
+    // Iterate through the array
+    while (i < right) {
+        if (nums[i] < pivot) {
+            // If the current element is less than the pivot, swap it with the smaller element
             swap(nums[i++], nums[k++]);
         } else {
-            if (nums[k] == sentinel) {
-                // bug point: nums[k], not k++
-                swap(nums[k], nums[--right]);
+            if (nums[i] == pivot) {
+                // If the current element is equal to the pivot, swap it with an element on the right side
+                swap(nums[i], nums[--right]);
+                ++equalCnt;
             } else {
-                ++k;
+                ++i;
             }
         }
     }
-    // move 'equal' iterms to 'middle'
-    int equalCnt = rend - right + 1;
-    int grCnt = right - left;
-    int cnt = std::min(equalCnt, grCnt);
-    for (int index = 0; index < cnt; ++index) {
-        swap(nums[i + index], nums[rend - index]);
+
+    // Move the elements equal to the pivot to their correct positions
+    for (int j = 0; j < equalCnt; ++j) {
+        swap(nums[k + j], nums[right + j]);
     }
-    return make_pair( i,  i + equalCnt - 1);
+
+    // Return the pivot indices as a pair
+    return make_pair(k, k + equalCnt - 1);
 }
