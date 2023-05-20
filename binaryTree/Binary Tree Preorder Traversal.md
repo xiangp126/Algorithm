@@ -29,7 +29,9 @@ it's only one-line change from `inorderTraversal`, very easy
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
@@ -40,27 +42,30 @@ public:
             return ret;
         }
 
-        stack<TreeNode *> stk;
-        TreeNode *node = root;
+        stack<TreeNode*> stk;
+        TreeNode* pNode = root;
 
-        while (node || !stk.empty()) {
-            if (node) {
-                // traverse this 'node'.
-                ret.push_back(node->val);
+        while (pNode || !stk.empty()) {
+            if (pNode) {
+                // Process the current node
+                ret.push_back(pNode->val);
 
-                stk.push(node);
-                node = node->left;
+                // Push the current node to the stack and move to its left subtree
+                stk.push(pNode);
+                pNode = pNode->left;
             } else {
-                // pop top of the element of the stack.
-                node = stk.top();
+                // Pop a node from the stack and move to its right subtree
+                pNode = stk.top();
                 stk.pop();
 
-                node = node->right;
+                pNode = pNode->right;
             }
         }
+
         return ret;
     }
 };
+
 ```
 
 ### Code - _using Stack Solution Two with C++ -- easiest thinking_
@@ -77,6 +82,17 @@ _in contrast to [Binary Tree Level Order Traversal](https://leetcode.com/problem
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
 class Solution {
 public:
     vector<int> preorderTraversal(TreeNode* root) {
@@ -86,22 +102,27 @@ public:
         }
 
         stack<TreeNode *> stk;
-        TreeNode *node = root;
-        stk.push(root);
+        TreeNode *pNode = root;
+        stk.push(pNode);
 
         while (!stk.empty()) {
-            // traverse 'node'
-            node = stk.top();
-            ret.push_back(node->val);
+            pNode = stk.top();
             stk.pop();
 
-            if (node->right) {
-                stk.push(node->right);
+            // Process the current node (add value to the result vector)
+            ret.push_back(pNode->val);
+
+            // Push the right child first, as it will be processed after left child
+            if (pNode->right) {
+                stk.push(pNode->right);
             }
-            if (node->left) {
-                stk.push(node->left);
+
+            // Push the left child
+            if (pNode->left) {
+                stk.push(pNode->left);
             }
         }
+
         return ret;
     }
 };

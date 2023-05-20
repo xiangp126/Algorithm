@@ -22,7 +22,9 @@ Output: [4,2,5,1,6,3,7]
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
@@ -32,22 +34,26 @@ public:
         if (!root) {
             return ret;
         }
-        stack<TreeNode *> stk;
-        TreeNode *node = root;
 
-        while (node || !stk.empty()) {
-            if (node) {
-                stk.push(node);
-                node = node->left;
+        stack<TreeNode*> stk;
+        TreeNode* pNode = root;
+
+        while (pNode || !stk.empty()) {
+            if (pNode) {
+                // Traverse left subtree
+                stk.push(pNode);
+                pNode = pNode->left;
             } else {
-                node = stk.top();
+                // Process the current node
+                pNode = stk.top();
                 stk.pop();
-                // traverse 'node'
-                ret.push_back(node->val);
+                ret.push_back(pNode->val);
 
-                node = node->right;
+                // Traverse right subtree
+                pNode = pNode->right;
             }
         }
+
         return ret;
     }
 };
