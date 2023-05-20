@@ -23,50 +23,35 @@ One possible answer is: [0,-3,9,-10,null,5], which represents the following heig
 ideas are simple as that of Array, think how to half divide it and then conquer.
 
 ```c++
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
 class Solution {
 public:
     TreeNode* sortedListToBST(ListNode* head) {
-        return buildTree(head, NULL);
-    }
-
-    /*
-     * buildTree: Convert Sorted List to Binary Search Tree
-     * @head : first elem of the List
-     * @tail : the terminal sign of the list(not included), typically is NULL
-     * @return the root pointer of the (sub)tree
-     */
-
-    TreeNode *buildTree(ListNode *head, ListNode *tail) {
-        if (head == tail) {
-            return NULL;
+        if (!head) {
+            return nullptr;
         }
+
+        if (!head->next) {
+            // Base case: Only one element in the linked list
+            return new TreeNode(head->val, nullptr, nullptr);
+        }
+
         ListNode *fast = head;
         ListNode *slow = head;
-        // bug point: tail not (always) NULL
-        while (fast != tail && fast->next != tail) {
-            slow = slow->next;
+        ListNode *preSlow = slow;
+
+        while (fast && fast->next) {
             fast = fast->next->next;
+            preSlow = slow;
+            slow = slow->next;
         }
+
         TreeNode *root = new TreeNode(slow->val);
-        root->left = buildTree(head, slow);
-        root->right = buildTree(slow->next, tail);
+        preSlow->next = nullptr;
+
+        // Recursively convert the left and right parts of the linked list to BST
+        root->left = sortedListToBST(head);
+        root->right = sortedListToBST(slow->next);
+
         return root;
     }
 };
@@ -94,16 +79,6 @@ and here is the complete code of `Tips` version:
 
 ```c++
 /**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode() : val(0), next(nullptr) {}
- *     ListNode(int x) : val(x), next(nullptr) {}
- *     ListNode(int x, ListNode *next) : val(x), next(next) {}
- * };
- */
-/**
  * Definition for a binary tree node.
  * struct TreeNode {
  *     int val;
@@ -117,30 +92,33 @@ and here is the complete code of `Tips` version:
 class Solution {
 public:
     TreeNode* sortedListToBST(ListNode* head) {
-        if (head == NULL) return NULL;
-        ListNode *fastPtr = head;
-        ListNode *slowPtr = head;
-        ListNode *preSlowPtr = head;
-
-        while (fastPtr != NULL && fastPtr->next != NULL) {
-            preSlowPtr = slowPtr;
-            slowPtr = slowPtr->next;
-            fastPtr = fastPtr->next->next;
+        if (!head) {
+            return nullptr;
         }
 
-        TreeNode *node = new TreeNode(slowPtr->val);
-        // one exception. There's only one node in the linked list.
-        if (preSlowPtr == slowPtr) {
-            node->left = NULL;
-            node->right = NULL;
-            return node;
+        if (!head->next) {
+            // Base case: Only one element in the linked list
+            return new TreeNode(head->val, nullptr, nullptr);
         }
 
-        preSlowPtr->next = NULL;
-        node->left = sortedListToBST(head);
-        node->right = sortedListToBST(slowPtr->next);
+        ListNode *fast = head;
+        ListNode *slow = head;
+        ListNode *preSlow = slow;
 
-        return node;
+        while (fast && fast->next) {
+            fast = fast->next->next;
+            preSlow = slow;
+            slow = slow->next;
+        }
+
+        TreeNode *root = new TreeNode(slow->val);
+        preSlow->next = nullptr;
+
+        // Recursively convert the left and right parts of the linked list to BST
+        root->left = sortedListToBST(head);
+        root->right = sortedListToBST(slow->next);
+
+        return root;
     }
 };
 ```
