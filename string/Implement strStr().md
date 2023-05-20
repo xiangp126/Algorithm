@@ -1,72 +1,73 @@
-## Implement strStr()
+## Find the Index of the First Occurrence in a String
 ### Illustrate
+<https://leetcode.com/problems/find-the-index-of-the-first-occurrence-in-a-string/>
 <https://leetcode.com/problems/implement-strstr>
 
 Return the index of the first occurrence of needle in haystack, or **-1** if needle is not part of haystack.
 
 ### example
 ```c
-Input: haystack = "hello", needle = "ll"
-Output: 2
+Input: haystack = "sadbutsad", needle = "sad"
+Output: 0
+Explanation: "sad" occurs at index 0 and 6.
+The first occurrence is at index 0, so we return 0.
 
-Input: haystack = "aaaaa", needle = "bba"
+Input: haystack = "leetcode", needle = "leeto"
 Output: -1
+Explanation: "leeto" did not occur in "leetcode", so we return -1.
 ```
 ### Code
-```c
+```cpp
 class Solution {
 public:
     int strStr(string haystack, string needle) {
-        int lenHaystack = haystack.size();
-        int lenNeedle = needle.size();
-        if (lenHaystack == 0 || lenNeedle == 0) {
-            if (lenNeedle == 0) {
-                return 0;
-            }
+        int hLen = haystack.length();
+        int nLen = needle.length();
+        if (!hLen || !nLen) {
             return -1;
         }
-        // get Next array
-        int next[lenNeedle];
-        getNext(needle, next);
-        int i = 0;
-        int j = 0;
-        // main loop
-        //while (i < haystack.size() && j < needle.size()) {
-        while (i < lenHaystack && j < lenNeedle) {
-            cout << "i = " << i << endl;
+
+        vector<int> nextArray(nLen, -1);
+        getNextArray(needle, nextArray);
+
+        int i = 0;  // Pointer for haystack
+        int j = 0;  // Pointer for needle
+        while (i < hLen && j < nLen) {
             if (j == -1 || haystack[i] == needle[j]) {
-                ++i;
+                ++i;  // Move both pointers to the next character
                 ++j;
             } else {
-                j = next[j];
-                cout << "jump to j = " << j << endl;
+                j = nextArray[j];  // Mismatch, move j using the nextArray
             }
         }
-        return (j == needle.size()) ? i - needle.size() : -1;
+
+        // Check if the full needle is found in the haystack
+        if (j == nLen) {
+            return i - nLen;  // Return the starting index of the found needle
+        } else {
+            return -1;  // Needle not found
+        }
     }
 
-    void getNext(string &str, int *next) {
-        const int N = str.size();
-        next[0] = -1;
-        int k = -1;
-        int i = 0;
-        while (i < N - 1) {
-            if (k == -1 || str[i] == str[k]) {
-                next[++i] = ++k;
+    void getNextArray(string needle, vector<int> &nextArray) {
+        int length = needle.length();
+        if (!length) {
+            return;
+        };
+
+        int j = 0;   // Pointer for the current character in the needle
+        int k = -1;  // Pointer for the previous character's longest prefix suffix value
+        nextArray[0] = -1;  // The first value is always -1 as there is no proper prefix
+
+        while (j < length - 1) {
+            if (k == -1 || needle[j] == needle[k]) {
+                ++j;  // Move to the next character in the needle
+                ++k;  // Increment the longest prefix suffix value
+                nextArray[j] = k;  // Store the current longest prefix suffix value
             } else {
-                k = next[k];
+                k = nextArray[k];  // Update k to backtrack and find a shorter prefix suffix
             }
         }
     }
 };
-```
-
-### Confusion
-_change like this will no loop at all, why ?_
-
-use `haystack.size()` directly, not `lenHaystack `
-
-```c
-while (i < haystack.size() && j < needle.size()) {
-//while (i < lenHaystack && j < lenNeedle) {
 ```
