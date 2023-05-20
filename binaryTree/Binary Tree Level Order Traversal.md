@@ -46,28 +46,27 @@ public:
         }
 
         TreeNode *node = root;
-        queue<TreeNode *> que;
-        que.push(node);
+        queue<TreeNode *> Qi;
+        Qi.push(node);
 
         vector<int> path;
         int qSize = 0;
-        int i = 0;
 
-        while (!que.empty()) {
-            // Bug point: You must store the queue size
+        while (!Qi.empty()) {
+            // Bug point: We must store the queue size
             // cos que.size() may vary after each operation.
-            qSize = que.size();
+            qSize = Qi.size();
             path.clear();
-            for (i = 0; i < qSize; ++i) {
-                node = que.front();
-                que.pop();
+            for (int i = 0; i < qSize; ++i) {
+                node = Qi.front();
+                Qi.pop();
                 path.push_back(node->val);
 
                 if (node->left) {
-                    que.push(node->left);
+                    Qi.push(node->left);
                 }
                 if (node->right) {
-                    que.push(node->right);
+                    Qi.push(node->right);
                 }
             }
             ret.push_back(path);
@@ -75,6 +74,7 @@ public:
         return ret;
     }
 };
+
 ```
 
 ### Code - _using dfs(Depth-First Search)_
