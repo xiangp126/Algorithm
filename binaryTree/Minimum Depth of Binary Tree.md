@@ -181,13 +181,6 @@ public:
 };
 ```
 
-or
-
-```cpp
-
-
-```
-
 ### Code - _Recursive with Java_
 
 ```java
