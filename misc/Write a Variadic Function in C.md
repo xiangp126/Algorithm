@@ -1,4 +1,6 @@
 ### Write a Variadic Function in C
+[C Library - \<stdarg.h\>](https://www.tutorialspoint.com/c_standard_library/stdarg_h.htm)
+
 To write a variadic function in C, you need to use the `<stdarg.h>` header and the macros provided by it. Here's a step-by-step guide on how to write a variadic function:
 
 ### Expnlanation
